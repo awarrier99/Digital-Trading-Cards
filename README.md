@@ -3,13 +3,14 @@ Georgia Tech Capstone
 
 Client: Christen Steele
 
-A app to streamline the networking process by connecting students, professionals, and recruiters through matched skills and shared interests.
+An app to streamline the networking process by connecting students, professionals, and recruiters through matched skills and shared interests.
 
 ## Demo
 Demo video links will be uploaded at the end of every sprint.
 
 ## Technology
-- Dart
+- Flutter Framework (https://flutter.dev/)
+- Dart (https://dart.dev/guides/language)
 
 ## Installation
 Installation info
