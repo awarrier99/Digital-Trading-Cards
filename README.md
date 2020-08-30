@@ -29,8 +29,11 @@ Patrick Ufer - pufer3@gatech.edu
 Ashvin Warrier - awarrier@gatech.edu
 
 ## Good code practices
-# Commit messages:
+### Commit messages:
 For commiting, if you’re using git from the command line, a good standard commit message is:
+
 ```git commit -m "Issue: #X - [short message explaining what you did]"```
+
 Example:
+
 ```git commit -m "Issue: #6 - Altered project organization for UI assets"```
