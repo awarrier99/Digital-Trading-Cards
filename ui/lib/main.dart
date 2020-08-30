@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'CreateAccount.dart';
+import 'package:ui/CreateAccount.dart';
 
 void main() {
   runApp(MyApp());
@@ -13,6 +13,7 @@ class MyApp extends StatelessWidget {
       title: 'Wisteria',
       theme: ThemeData(
         primarySwatch: Colors.green,
+        primaryColor: Color(0xFF92DAAF),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: WelcomeScreen(title: 'Wisteria'),
@@ -57,8 +58,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               },
               textColor: Color(0xFF92DAAF),
               color: Colors.white,
-              child:
-                  const Text('Create Account', style: TextStyle(fontSize: 20)),
+              child: Text('Create Account', style: TextStyle(fontSize: 20)),
             ),
           ],
         ),
