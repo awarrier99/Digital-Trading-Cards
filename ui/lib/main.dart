@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:ui/CreateAccount.dart';
+import 'package:ui/screens/CreateAccount.dart';
 
 void main() {
   runApp(MyApp());

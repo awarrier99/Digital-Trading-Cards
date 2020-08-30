@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import './Basic_Info_Form.dart';
-import 'CustomWidgets/Forms/DynamicForm.dart';
+import '../components/forms/DynamicForm.dart';
 
 class CreateAccount extends StatelessWidget {
   final _createAccountFormKey = GlobalKey<FormState>();
