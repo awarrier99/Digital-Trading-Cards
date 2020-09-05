@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:ui/palette.dart';
 
-import 'package:ui/screens/CreateAccount.dart';
+import 'package:ui/screens/CreateCard1.dart';
 
 class WelcomeScreen extends StatefulWidget {
   WelcomeScreen({Key key, this.title}) : super(key: key);
@@ -13,7 +14,7 @@ class WelcomeScreen extends StatefulWidget {
 class _WelcomeScreenState extends State<WelcomeScreen> {
   Future createAccount(context) async {
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => CreateAccount()));
+        context, MaterialPageRoute(builder: (context) => CreateCard1()));
   }
 
   @override
@@ -60,8 +61,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                             height: 40,
                             child: Material(
                               borderRadius: BorderRadius.circular(20),
-                              shadowColor: Color(0xFF92DAAF),
-                              color: Color(0xFF92DAAF),
+                              shadowColor: Palette.primaryGreen,
+                              color: Palette.primaryGreen,
                               elevation: 7,
                               child: GestureDetector(
                                 onTap: () {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:ui/palette.dart';
 
 // Create a Form widget.
 class BasicInfoForm extends StatefulWidget {
@@ -27,7 +28,7 @@ class BasicInfoFormState extends State<BasicInfoForm> {
                 'Contact Info',
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF92DAAF),
+                    color: Palette.primaryGreen,
                     fontSize: 18),
               )),
           TextFormField(

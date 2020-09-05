@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:ui/screens/WelcomeScreen.dart';
+import 'palette.dart';
 
 void main() {
   runApp(MyApp());
@@ -13,7 +14,7 @@ class MyApp extends StatelessWidget {
       title: 'Wisteria',
       theme: ThemeData(
         primarySwatch: Colors.green,
-        primaryColor: Color(0xFF92DAAF),
+        primaryColor: Palette.primaryGreen,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: WelcomeScreen(title: 'Wisteria.'),

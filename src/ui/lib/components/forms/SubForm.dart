@@ -1,38 +1,22 @@
 import 'package:flutter/material.dart';
-
-import './EducationInputs.dart';
-import './ExperienceVolunteerInput.dart';
-import './SkillsInputs.dart';
-import './InterestsInputs.dart';
+import 'package:ui/components/inheretedwidgets/SubFormInheretedWidget.dart';
 
 class SubForm extends StatefulWidget {
   final String subTitle;
   final int index;
   final Function callback;
-  final String subFormID;
 
-  SubForm(this.subTitle, this.index, this.callback, this.subFormID);
+  SubForm(this.subTitle, this.index, this.callback);
 
   @override
   _SubFormState createState() => _SubFormState();
 }
 
 class _SubFormState extends State<SubForm> {
-  Widget getSubFormInput() {
-    if (widget.subFormID == 'EducationInputs') {
-      return EducationInputs();
-    } else if (widget.subFormID == 'ExperienceVolunteerInput') {
-      return ExperienceVolunteerInput();
-    } else if (widget.subFormID == 'SkillsInputs') {
-      return SkillsInputs();
-    } else if (widget.subFormID == 'InterestsInputs') {
-      return InterestsInputs();
-    }
-    return null;
-  }
-
   @override
   Widget build(BuildContext context) {
+    final subFormInhereted = SubFormInheretedWidget.of(context);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -45,7 +29,7 @@ class _SubFormState extends State<SubForm> {
             },
           ),
         ]),
-        getSubFormInput(),
+        subFormInhereted.inputs,
       ],
     );
   }
