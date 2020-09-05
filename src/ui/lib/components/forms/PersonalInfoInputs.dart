@@ -3,18 +3,18 @@ import 'package:flutter/services.dart';
 import 'package:ui/palette.dart';
 
 // Create a Form widget.
-class BasicInfoForm extends StatefulWidget {
+class PersonalInfoInputs extends StatefulWidget {
   final GlobalKey key;
 
-  BasicInfoForm(this.key);
+  PersonalInfoInputs(this.key);
 
   @override
-  BasicInfoFormState createState() {
-    return BasicInfoFormState();
+  PersonalInfoInputsState createState() {
+    return PersonalInfoInputsState();
   }
 }
 
-class BasicInfoFormState extends State<BasicInfoForm> {
+class PersonalInfoInputsState extends State<PersonalInfoInputs> {
   @override
   Widget build(BuildContext context) {
     return Form(

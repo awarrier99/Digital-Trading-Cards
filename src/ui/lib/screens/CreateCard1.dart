@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ui/components/forms/EducationInputs.dart';
 
-import 'BasicInfoForm.dart';
+import '../components/forms/PersonalInfoInputs.dart';
 import '../components/forms/DynamicForm.dart';
 import './CreateAccount2.dart';
 import '../palette.dart';
@@ -20,7 +20,7 @@ class CreateCard1 extends StatelessWidget {
         body: SingleChildScrollView(
       child: Form(
           child: Column(children: <Widget>[
-        BasicInfoForm(_createCard1FormKey),
+        PersonalInfoInputs(_createCard1FormKey),
         DynamicForm('Education', EducationInputs()),
         Padding(
             padding: const EdgeInsets.symmetric(vertical: 16.0),
