@@ -23,14 +23,10 @@ class PersonalInfoInputsState extends State<PersonalInfoInputs> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Visibility(
-              visible: true,
-              child: Text(
-                'Contact Info',
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Palette.primaryGreen,
-                    fontSize: 18),
-              )),
+            visible: true,
+            child: Text('Contact Info',
+                style: TextStyle(fontSize: 20, color: Palette.darkGreen)),
+          ),
           TextFormField(
             decoration: InputDecoration(labelText: 'First Name*'),
             validator: (value) {

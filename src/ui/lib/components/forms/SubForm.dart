@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:ui/components/forms/ColorBadge.dart';
 import 'package:ui/components/inheretedwidgets/SubFormInheretedWidget.dart';
+import 'package:ui/palette.dart';
 
 class SubForm extends StatefulWidget {
   final String subTitle;
@@ -17,20 +19,25 @@ class _SubFormState extends State<SubForm> {
   Widget build(BuildContext context) {
     final subFormInhereted = SubFormInheretedWidget.of(context);
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          Text('${widget.subTitle} #${widget.index}'),
-          IconButton(
-            icon: Icon(Icons.delete_outline),
-            onPressed: () {
-              widget.callback();
-            },
-          ),
-        ]),
-        subFormInhereted.inputs,
-      ],
-    );
+    return Container(
+        margin: EdgeInsets.only(bottom: 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+              Text(
+                '${widget.subTitle} #${widget.index}',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              ),
+              IconButton(
+                icon: Icon(Icons.delete_outline),
+                onPressed: () {
+                  widget.callback();
+                },
+              ),
+            ]),
+            subFormInhereted.inputs,
+          ],
+        ));
   }
 }

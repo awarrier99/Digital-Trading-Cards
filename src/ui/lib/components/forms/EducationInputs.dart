@@ -7,6 +7,7 @@ class EducationInputs extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TextFormField(
           decoration: InputDecoration(labelText: 'School*'),
@@ -26,9 +27,19 @@ class EducationInputs extends StatelessWidget {
             return null;
           },
         ),
-        Text('Degree Type (optional)'),
+        Container(
+            margin: EdgeInsets.only(top: 20),
+            child: Text(
+              'Degree Type*',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            )),
         DropdownFormField(['Associates', 'Bachelors', 'Masters', 'PhD']),
-        Text('Graduation Date (optional)'),
+        Container(
+            margin: EdgeInsets.only(top: 20),
+            child: Text(
+              'Graduation Date',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            )),
         Row(children: [
           DropdownFormField(['Fall', 'Spring', 'Summer']),
           DropdownFormField(new List<String>.generate(

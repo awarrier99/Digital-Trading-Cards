@@ -17,24 +17,31 @@ class CreateCard1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SingleChildScrollView(
-      child: Form(
-          child: Column(children: <Widget>[
-        PersonalInfoInputs(_createCard1FormKey),
-        DynamicForm('Education', EducationInputs()),
-        Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
-            child: RaisedButton(
-              child: Text('Next'),
-              textColor: Colors.white,
-              color: Palette.primaryGreen,
-              onPressed: () {
-                if (_createCard1FormKey.currentState.validate()) {
-                  nextStep(context);
-                }
-              },
-            )),
-      ])),
-    ));
+        appBar: AppBar(
+          title: Text('Create Card'),
+        ),
+        body: Container(
+            margin: EdgeInsets.all(20),
+            child: SingleChildScrollView(
+              child: Form(
+                  child: Column(children: <Widget>[
+                PersonalInfoInputs(_createCard1FormKey),
+                DynamicForm('Education', EducationInputs()),
+                Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                  Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16.0),
+                      child: RaisedButton(
+                        child: Text('Next'),
+                        textColor: Colors.white,
+                        color: Palette.primaryGreen,
+                        onPressed: () {
+                          if (_createCard1FormKey.currentState.validate()) {
+                            nextStep(context);
+                          }
+                        },
+                      ))
+                ]),
+              ])),
+            )));
   }
 }
