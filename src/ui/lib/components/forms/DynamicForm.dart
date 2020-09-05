@@ -12,6 +12,7 @@ class DynamicForm extends StatefulWidget {
 
 class _DynamicFormState extends State<DynamicForm> {
   int index = 0;
+  String test = 'EducationInputs';
   final _formKey = GlobalKey<FormState>();
 
   callback() {
@@ -54,7 +55,7 @@ class _DynamicFormState extends State<DynamicForm> {
                 ),
               ]),
               for (int i = 0; i < index; i++)
-                SubForm('${widget.title}', (i + 1), callback),
+                SubForm('${widget.title}', (i + 1), callback, test),
             ])));
   }
 }
