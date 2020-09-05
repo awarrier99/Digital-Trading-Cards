@@ -13,7 +13,7 @@ class CreateAccount extends StatelessWidget {
       child: Form(
           child: Column(children: <Widget>[
         BasicInfoForm(_createAccountFormKey),
-        DynamicForm('Education'),
+        DynamicForm('Education', 'EducationInputs'),
         Padding(
             padding: const EdgeInsets.symmetric(vertical: 16.0),
             child: RaisedButton(

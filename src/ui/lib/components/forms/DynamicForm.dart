@@ -4,7 +4,8 @@ import 'SubForm.dart';
 
 class DynamicForm extends StatefulWidget {
   final String title;
-  DynamicForm(this.title);
+  final String subformID;
+  DynamicForm(this.title, this.subformID);
 
   @override
   _DynamicFormState createState() => _DynamicFormState();
@@ -55,7 +56,7 @@ class _DynamicFormState extends State<DynamicForm> {
                 ),
               ]),
               for (int i = 0; i < index; i++)
-                SubForm('${widget.title}', (i + 1), callback, test),
+                SubForm('${widget.title}', (i + 1), callback, widget.subformID),
             ])));
   }
 }
