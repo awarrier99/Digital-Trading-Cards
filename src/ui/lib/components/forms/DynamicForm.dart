@@ -16,7 +16,6 @@ class DynamicForm extends StatefulWidget {
 
 class _DynamicFormState extends State<DynamicForm> {
   int index = 0;
-  String test = 'EducationInputs';
   final _formKey = GlobalKey<FormState>();
 
   callback() {

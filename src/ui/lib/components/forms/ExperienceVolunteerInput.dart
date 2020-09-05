@@ -9,7 +9,10 @@ class ExperienceVolunteerInput extends StatelessWidget {
       children: [
         Text('New Experience'),
         TextFormField(
-          decoration: InputDecoration(labelText: 'Title*'),
+          cursorColor: Color(0xFF92DAAF),
+          keyboardType: TextInputType.number,
+          decoration: InputDecoration(
+              labelText: 'Title*', border: OutlineInputBorder()),
           validator: (value) {
             if (value.isEmpty) {
               return 'Required';
@@ -18,7 +21,11 @@ class ExperienceVolunteerInput extends StatelessWidget {
           },
         ),
         TextFormField(
-            decoration: InputDecoration(labelText: 'Company/Organization*'),
+            cursorColor: Color(0xFF92DAAF),
+            keyboardType: TextInputType.number,
+            decoration: InputDecoration(
+                labelText: 'Company/Organization*',
+                border: OutlineInputBorder()),
             validator: (value) {
               if (value.isEmpty) {
                 return 'Required';
@@ -26,6 +33,25 @@ class ExperienceVolunteerInput extends StatelessWidget {
               return null;
             }),
         Text('Start Date'),
+        Row(children: [
+          DropdownFormField([
+            'January',
+            'February',
+            'March',
+            'April',
+            'May',
+            'June',
+            'July',
+            'August',
+            'September',
+            'October',
+            'November',
+            'December'
+          ]),
+          DropdownFormField(new List<String>.generate(
+              10, (i) => (i + DateTime.now().year - 5).toString())),
+        ]),
+        Text('End Date'),
         Row(children: [
           DropdownFormField([
             'January',
