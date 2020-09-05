@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import './EducationInputs.dart';
 import './ExperienceVolunteerInput.dart';
-import 'EducationInputs.dart';
-import 'EducationInputs.dart';
+import './SkillsInputs.dart';
+import './InterestsInputs.dart';
 
 class SubForm extends StatefulWidget {
   final String subTitle;
@@ -23,7 +23,12 @@ class _SubFormState extends State<SubForm> {
       return EducationInputs();
     } else if (widget.subFormID == 'ExperienceVolunteerInput') {
       return ExperienceVolunteerInput();
+    } else if (widget.subFormID == 'SkillsInputs') {
+      return SkillsInputs();
+    } else if (widget.subFormID == 'InterestsInputs') {
+      return InterestsInputs();
     }
+    return null;
   }
 
   @override
