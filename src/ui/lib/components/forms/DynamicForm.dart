@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+
+import 'package:ui/SizeConfig.dart';
+import 'package:ui/components/forms/ColorBadge.dart';
+
 import 'package:ui/palette.dart';
 
 import 'SubForm.dart';
@@ -26,6 +30,7 @@ class _DynamicFormState extends State<DynamicForm> {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return new SubFormInheretedWidget(
         inputs: widget.inputs,
         child: Container(
@@ -33,9 +38,12 @@ class _DynamicFormState extends State<DynamicForm> {
                 key: _formKey,
                 child: Column(children: [
                   Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                    Text(widget.title,
-                        style:
-                            TextStyle(fontSize: 20, color: Palette.darkGreen)),
+                    Text(
+                      widget.title,
+                      style: TextStyle(
+                          fontSize: SizeConfig.safeBlockHorizontal * 5,
+                          color: Palette.darkGreen),
+                    ),
                     FlatButton(
                       onPressed: () {
                         //Add new form
@@ -52,6 +60,7 @@ class _DynamicFormState extends State<DynamicForm> {
                           Text(
                             'Add ${widget.title}',
                             style: TextStyle(
+                              fontSize: SizeConfig.safeBlockHorizontal * 2.55,
                               decoration: TextDecoration.underline,
                             ),
                           )

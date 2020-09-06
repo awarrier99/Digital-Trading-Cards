@@ -12,27 +12,33 @@ class CreateAccount2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Form(
-          child: Column(
-            children: [
-              DynamicForm('Work Experience', ExperienceVolunteerInput()),
-              DynamicForm('Volunteer Experience', ExperienceVolunteerInput()),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16.0),
-                child: RaisedButton(
-                  child: Text('Next'),
-                  textColor: Colors.white,
-                  color: Color(0xFF92DAAF),
-                  onPressed: () {
-                    navigateToCreateAccount3(context);
-                  },
-                ),
-              ),
-            ],
-          ),
+        appBar: AppBar(
+          title: Text('Create Card'),
         ),
-      ),
-    );
+        body: Container(
+          margin: EdgeInsets.all(20),
+          child: SingleChildScrollView(
+            child: Form(
+              child: Column(
+                children: [
+                  DynamicForm('Work Experience', ExperienceVolunteerInput()),
+                  DynamicForm(
+                      'Volunteer Experience', ExperienceVolunteerInput()),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                    child: RaisedButton(
+                      child: Text('Next'),
+                      textColor: Colors.white,
+                      color: Color(0xFF92DAAF),
+                      onPressed: () {
+                        navigateToCreateAccount3(context);
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ));
   }
 }
