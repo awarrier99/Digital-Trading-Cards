@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ui/components/forms/ColorBadge.dart';
 import 'package:ui/palette.dart';
 
 import 'SubForm.dart';
@@ -30,7 +29,6 @@ class _DynamicFormState extends State<DynamicForm> {
     return new SubFormInheretedWidget(
         inputs: widget.inputs,
         child: Container(
-            margin: EdgeInsets.only(top: 20),
             child: Form(
                 key: _formKey,
                 child: Column(children: [

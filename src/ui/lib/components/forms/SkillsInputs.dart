@@ -7,9 +7,10 @@ class SkillsInputs extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TextFormField(
-          decoration: InputDecoration(labelText: 'Name'),
+          decoration: InputDecoration(hintText: 'Name'),
           validator: (value) {
             if (value.isEmpty) {
               return 'Required';
@@ -17,7 +18,12 @@ class SkillsInputs extends StatelessWidget {
             return null;
           },
         ),
-        Text('Proficiency Level'),
+        Container(
+            margin: EdgeInsets.only(top: 20),
+            child: Text(
+              'Proficiency Level',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            )),
         DropdownFormField(['Expert', 'Advanced', 'Intermediate', 'Novice'])
       ],
     );

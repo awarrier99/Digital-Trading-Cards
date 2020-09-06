@@ -7,7 +7,7 @@ class InterestsInputs extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         TextFormField(
-          decoration: InputDecoration(labelText: 'Name'),
+          decoration: InputDecoration(hintText: 'Name'),
           validator: (value) {
             if (value.isEmpty) {
               return 'Required';

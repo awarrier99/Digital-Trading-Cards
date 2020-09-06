@@ -18,7 +18,10 @@ class CreateCard1 extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Create Card'),
+          title: Text(
+            'Create Card',
+            style: TextStyle(fontFamily: 'Montserrat'),
+          ),
         ),
         body: Container(
             margin: EdgeInsets.all(20),
@@ -26,6 +29,7 @@ class CreateCard1 extends StatelessWidget {
               child: Form(
                   child: Column(children: <Widget>[
                 PersonalInfoInputs(_createCard1FormKey),
+                SizedBox(height: 20),
                 DynamicForm('Education', EducationInputs()),
                 Row(mainAxisAlignment: MainAxisAlignment.end, children: [
                   Padding(
