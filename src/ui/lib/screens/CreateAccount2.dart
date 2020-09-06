@@ -24,17 +24,19 @@ class CreateAccount2 extends StatelessWidget {
                   DynamicForm('Work Experience', ExperienceVolunteerInput()),
                   DynamicForm(
                       'Volunteer Experience', ExperienceVolunteerInput()),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 16.0),
-                    child: RaisedButton(
-                      child: Text('Next'),
-                      textColor: Colors.white,
-                      color: Color(0xFF92DAAF),
-                      onPressed: () {
-                        navigateToCreateAccount3(context);
-                      },
+                  Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16.0),
+                      child: RaisedButton(
+                        child: Text('Next'),
+                        textColor: Colors.white,
+                        color: Color(0xFF92DAAF),
+                        onPressed: () {
+                          navigateToCreateAccount3(context);
+                        },
+                      ),
                     ),
-                  ),
+                  ]),
                 ],
               ),
             ),
