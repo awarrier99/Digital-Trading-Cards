@@ -41,7 +41,7 @@ class _DynamicFormState extends State<DynamicForm> {
                     Text(
                       widget.title,
                       style: TextStyle(
-                          fontSize: SizeConfig.safeBlockHorizontal * 5,
+                          fontSize: SizeConfig.safeBlockHorizontal * 4.2,
                           color: Palette.darkGreen),
                     ),
                     FlatButton(

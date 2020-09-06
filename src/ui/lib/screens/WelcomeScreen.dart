@@ -32,7 +32,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       child: Text(
                         widget.title,
                         style: TextStyle(
-                            fontSize: 70, fontWeight: FontWeight.bold),
+                            fontSize: 60, fontWeight: FontWeight.bold),
                       ),
                     )),
                     Container(
