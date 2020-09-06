@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'BasicInfoForm.dart';
+import '../components/forms/PersonalInfoInputs.dart';
 import '../components/forms/DynamicForm.dart';
 import 'package:ui/components/forms/EducationInputs.dart';
 import 'package:ui/screens/CreateAccount2.dart';
@@ -18,7 +18,7 @@ class CreateAccount extends StatelessWidget {
         body: SingleChildScrollView(
       child: Form(
           child: Column(children: <Widget>[
-        BasicInfoForm(_createAccountFormKey),
+        PersonalInfoInputs(_createAccountFormKey),
         DynamicForm('Education', EducationInputs()),
         Padding(
             padding: const EdgeInsets.symmetric(vertical: 16.0),
