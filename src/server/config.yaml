@@ -1,0 +1,6 @@
+database:
+  host: 35.231.254.21
+  port: 3306
+  username: root
+  password: digitaltradingcards14
+  databaseName: digital_trading_cards
