@@ -1,3 +1,4 @@
+import 'routes.dart';
 import 'server.dart';
 import 'util/db.dart';
 
@@ -28,20 +29,7 @@ class ServerChannel extends ApplicationChannel {
   ///
   /// This method is invoked after [prepare].
   @override
-  Controller get entryPoint {
-    final router = Router();
-
-    // Prefer to use `link` instead of `linkFunction`.
-    // See: https://aqueduct.io/docs/http/request_controller/
-    router
-      .route("/test")
-      .linkFunction((request) async {
-        final results = await db.query('SELECT * FROM test');
-        return Response.ok({'results': results.toList()});
-      });
-
-    return router;
-  }
+  Controller get entryPoint => createRoutes();
 }
 
 class ServerConfig extends Configuration {
