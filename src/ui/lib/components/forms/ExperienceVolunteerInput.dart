@@ -3,30 +3,40 @@ import 'DropdownFormField.dart';
 import 'package:ui/SizeConfig.dart';
 
 class ExperienceVolunteerInput extends StatelessWidget {
+  FocusNode companyNode = FocusNode();
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Column(
       children: [
         TextFormField(
-          cursorColor: Color(0xFF92DAAF),
-          keyboardType: TextInputType.text,
-          decoration: InputDecoration(
-              labelText: 'Title*', border: OutlineInputBorder()),
-          validator: (value) {
-            if (value.isEmpty) {
-              return 'Required';
-            }
-            return null;
-          },
-        ),
+            autofocus: true,
+            textInputAction: TextInputAction.next,
+            cursorColor: Color(0xFF92DAAF),
+            keyboardType: TextInputType.text,
+            decoration: InputDecoration(
+                labelText: 'Title*', border: OutlineInputBorder()),
+            textCapitalization: TextCapitalization.sentences,
+            validator: (value) {
+              if (value.isEmpty) {
+                return 'Required';
+              }
+              return null;
+            },
+            onFieldSubmitted: (term) {
+              FocusScope.of(context).requestFocus(companyNode);
+            }),
         SizedBox(height: SizeConfig.safeBlockVertical * 2),
         TextFormField(
+            focusNode: companyNode,
+            textInputAction: TextInputAction.done,
             cursorColor: Color(0xFF92DAAF),
             keyboardType: TextInputType.text,
             decoration: InputDecoration(
                 labelText: 'Company/Organization*',
                 border: OutlineInputBorder()),
+            textCapitalization: TextCapitalization.sentences,
             validator: (value) {
               if (value.isEmpty) {
                 return 'Required';

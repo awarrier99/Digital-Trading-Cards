@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 
 import 'DropdownFormField.dart';
+import 'package:ui/SizeConfig.dart';
 
 class EducationInputs extends StatelessWidget {
+  FocusNode majorNode = FocusNode();
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -10,16 +13,27 @@ class EducationInputs extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TextFormField(
-          decoration: InputDecoration(labelText: 'School*'),
-          validator: (value) {
-            if (value.isEmpty) {
-              return 'Required';
-            }
-            return null;
-          },
-        ),
+            autofocus: true,
+            textInputAction: TextInputAction.next,
+            decoration: InputDecoration(
+                labelText: 'School*', border: OutlineInputBorder()),
+            textCapitalization: TextCapitalization.sentences,
+            validator: (value) {
+              if (value.isEmpty) {
+                return 'Required';
+              }
+              return null;
+            },
+            onFieldSubmitted: (term) {
+              FocusScope.of(context).requestFocus(majorNode);
+            }),
+        SizedBox(height: SizeConfig.safeBlockVertical * 2),
         TextFormField(
-          decoration: InputDecoration(labelText: 'Major/Subject*'),
+          focusNode: majorNode,
+          textInputAction: TextInputAction.done,
+          decoration: InputDecoration(
+              labelText: 'Major/Subject*', border: OutlineInputBorder()),
+          textCapitalization: TextCapitalization.sentences,
           validator: (value) {
             if (value.isEmpty) {
               return 'Required';
