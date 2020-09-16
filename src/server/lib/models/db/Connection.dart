@@ -14,8 +14,8 @@ class Connection extends Serializable {
   @override
   Map<String, dynamic> asMap() {
     return {
-      "user1": user1.asMap(),
-      "user2": user2.asMap()
+      'user1': user1.asMap(),
+      'user2': user2.asMap()
     };
   }
 
@@ -24,14 +24,14 @@ class Connection extends Serializable {
     final user1Map = object['user1'] as Map<String, dynamic>;
     final user2Map = object['user2'] as Map<String, dynamic>;
 
-    if (user1Map['type'] == UserType.student.toString()) {
+    if (stringToUserType(user1Map['type'] as String) == UserType.student) {
       user1 = Student()
         ..readFromMap(user1Map);
     } else {
       user1 = Recruiter()
         ..readFromMap(user1Map);
     }
-    if (user2Map['type'] == UserType.student) {
+    if (stringToUserType(user2Map['type'] as String) == UserType.student) {
       user2 = Student()
         ..readFromMap(user2Map);
     } else {

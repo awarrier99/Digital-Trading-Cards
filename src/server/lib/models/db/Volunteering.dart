@@ -27,13 +27,13 @@ class Volunteering extends Serializable {
   @override
   Map<String, dynamic> asMap() {
     return {
-      "id": id,
-      "user": user.asMap(),
-      "company": company.asMap(),
-      "title": title,
-      "description": description,
-      "startDate": startDate.toIso8601String(),
-      "endDate": endDate.toIso8601String()
+      'id': id,
+      'user': user.asMap(),
+      'company': company.asMap(),
+      'title': title,
+      'description': description,
+      'startDate': startDate.toIso8601String(),
+      'endDate': endDate.toIso8601String()
     };
   }
 
@@ -41,7 +41,7 @@ class Volunteering extends Serializable {
   void readFromMap(Map<String, dynamic> object) {
     if (user == null) {
       final userMap = object['user'] as Map<String, dynamic>;
-      if (userMap['type'] == UserType.student.toString()) {
+      if (stringToUserType(userMap['type'] as String) == UserType.student) {
         user = Student()
           ..readFromMap(userMap);
       } else {
@@ -55,5 +55,42 @@ class Volunteering extends Serializable {
     description = object['description'] as String;
     startDate = DateTime.parse(object['startDate'] as String);
     endDate = DateTime.parse(object['endDate'] as String);
+  }
+
+  Future<void> save() async {
+    const sql = '''
+      INSERT INTO volunteering
+      (user, company, title, description, start_date, end_date)
+      VALUES (?, ?, ?, ?, ?, ?)
+    ''';
+    await ServerChannel.db.query(sql, [
+      user.id,
+      company.name,
+      title,
+      description,
+      startDate.toUtc(),
+      endDate.toUtc()
+    ]);
+  }
+
+  static Future<List<Volunteering>> getByUser(User user) async {
+    const sql = '''
+      SELECT * FROM volunteering
+      WHERE user = ?
+    ''';
+    final results = await ServerChannel.db.query(sql, [user.id]);
+
+    final resultFutures = results.map((e) async =>
+    Volunteering.create(
+      user: user,
+      company: Company.create(name: e[2] as String),
+      title: e[3] as String,
+      description: e[4] as String,
+      startDate: (e[5] as DateTime).toLocal(),
+      endDate: (e[6] as DateTime).toLocal(),
+    )
+      ..id = e[0] as int
+    );
+    return Future.wait(resultFutures);
   }
 }

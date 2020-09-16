@@ -1,5 +1,3 @@
-import 'package:mysql1/mysql1.dart';
-
 import '../server.dart';
 
 class Database {

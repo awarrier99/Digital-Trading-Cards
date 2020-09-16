@@ -15,15 +15,15 @@ class UserSkill extends Serializable {
   @override
   Map<String, dynamic> asMap() {
     return {
-      "user": user.asMap(),
-      "skill": skill
+      'user': user.asMap(),
+      'skill': skill.asMap()
     };
   }
 
   @override
   void readFromMap(Map<String, dynamic> object) {
     final userMap = object['user'] as Map<String, dynamic>;
-    if (userMap['type'] == UserType.student.toString()) {
+    if (stringToUserType(userMap['type'] as String) == UserType.student) {
       user = Student()
         ..readFromMap(userMap);
     } else {
@@ -32,5 +32,14 @@ class UserSkill extends Serializable {
     }
     skill = Skill()
       ..readFromMap(object['skill'] as Map<String, dynamic>);
+  }
+
+  Future<void> save() async {
+    const sql = '''
+      INSERT INTO user_skills
+      (user, skill)
+      VALUES (?, ?)
+    ''';
+    await ServerChannel.db.query(sql, [user.id, skill.title]);
   }
 }

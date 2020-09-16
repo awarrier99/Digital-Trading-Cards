@@ -2,10 +2,10 @@ import 'package:meta/meta.dart';
 
 import '../../server.dart';
 
-class Company extends Serializable {
-  Company();
+class Field extends Serializable {
+  Field();
 
-  Company.create({@required this.name});
+  Field.create({@required this.name});
 
   String name;
 
