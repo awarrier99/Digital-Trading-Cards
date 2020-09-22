@@ -81,20 +81,20 @@ abstract class User extends Serializable {
     }
 
     final userRow = results.first;
-    if (stringToUserType(userRow[7] as String) == UserType.student) {
+    if (stringToUserType(userRow['type'] as String) == UserType.student) {
       const sql2 = '''
         SELECT * FROM students
         WHERE id = ?
       ''';
       final studentRow = (await ServerChannel.db.query(sql2, [id])).first;
       return Student.create(
-          firstName: userRow[1] as String,
-          lastName: userRow[2] as String,
-          username: userRow[3] as String,
-          country: userRow[4] as String,
-          state: userRow[5] as String,
-          city: userRow[6] as String,
-          gpa: studentRow[1] as double
+          firstName: userRow['first_name'] as String,
+          lastName: userRow['last_name'] as String,
+          username: userRow['username'] as String,
+          country: userRow['country'] as String,
+          state: userRow['state'] as String,
+          city: userRow['city'] as String,
+          gpa: studentRow['gpa'] as double
       )
           ..id = id;
     }
@@ -105,14 +105,14 @@ abstract class User extends Serializable {
     ''';
     final recruiterRow = (await ServerChannel.db.query(sql3, [id])).first;
     return Recruiter.create(
-        firstName: userRow[1] as String,
-        lastName: userRow[2] as String,
-        username: userRow[3] as String,
-        country: userRow[4] as String,
-        state: userRow[5] as String,
-        city: userRow[6] as String,
-        company: Company.create(name: recruiterRow[1] as String),
-        website: recruiterRow[2] as String
+        firstName: userRow['first_name'] as String,
+        lastName: userRow['last_name'] as String,
+        username: userRow['username'] as String,
+        country: userRow['country'] as String,
+        state: userRow['state'] as String,
+        city: userRow['city'] as String,
+        company: Company.create(name: recruiterRow['company'] as String),
+        website: recruiterRow['website'] as String
     )
         ..id = id;
   }

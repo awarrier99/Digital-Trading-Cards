@@ -83,13 +83,13 @@ class Volunteering extends Serializable {
     final resultFutures = results.map((e) async =>
     Volunteering.create(
       user: user,
-      company: Company.create(name: e[2] as String),
-      title: e[3] as String,
-      description: e[4] as String,
-      startDate: (e[5] as DateTime).toLocal(),
-      endDate: (e[6] as DateTime).toLocal(),
+      company: Company.create(name: e['company'] as String),
+      title: e['title'] as String,
+      description: e['description'] as String,
+      startDate: (e['start_date'] as DateTime).toLocal(),
+      endDate: (e['end_date'] as DateTime).toLocal(),
     )
-      ..id = e[0] as int
+      ..id = e['id'] as int
     );
     return Future.wait(resultFutures);
   }
