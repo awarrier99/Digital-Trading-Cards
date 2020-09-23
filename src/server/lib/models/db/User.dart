@@ -103,7 +103,7 @@ class User extends Serializable {
           state: userRow['state'] as String,
           city: userRow['city'] as String,
           password: userRow['password'] as String,
-          gpa: studentRow[1] as double)
+          gpa: studentRow['gpa'] as double)
           ..id = id;
     }
 
@@ -113,14 +113,14 @@ class User extends Serializable {
     ''';
     final recruiterRow = (await ServerChannel.db.query(sql3, [id])).first;
     return Recruiter.create(
-        firstName: userRow[1] as String,
-        lastName: userRow[2] as String,
-        username: userRow[3] as String,
-        country: userRow[4] as String,
-        state: userRow[5] as String,
-        city: userRow[6] as String,
-        company: Company.create(name: recruiterRow[1] as String),
-        website: recruiterRow[2] as String)
+        firstName: userRow['first_name'] as String,
+        lastName: userRow['last_name'] as String,
+        username: userRow['username'] as String,
+        country: userRow['country'] as String,
+        state: userRow['state'] as String,
+        city: userRow['city'] as String,
+        company: Company.create(name: recruiterRow['company'] as String),
+        website: recruiterRow['website'] as String)
       ..id = id;
   }
 
