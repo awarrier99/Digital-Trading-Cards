@@ -1,13 +1,12 @@
 import 'package:meta/meta.dart';
+import 'package:dbcrypt/dbcrypt.dart';
 
 import '../../server.dart';
 import 'Company.dart';
 
-enum UserType {
-  student,
-  recruiter
-}
+enum UserType { student, recruiter }
 
+DBCrypt dbCrypt;
 String userTypeToString(UserType userType) {
   switch (userType) {
     case UserType.student:
@@ -15,6 +14,12 @@ String userTypeToString(UserType userType) {
     default:
       return 'Recruiter';
   }
+}
+
+String hashPassword(String plainPass) {
+  final String hashedPassword =
+      DBCrypt().hashpw(plainPass, DBCrypt().gensalt());
+  return hashedPassword;
 }
 
 UserType stringToUserType(String string) {
@@ -26,16 +31,16 @@ UserType stringToUserType(String string) {
   }
 }
 
-abstract class User extends Serializable {
-  User({
-    @required this.firstName,
-    @required this.lastName,
-    @required this.username,
-    @required this.country,
-    @required this.state,
-    @required this.city,
-    @required this.type
-  });
+class User extends Serializable {
+  User(
+      {@required this.firstName,
+      @required this.lastName,
+      @required this.username,
+      @required this.country,
+      @required this.state,
+      @required this.city,
+      @required this.password,
+      @required this.type});
 
   int id;
   String firstName;
@@ -44,6 +49,7 @@ abstract class User extends Serializable {
   String country;
   String state;
   String city;
+  String password;
   UserType type;
 
   @override
@@ -68,6 +74,8 @@ abstract class User extends Serializable {
     country = object['country'] as String;
     state = object['state'] as String;
     city = object['city'] as String;
+    type = stringToUserType(object['type'] as String);
+    password = object['password'] as String;
   }
 
   static Future<User> get(int id) async {
@@ -81,22 +89,22 @@ abstract class User extends Serializable {
     }
 
     final userRow = results.first;
-    if (stringToUserType(userRow[7] as String) == UserType.student) {
+    if (stringToUserType(userRow['type'] as String) == UserType.student) {
       const sql2 = '''
         SELECT * FROM students
         WHERE id = ?
       ''';
       final studentRow = (await ServerChannel.db.query(sql2, [id])).first;
       return Student.create(
-          firstName: userRow[1] as String,
-          lastName: userRow[2] as String,
-          username: userRow[3] as String,
-          country: userRow[4] as String,
-          state: userRow[5] as String,
-          city: userRow[6] as String,
-          gpa: studentRow[1] as double
-      )
-          ..id = id;
+          firstName: userRow['first_name'] as String,
+          lastName: userRow['last_anem'] as String,
+          username: userRow['username'] as String,
+          country: userRow['country'] as String,
+          state: userRow['state'] as String,
+          city: userRow['city'] as String,
+          password: userRow['password'] as String,
+          gpa: studentRow[1] as double)
+        ..id = id;
     }
 
     const sql3 = '''
@@ -112,52 +120,85 @@ abstract class User extends Serializable {
         state: userRow[5] as String,
         city: userRow[6] as String,
         company: Company.create(name: recruiterRow[1] as String),
-        website: recruiterRow[2] as String
-    )
-        ..id = id;
+        website: recruiterRow[2] as String)
+      ..id = id;
   }
+
+  static Future<User> getLoginCreds(String username) {}
 
   Future<void> save() async {
     const sql = '''
         INSERT INTO users
-        (first_name, last_name, username, country, state, city, type)
-        VALUES (?, ?, ?, ?, ?, ?, 'student')
+        (first_name, last_name, username, country, state, city, password, type)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
       ''';
-    final results = await ServerChannel.db.query(sql, [firstName, lastName, username, country, state, city]);
+    final results = await ServerChannel.db.query(sql, [
+      firstName,
+      lastName,
+      username,
+      country,
+      state,
+      city,
+      hashPassword(password),
+      userTypeToString(type)
+    ]);
     id = results.insertId;
+  }
+
+  Future<bool> checkAuth(String username, String password) async {
+    const sql = '''
+      SELECT password FROM users
+      WHERE username = ?
+    ''';
+    final results = (await ServerChannel.db.query(sql, [username])).first;
+    String hashedPass = results['password'].toString();
+    if (results.isEmpty) {
+      return null;
+    }
+    var isCorrect = new DBCrypt().checkpw(password, hashedPass);
+    return isCorrect;
   }
 }
 
 class Student extends User {
   Student();
 
-  Student.create({
-    @required String firstName,
-    @required String lastName,
-    @required String username,
-    @required String country,
-    @required String state,
-    @required String city,
-    @required this.gpa
-  }): super(
-    firstName: firstName,
-    lastName: lastName,
-    username: username,
-    country: country,
-    state: state,
-    city: city,
-    type: UserType.student
-  );
+  Student.create(
+      {@required String firstName,
+      @required String lastName,
+      @required String username,
+      @required String country,
+      @required String state,
+      @required String city,
+      @required String password,
+      this.gpa})
+      : super(
+            firstName: firstName,
+            lastName: lastName,
+            username: username,
+            country: country,
+            state: state,
+            city: city,
+            password: password,
+            type: UserType.student);
+
+  factory Student.of(User user) {
+    return Student.create(
+        firstName: user.firstName,
+        lastName: user.lastName,
+        username: user.username,
+        country: user.country,
+        state: user.state,
+        city: user.city,
+        password: user.password);
+  }
 
   double gpa;
 
   @override
   Map<String, dynamic> asMap() {
     final userMap = super.asMap();
-    return {
-      ...userMap,
-      'gpa': gpa
-    };
+    return {...userMap, 'gpa': gpa};
   }
 
   @override
@@ -187,24 +228,36 @@ class Student extends User {
 class Recruiter extends User {
   Recruiter();
 
-  Recruiter.create({
-    @required String firstName,
-    @required String lastName,
-    @required String username,
-    @required String country,
-    @required String state,
-    @required String city,
-    @required this.company,
-    this.website
-  }): super(
-      firstName: firstName,
-      lastName: lastName,
-      username: username,
-      country: country,
-      state: state,
-      city: city,
-      type: UserType.recruiter
-  );
+  Recruiter.create(
+      {@required String firstName,
+      @required String lastName,
+      @required String username,
+      @required String country,
+      @required String state,
+      @required String city,
+      @required String password,
+      this.company,
+      this.website})
+      : super(
+            firstName: firstName,
+            lastName: lastName,
+            username: username,
+            country: country,
+            state: state,
+            city: city,
+            password: password,
+            type: UserType.recruiter);
+
+  factory Recruiter.of(User user) {
+    return Recruiter.create(
+        firstName: user.firstName,
+        lastName: user.lastName,
+        username: user.username,
+        country: user.country,
+        state: user.state,
+        city: user.city,
+        password: user.password);
+  }
 
   Company company;
   String website;
@@ -212,19 +265,14 @@ class Recruiter extends User {
   @override
   Map<String, dynamic> asMap() {
     final userMap = super.asMap();
-    return {
-      ...userMap,
-      'company': company,
-      'website': website
-    };
+    return {...userMap, 'company': company, 'website': website};
   }
 
   @override
   void readFromMap(Map<String, dynamic> object) {
     super.readFromMap(object);
     type = UserType.recruiter;
-    company = Company()
-      ..readFromMap(object['company'] as Map<String, dynamic>);
+    company = Company()..readFromMap(object['company'] as Map<String, dynamic>);
     website = object['website'] as String;
   }
 
@@ -237,6 +285,5 @@ class Recruiter extends User {
       VALUES (?, ?, ?)
     ''';
     await ServerChannel.db.query(sql, [id, company.name, website]);
-
   }
 }

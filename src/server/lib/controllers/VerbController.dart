@@ -2,17 +2,9 @@ import '../models/db/models.dart';
 import '../server.dart';
 import '../util/tools.dart';
 
-enum Resource {
-  card
-}
+enum Resource { card, user }
 
-enum Verb {
-  post,
-  get,
-  put,
-  patch,
-  delete
-}
+enum Verb { post, get, put, patch, delete }
 
 Verb stringToVerb(String string) {
   switch (string) {
@@ -34,7 +26,8 @@ class VerbController extends Controller {
 
   final Resource resource;
 
-  Future<RequestOrResponse> _commonPost(Request request, int id, checker) async {
+  Future<RequestOrResponse> _commonPost(
+      Request request, int id, checker) async {
     if (id == null) {
       return request;
     }
@@ -46,7 +39,8 @@ class VerbController extends Controller {
     return Response.conflict(body: {'success': false});
   }
 
-  Future<RequestOrResponse> _commonPutOrPatchOrDelete(Request request, int id, checker) async {
+  Future<RequestOrResponse> _commonPutOrPatchOrDelete(
+      Request request, int id, checker) async {
     if (id == null) {
       return notAllowed();
     }
@@ -61,9 +55,9 @@ class VerbController extends Controller {
   @override
   Future<RequestOrResponse> handle(Request request) async {
     final idString = request.path.variables['id'];
-    final id = idString == null ? null : int.parse(idString);
+    final id = idString == null || idString == "" ? null : int.parse(idString);
+    print(request.path.string);
     final verb = stringToVerb(request.method);
-
     if (resource == Resource.card) {
       if (verb == Verb.post) {
         return _commonPost(request, id, User.get);
@@ -76,6 +70,16 @@ class VerbController extends Controller {
       }
 
       return _commonPutOrPatchOrDelete(request, id, User);
+    } else if (resource == Resource.user) {
+      if (verb == Verb.post) {
+        return _commonPost(request, id, User.get);
+      } else if (verb == Verb.get) {
+        if (id != null) {
+          return request;
+        }
+
+        return notAllowed();
+      }
     }
 
     return request;
