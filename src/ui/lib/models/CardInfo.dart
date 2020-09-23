@@ -5,11 +5,9 @@ import 'dart:convert';
 
 class Company {
   String name;
-  
+
   Map<String, dynamic> toJson() {
-    return {
-      'name': name
-    };
+    return {'name': name};
   }
 }
 
@@ -21,6 +19,7 @@ class User {
   String state;
   String city;
   String type;
+  String password;
 
   double gpa;
 
@@ -35,7 +34,8 @@ class User {
       'country': country,
       'state': state,
       'city': city,
-      'type': type
+      'password': 'password',
+      'type': type, 
     };
     if (type == 'Student') {
       map.putIfAbsent('gpa', () => gpa);
@@ -43,7 +43,7 @@ class User {
       map.putIfAbsent('company', () => company);
       map.putIfAbsent('website', () => website);
     }
-    
+
     return map;
   }
 }
@@ -51,22 +51,17 @@ class User {
 class Institution {
   String name;
   String longName;
-  
+
   Map<String, dynamic> toJson() {
-    return {
-      'name': name,
-      'longName': longName
-    };
+    return {'name': name, 'longName': longName};
   }
 }
 
 class Field {
   String name;
-  
+
   Map<String, dynamic> toJson() {
-    return {
-      'name': name
-    };
+    return {'name': name};
   }
 }
 
@@ -77,7 +72,7 @@ class Education {
   bool current;
   DateTime startDate;
   DateTime endDate;
-  
+
   Map<String, dynamic> toJson() {
     return {
       'institution': institution == null ? {} : institution.toJson(),
@@ -97,7 +92,7 @@ class Work {
   bool current;
   DateTime startDate;
   DateTime endDate;
-  
+
   Map<String, dynamic> toJson() {
     return {
       'company': company == null ? {} : company.toJson(),
@@ -116,7 +111,7 @@ class Volunteering {
   String description;
   DateTime startDate;
   DateTime endDate;
-  
+
   Map<String, dynamic> toJson() {
     return {
       'company': company == null ? {} : company.toJson(),
@@ -130,21 +125,17 @@ class Volunteering {
 
 class Skill {
   String name;
-  
+
   Map<String, dynamic> toJson() {
-    return {
-      'name': name
-    };
+    return {'name': name};
   }
 }
 
 class Interest {
   String name;
-  
+
   Map<String, dynamic> toJson() {
-    return {
-      'name': name
-    };
+    return {'name': name};
   }
 }
 

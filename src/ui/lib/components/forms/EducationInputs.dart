@@ -109,6 +109,7 @@ class EducationInputsState extends State<EducationInputs> {
           ],
           crossAxisAlignment: CrossAxisAlignment.center,
         ),
+        DropdownFormField(['Associate', 'Bachelor\'s', 'Master\'s', 'Doctoral']),
         Container(
             margin: EdgeInsets.only(top: 20),
             child: Text(
@@ -139,6 +140,11 @@ class EducationInputsState extends State<EducationInputs> {
               widget.model.endDate = value;
           }
         ),
+            
+        Row(children: [
+          DropdownFormField(['Fall', 'Spring', 'Summer']),
+          DropdownFormField(new List<String>.generate(10, (i) => (i + DateTime.now().year - 5).toString())),
+        ])
       ],
     );
   }

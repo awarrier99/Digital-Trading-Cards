@@ -97,24 +97,14 @@ class User extends Serializable {
       final studentRow = (await ServerChannel.db.query(sql2, [id])).first;
       return Student.create(
           firstName: userRow['first_name'] as String,
-<<<<<<< HEAD
-          lastName: userRow['last_anem'] as String,
-=======
           lastName: userRow['last_name'] as String,
->>>>>>> 5cfaeeb335c85043050b94acb6d2c9b3b661b14e
           username: userRow['username'] as String,
           country: userRow['country'] as String,
           state: userRow['state'] as String,
           city: userRow['city'] as String,
-<<<<<<< HEAD
           password: userRow['password'] as String,
           gpa: studentRow[1] as double)
-        ..id = id;
-=======
-          gpa: studentRow['gpa'] as double
-      )
           ..id = id;
->>>>>>> 5cfaeeb335c85043050b94acb6d2c9b3b661b14e
     }
 
     const sql3 = '''
@@ -123,7 +113,6 @@ class User extends Serializable {
     ''';
     final recruiterRow = (await ServerChannel.db.query(sql3, [id])).first;
     return Recruiter.create(
-<<<<<<< HEAD
         firstName: userRow[1] as String,
         lastName: userRow[2] as String,
         username: userRow[3] as String,
@@ -133,18 +122,6 @@ class User extends Serializable {
         company: Company.create(name: recruiterRow[1] as String),
         website: recruiterRow[2] as String)
       ..id = id;
-=======
-        firstName: userRow['first_name'] as String,
-        lastName: userRow['last_name'] as String,
-        username: userRow['username'] as String,
-        country: userRow['country'] as String,
-        state: userRow['state'] as String,
-        city: userRow['city'] as String,
-        company: Company.create(name: recruiterRow['company'] as String),
-        website: recruiterRow['website'] as String
-    )
-        ..id = id;
->>>>>>> 5cfaeeb335c85043050b94acb6d2c9b3b661b14e
   }
 
   static Future<User> getLoginCreds(String username) {}

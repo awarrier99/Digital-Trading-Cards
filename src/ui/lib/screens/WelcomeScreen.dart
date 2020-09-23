@@ -1,18 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:ui/palette.dart';
+import 'package:provider/provider.dart';
 import 'package:ui/SizeConfig.dart';
 import 'package:ui/screens/CreateAccount.dart';
 import 'package:ui/screens/CreateCard1.dart';
+import '../models/CardInfo.dart';
+
 
 class WelcomeScreen extends StatefulWidget {
-  WelcomeScreen({Key key, this.title}) : super(key: key);
   final String title;
+  final User model;
+
+  WelcomeScreen({Key key, this.title, @required this.model}) : super(key: key);
+
 
   @override
   _WelcomeScreenState createState() => _WelcomeScreenState();
 }
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
+  FocusNode passwordNode = FocusNode();
+  FocusNode usernameNode = FocusNode();
+
   Future createAccount(context) async {
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => CreateAccount()));
@@ -42,8 +51,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         padding: EdgeInsets.only(top: 30, left: 20, right: 20),
                         child: Column(
                           children: <Widget>[
-                            TextField(
+                            TextFormField(
                               keyboardType: TextInputType.emailAddress,
+                              onChanged: (value) {
+                                  widget.model.username = value;
+                              },
+                              onFieldSubmitted: (term) {
+                                  FocusScope.of(context).requestFocus(usernameNode);
+                              },
                               decoration: InputDecoration(
                                   labelText: 'EMAIL',
                                   labelStyle: TextStyle(
@@ -52,8 +67,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                       color: Colors.grey)),
                             ),
                             SizedBox(height: 20),
-                            TextField(
+                            TextFormField(
                               obscureText: true,
+                              onChanged: (value) {
+                                  widget.model.password = value;
+                              },
+                              onFieldSubmitted: (term) {
+                                  FocusScope.of(context).requestFocus(passwordNode);
+                              },
                               decoration: InputDecoration(
                                   labelText: 'PASSWORD',
                                   labelStyle: TextStyle(

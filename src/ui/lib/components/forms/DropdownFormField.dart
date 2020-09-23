@@ -33,6 +33,7 @@ class _DropdownFormFieldState extends State<DropdownFormField> {
             dropdownValue = newValue;
           });
           if (widget.onChanged != null) widget.onChanged(newValue);
+          // widget.onChanged(newValue);
         },
         items: widget.data.map<DropdownMenuItem<String>>((String value) {
           return DropdownMenuItem<String>(
