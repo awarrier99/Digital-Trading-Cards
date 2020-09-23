@@ -23,9 +23,14 @@ class CreateAccount2 extends StatelessWidget {
             child: Form(
               child: Column(
                 children: [
-                  DynamicForm('Work Experience', ExperienceVolunteerInput()),
                   DynamicForm(
-                      'Volunteer Experience', ExperienceVolunteerInput()),
+                      title: 'Work Experience',
+                      inputBuilder: () => ExperienceVolunteerInput()
+                  ),
+                  DynamicForm(
+                      title: 'Volunteer Experience',
+                      inputBuilder: () => ExperienceVolunteerInput()
+                  ),
                   SizedBox(
                       width: SizeConfig.screenWidth,
                       child: RaisedButton(

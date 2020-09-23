@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:ui/components/forms/EducationInputs.dart';
 import 'package:ui/SizeConfig.dart';
+import 'package:provider/provider.dart';
 import '../components/forms/PersonalInfoInputs.dart';
 import '../components/forms/DynamicForm.dart';
 import './CreateAccount2.dart';
 import '../palette.dart';
+import '../models/CardInfo.dart';
 
 class CreateCard1 extends StatelessWidget {
   final _createCard1FormKey = GlobalKey<FormState>();
+  final personalInfoInputsModel = User();
+  final educationInputsModel = [Education()];
 
   Future nextStep(context) async {
     Navigator.push(
@@ -16,6 +20,7 @@ class CreateCard1 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return Scaffold(
         appBar: AppBar(
           title: Text(
@@ -28,9 +33,17 @@ class CreateCard1 extends StatelessWidget {
             child: SingleChildScrollView(
               child: Form(
                   child: Column(children: <Widget>[
-                PersonalInfoInputs(_createCard1FormKey),
+                PersonalInfoInputs(
+                  key: _createCard1FormKey,
+                  model: personalInfoInputsModel,
+                ),
                 SizedBox(height: 20),
-                DynamicForm('Education', EducationInputs()),
+                DynamicForm(
+                  title: 'Education',
+                  inputBuilder: (model) => EducationInputs(model: model),
+                  dynamicModelList: educationInputsModel,
+                  dynamicModelBuilder: () => Education()
+                ),
                 SizedBox(
                     width: SizeConfig.screenWidth,
                     child: RaisedButton(
@@ -38,6 +51,8 @@ class CreateCard1 extends StatelessWidget {
                       textColor: Colors.white,
                       color: Palette.primaryGreen,
                       onPressed: () {
+                        print(personalInfoInputsModel.toJson());
+
                         if (_createCard1FormKey.currentState.validate()) {
                           nextStep(context);
                         }

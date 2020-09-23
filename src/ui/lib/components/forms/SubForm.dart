@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:ui/components/forms/ColorBadge.dart';
-import 'package:ui/components/inheretedwidgets/SubFormInheretedWidget.dart';
+import 'package:ui/components/inheritedWidgets/SubFormInheritedWidget.dart';
 import 'package:ui/palette.dart';
 
 class SubForm extends StatefulWidget {
   final String subTitle;
   final int index;
   final Function callback;
+  final subModel;
 
-  SubForm(this.subTitle, this.index, this.callback);
+  SubForm({
+    @required this.subTitle,
+    @required this.index,
+    @required this.callback,
+    this.subModel
+  });
 
   @override
   _SubFormState createState() => _SubFormState();
@@ -17,7 +23,7 @@ class SubForm extends StatefulWidget {
 class _SubFormState extends State<SubForm> {
   @override
   Widget build(BuildContext context) {
-    final subFormInhereted = SubFormInheretedWidget.of(context);
+    final subFormInherited = SubFormInheritedWidget.of(context);
 
     return Container(
         margin: EdgeInsets.only(bottom: 20),
@@ -36,7 +42,7 @@ class _SubFormState extends State<SubForm> {
                 },
               ),
             ]),
-            subFormInhereted.inputs,
+            subFormInherited.inputBuilder(widget.subModel),
           ],
         ));
   }

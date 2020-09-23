@@ -1,13 +1,24 @@
 import 'package:flutter/material.dart';
-
-import 'DropdownFormField.dart';
 import 'package:ui/SizeConfig.dart';
 
-class EducationInputs extends StatelessWidget {
+import 'DropdownFormField.dart';
+import '../../models/CardInfo.dart';
+
+class EducationInputs extends StatefulWidget {
+  final Education model;
+
+  EducationInputs({@required this.model});
+
+  @override
+  EducationInputsState createState() => EducationInputsState();
+}
+
+class EducationInputsState extends State<EducationInputs> {
   FocusNode majorNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -23,6 +34,10 @@ class EducationInputs extends StatelessWidget {
                 return 'Required';
               }
               return null;
+            },
+            onChanged: (value) {
+              widget.model.institution = Institution()
+                  ..name = value;
             },
             onFieldSubmitted: (term) {
               FocusScope.of(context).requestFocus(majorNode);
@@ -40,14 +55,24 @@ class EducationInputs extends StatelessWidget {
             }
             return null;
           },
+          onChanged: (value) {
+            widget.model.field = Field()
+                ..name = value;
+          },
         ),
         Container(
             margin: EdgeInsets.only(top: 20),
             child: Text(
               'Degree Type*',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-            )),
-        DropdownFormField(['Associates', 'Bachelors', 'Masters', 'PhD']),
+            )
+        ),
+        DropdownFormField(
+          data: ['Associate', 'Bachelor\'s', 'Master\'s', 'Doctoral'],
+          onChanged: (value) {
+            widget.model.degree = value;
+          },
+        ),
         Container(
             margin: EdgeInsets.only(top: 20),
             child: Text(
@@ -55,9 +80,18 @@ class EducationInputs extends StatelessWidget {
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
             )),
         Row(children: [
-          DropdownFormField(['Fall', 'Spring', 'Summer']),
-          DropdownFormField(new List<String>.generate(
-              10, (i) => (i + DateTime.now().year - 5).toString())),
+          DropdownFormField(
+            data: ['Fall', 'Spring', 'Summer'],
+            onChanged: (value) {
+
+            },
+          ),
+          DropdownFormField(
+            data: new List<String>.generate(10, (i) => (i + DateTime.now().year - 5).toString()),
+            onChanged: (value) {
+
+            },
+          ),
         ])
       ],
     );

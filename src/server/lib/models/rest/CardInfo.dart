@@ -25,15 +25,12 @@ class CardInfo extends Serializable {
     return {
       "user": user.asMap(),
       "education": education.map((e) => e.asMap()
-        ..update('field', (value) => value['name'])
         ..remove('user'))
           .toList(),
       "work": work.map((e) => e.asMap()
-        ..update('company', (value) => value['name'])
         ..remove('user'))
           .toList(),
       "volunteering": volunteering.map((e) => e.asMap()
-        ..update('company', (value) => value['name'])
         ..remove('user'))
           .toList(),
       "skills": skills.map((e) => e.title)

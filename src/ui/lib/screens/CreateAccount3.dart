@@ -25,9 +25,15 @@ class CreateAccount3 extends StatelessWidget {
         child: SingleChildScrollView(
           child: Form(
               child: Column(children: <Widget>[
-            DynamicForm('Skills', SkillsInputs()),
+            DynamicForm(
+                title: 'Skills',
+                inputBuilder: () => SkillsInputs()
+            ),
             SizedBox(height: 20),
-            DynamicForm('Interests', InterestsInputs()),
+            DynamicForm(
+                title: 'Interests',
+                inputBuilder: () => InterestsInputs()
+            ),
             SizedBox(
                 width: SizeConfig.screenWidth,
                 child: RaisedButton(

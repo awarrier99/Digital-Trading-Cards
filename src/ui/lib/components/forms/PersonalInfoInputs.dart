@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:ui/palette.dart';
 import 'package:ui/SizeConfig.dart';
+
+import '../../models/CardInfo.dart';
 
 // Create a Form widget.
 class PersonalInfoInputs extends StatefulWidget {
   final GlobalKey key;
+  final User model;
 
-  PersonalInfoInputs(this.key);
+  PersonalInfoInputs({@required this.key, @required this.model});
 
   @override
   PersonalInfoInputsState createState() {
@@ -24,6 +28,7 @@ class PersonalInfoInputsState extends State<PersonalInfoInputs> {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return Form(
       key: widget.key,
       child: Column(
@@ -46,6 +51,9 @@ class PersonalInfoInputsState extends State<PersonalInfoInputs> {
                 }
                 return null;
               },
+              onChanged: (value) {
+                widget.model.firstName = value;
+              },
               onFieldSubmitted: (term) {
                 FocusScope.of(context).requestFocus(lastNameNode);
               }),
@@ -62,6 +70,9 @@ class PersonalInfoInputsState extends State<PersonalInfoInputs> {
                 }
                 return null;
               },
+              onChanged: (value) {
+                widget.model.lastName = value;
+              },
               onFieldSubmitted: (term) {
                 FocusScope.of(context).requestFocus(emailNode);
               }),
@@ -77,6 +88,9 @@ class PersonalInfoInputsState extends State<PersonalInfoInputs> {
                   return 'Required';
                 }
                 return null;
+              },
+              onChanged: (value) {
+                widget.model.username = value;
               },
               onFieldSubmitted: (term) {
                 FocusScope.of(context).requestFocus(phoneNode);
