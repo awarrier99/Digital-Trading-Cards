@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:ui/components/forms/DropdownFormField.dart';
 import 'package:ui/palette.dart';
 import 'package:ui/SizeConfig.dart';
 
@@ -24,11 +25,18 @@ class PersonalInfoInputsState extends State<PersonalInfoInputs> {
   // user hits the continue button on the keyboard.
   FocusNode lastNameNode = FocusNode();
   FocusNode emailNode = FocusNode();
-  FocusNode phoneNode = FocusNode();
+  FocusNode countryNode = FocusNode();
+  FocusNode stateNode = FocusNode();
+  FocusNode cityNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    widget.model.type = 'Student';
+  }
 
   @override
   Widget build(BuildContext context) {
-    SizeConfig().init(context);
     return Form(
       key: widget.key,
       child: Column(
@@ -36,14 +44,17 @@ class PersonalInfoInputsState extends State<PersonalInfoInputs> {
         children: <Widget>[
           Visibility(
             visible: true,
-            child: Text('Contact Info',
-                style: TextStyle(fontSize: 20, color: Palette.darkGreen)),
+            child: Text('Personal Information',
+                style: TextStyle(fontSize: 20, color: Palette.darkGreen)
+            ),
           ),
           SizedBox(height: SizeConfig.safeBlockVertical * 2),
           TextFormField(
               textInputAction: TextInputAction.next,
               decoration: InputDecoration(
-                  labelText: 'First Name*', border: OutlineInputBorder()),
+                  labelText: 'First Name*',
+                  border: OutlineInputBorder()
+              ),
               textCapitalization: TextCapitalization.words,
               validator: (value) {
                 if (value.isEmpty) {
@@ -62,7 +73,9 @@ class PersonalInfoInputsState extends State<PersonalInfoInputs> {
               focusNode: lastNameNode,
               textInputAction: TextInputAction.next,
               decoration: InputDecoration(
-                  labelText: 'Last Name*', border: OutlineInputBorder()),
+                  labelText: 'Last Name*',
+                  border: OutlineInputBorder()
+              ),
               textCapitalization: TextCapitalization.words,
               validator: (value) {
                 if (value.isEmpty) {
@@ -75,13 +88,16 @@ class PersonalInfoInputsState extends State<PersonalInfoInputs> {
               },
               onFieldSubmitted: (term) {
                 FocusScope.of(context).requestFocus(emailNode);
-              }),
+              }
+          ),
           SizedBox(height: SizeConfig.safeBlockVertical * 2),
           TextFormField(
               focusNode: emailNode,
               textInputAction: TextInputAction.next,
               decoration: InputDecoration(
-                  labelText: 'Contact Email*', border: OutlineInputBorder()),
+                  labelText: 'Email*',
+                  border: OutlineInputBorder()
+              ),
               keyboardType: TextInputType.emailAddress,
               validator: (value) {
                 if (value.isEmpty) {
@@ -93,20 +109,87 @@ class PersonalInfoInputsState extends State<PersonalInfoInputs> {
                 widget.model.username = value;
               },
               onFieldSubmitted: (term) {
-                FocusScope.of(context).requestFocus(phoneNode);
-              }),
+                FocusScope.of(context).requestFocus(countryNode);
+              }
+          ),
           SizedBox(height: SizeConfig.safeBlockVertical * 2),
           TextFormField(
-            focusNode: phoneNode,
-            textInputAction: TextInputAction.done,
-            decoration: InputDecoration(
-                labelText: 'Phone',
-                helperText: 'Ex. 012-345-6789',
-                border: OutlineInputBorder()),
-            keyboardType: TextInputType.phone,
+              focusNode: countryNode,
+              textInputAction: TextInputAction.next,
+              decoration: InputDecoration(
+                  labelText: 'Country*',
+                  border: OutlineInputBorder()
+              ),
+              textCapitalization: TextCapitalization.words,
+              validator: (value) {
+                if (value.isEmpty) {
+                  return 'Required';
+                }
+                return null;
+              },
+              onChanged: (value) {
+                widget.model.country = value;
+              },
+              onFieldSubmitted: (term) {
+                FocusScope.of(context).requestFocus(stateNode);
+              }
           ),
-        ],
-      ),
+          SizedBox(height: SizeConfig.safeBlockVertical * 2),
+          TextFormField(
+              focusNode: stateNode,
+              textInputAction: TextInputAction.next,
+              decoration: InputDecoration(
+                  labelText: 'State*',
+                  border: OutlineInputBorder()
+              ),
+              textCapitalization: TextCapitalization.words,
+              validator: (value) {
+                if (value.isEmpty) {
+                  return 'Required';
+                }
+                return null;
+              },
+              onChanged: (value) {
+                widget.model.state = value;
+              },
+              onFieldSubmitted: (term) {
+                FocusScope.of(context).requestFocus(cityNode);
+              }
+          ),
+          SizedBox(height: SizeConfig.safeBlockVertical * 2),
+          TextFormField(
+              focusNode: cityNode,
+              textInputAction: TextInputAction.next,
+              decoration: InputDecoration(
+                  labelText: 'City*',
+                  border: OutlineInputBorder()
+              ),
+              textCapitalization: TextCapitalization.words,
+              validator: (value) {
+                if (value.isEmpty) {
+                  return 'Required';
+                }
+                return null;
+              },
+              onChanged: (value) {
+                widget.model.city = value;
+              }
+          ),
+          Container(
+              margin: EdgeInsets.only(top: 20),
+              child: Text(
+                'User Type*',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              )
+          ),
+          DropdownFormField(
+            ['Student', 'Recruiter'],
+            onChanged: (value) {
+              widget.model.type = value;
+            },
+          )
+        ]
+      )
     );
   }
 }

@@ -32,13 +32,12 @@ class _DynamicFormState extends State<DynamicForm> {
   callback() {
     setState(() {
       index--;
-      widget.dynamicModelList.removeLast();
+      if (widget.dynamicModelList != null) widget.dynamicModelList.removeLast();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    SizeConfig().init(context);
     return new SubFormInheritedWidget(
         inputBuilder: widget.inputBuilder,
         child: Container(
@@ -58,7 +57,7 @@ class _DynamicFormState extends State<DynamicForm> {
                       subTitle: widget.title,
                       index: (i + 1),
                       callback: callback,
-                      subModel: widget.dynamicModelList[i],
+                      subModel: widget.dynamicModelList == null ? null : widget.dynamicModelList[i],
                     ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -69,10 +68,10 @@ class _DynamicFormState extends State<DynamicForm> {
                           setState(() {
                             if (_formKey.currentState.validate()) {
                               index++;
-                              widget.dynamicModelList.add(widget.dynamicModelBuilder());
                             }
                           });
-                          return;
+                          if (widget.dynamicModelList != null)
+                            widget.dynamicModelList.add(widget.dynamicModelBuilder());
                         },
                         child: Row(
                           children: [

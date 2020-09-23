@@ -4,7 +4,7 @@ class DropdownFormField extends StatefulWidget {
   final List<String> data;
   final Function onChanged;
 
-  DropdownFormField({@required this.data, this.onChanged});
+  DropdownFormField(this.data, {this.onChanged});
   // DropdownFormField({Key key}) : super(key: key);
 
   @override
@@ -32,7 +32,7 @@ class _DropdownFormFieldState extends State<DropdownFormField> {
           setState(() {
             dropdownValue = newValue;
           });
-          widget.onChanged(newValue);
+          if (widget.onChanged != null) widget.onChanged(newValue);
         },
         items: widget.data.map<DropdownMenuItem<String>>((String value) {
           return DropdownMenuItem<String>(

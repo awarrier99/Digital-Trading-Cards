@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:ui/screens/CreateAccount3.dart';
-import '../components/forms/DynamicForm.dart';
-import 'package:ui/components/forms/ExperienceVolunteerInput.dart';
+import 'package:ui/components/forms/WorkInputs.dart';
 import 'package:ui/SizeConfig.dart';
-import '../palette.dart';
 
-class CreateAccount2 extends StatelessWidget {
+import '../palette.dart';
+import '../components/forms/DynamicForm.dart';
+import '../models/CardInfo.dart';
+
+class CreateCard2 extends StatelessWidget {
+  final workInputsModel = <Work>[];
+  final volunteeringInputsModel = <Volunteering>[];
+
   Future navigateToCreateAccount3(context) async {
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => CreateAccount3()));
@@ -24,12 +29,14 @@ class CreateAccount2 extends StatelessWidget {
               child: Column(
                 children: [
                   DynamicForm(
-                      title: 'Work Experience',
-                      inputBuilder: () => ExperienceVolunteerInput()
+                    title: 'Work Experience',
+                    inputBuilder: (model) => WorkInputs(model: model),
+                    dynamicModelList: workInputsModel,
+                    dynamicModelBuilder: () => Work(),
                   ),
                   DynamicForm(
                       title: 'Volunteer Experience',
-                      inputBuilder: () => ExperienceVolunteerInput()
+                      inputBuilder: (model) => WorkInputs(model: model)
                   ),
                   SizedBox(
                       width: SizeConfig.screenWidth,

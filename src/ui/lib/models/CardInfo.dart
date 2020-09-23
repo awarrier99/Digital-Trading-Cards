@@ -149,12 +149,12 @@ class Interest {
 }
 
 class CardInfo {
-  final User user = User();
-  final List<Education> education = [];
-  final List<Work> work = [];
-  final List<Volunteering> volunteering = [];
-  final List<Skill> skills = [];
-  final List<Interest> interests = [];
+  User user = User();
+  List<Education> education = [];
+  List<Work> work = [];
+  List<Volunteering> volunteering = [];
+  List<Skill> skills = [];
+  List<Interest> interests = [];
 
   Map<String, dynamic> toJson() {
     return {
@@ -169,38 +169,22 @@ class CardInfo {
 }
 
 class CardInfoModel {
-  final CardInfo createUser = CardInfo();
+  final CardInfo _createUser = CardInfo();
+  CardInfo get createUser => _createUser;
 
   Future<void> createCard() async {
     final res = await post('/api/cards', headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
-    }, body: createUser.toJson());
+    }, body: _createUser.toJson());
     print(json.decode(res.body));
   }
 
-  void updateUser({
-    String firstName,
-    String lastName,
-    String username,
-    String country,
-    String state,
-    String city,
-    String type,
-    double gpa,
-    String company,
-    String website
-  }) {
-    if (firstName != null) createUser.user.firstName = firstName;
-    if (lastName != null) createUser.user.lastName = lastName;
-    if (username != null) createUser.user.username = username;
-    if (country != null) createUser.user.country = country;
-    if (state != null) createUser.user.state = state;
-    if (city != null) createUser.user.city = city;
-    if (type != null) createUser.user.type = type;
-    if (gpa != null) createUser.user.gpa = gpa;
-    if (company != null) createUser.user.company = Company()
-      ..name = company;
-    if (website != null) createUser.user.website = website;
+  void updateUser(User user) {
+    _createUser.user = user;
+  }
+
+  void updateEducation(List<Education> education) {
+    _createUser.education = education;
   }
 }

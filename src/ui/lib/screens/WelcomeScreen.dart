@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ui/palette.dart';
 import 'package:ui/SizeConfig.dart';
+import 'package:ui/screens/CreateAccount.dart';
 import 'package:ui/screens/CreateCard1.dart';
 
 class WelcomeScreen extends StatefulWidget {
@@ -14,7 +15,7 @@ class WelcomeScreen extends StatefulWidget {
 class _WelcomeScreenState extends State<WelcomeScreen> {
   Future createAccount(context) async {
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => CreateCard1()));
+        context, MaterialPageRoute(builder: (context) => CreateAccount()));
   }
 
   @override
