@@ -78,6 +78,35 @@ class CardInfo extends Serializable {
         .toList();
   }
 
+  static Future<void> create(CardInfo cardInfo) async {
+    final List<Future> futures = [];
+    await cardInfo.user.save();
+    futures.add(
+        Future.forEach(cardInfo.education, (Education e) => e.save())
+    );
+    futures.add(
+        Future.forEach(cardInfo.work, (Work e) => e.save())
+    );
+    futures.add(
+        Future.forEach(cardInfo.volunteering, (Volunteering e) => e.save())
+    );
+    futures.add(
+        Future.forEach(
+            cardInfo.skills,
+                (Skill e) => UserSkill.create(user: cardInfo.user, skill: e)
+              ..save()
+        )
+    );
+    futures.add(
+        Future.forEach(
+            cardInfo.interests,
+                (Interest e) => UserInterest.create(user: cardInfo.user, interest: e)
+              ..save()
+        )
+    );
+    await Future.wait(futures);
+  }
+
   static Future<CardInfo> get(User user) async {
     return CardInfo(
         user: user,

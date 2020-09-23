@@ -44,32 +44,37 @@ class _DynamicFormState extends State<DynamicForm> {
                           fontSize: SizeConfig.safeBlockHorizontal * 4.2,
                           color: Palette.darkGreen),
                     ),
-                    FlatButton(
-                      onPressed: () {
-                        //Add new form
-                        setState(() {
-                          if (_formKey.currentState.validate()) {
-                            index++;
-                          }
-                        });
-                        return;
-                      },
-                      child: Row(
-                        children: [
-                          Icon(Icons.add),
-                          Text(
-                            'Add ${widget.title}',
-                            style: TextStyle(
-                              fontSize: SizeConfig.safeBlockHorizontal * 2.55,
-                              decoration: TextDecoration.underline,
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
                   ]),
                   for (int i = 0; i < index; i++)
                     SubForm('${widget.title}', (i + 1), callback),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      FlatButton(
+                        onPressed: () {
+                          //Add new form
+                          setState(() {
+                            if (_formKey.currentState.validate()) {
+                              index++;
+                            }
+                          });
+                          return;
+                        },
+                        child: Row(
+                          children: [
+                            Icon(Icons.add),
+                            Text(
+                              'Add ${widget.title}',
+                              style: TextStyle(
+                                fontSize: SizeConfig.safeBlockHorizontal * 3,
+                                decoration: TextDecoration.underline,
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
+                  )
                 ]))));
   }
 }

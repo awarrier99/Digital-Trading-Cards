@@ -30,6 +30,6 @@ class Institution extends Serializable {
       WHERE name = ?
     ''';
     final institution = (await ServerChannel.db.query(sql, [name])).first;
-    return Institution.create(name: name, longName: institution[1] as String);
+    return Institution.create(name: name, longName: institution['long_name'] as String);
   }
 }
