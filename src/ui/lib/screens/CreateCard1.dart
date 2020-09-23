@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ui/components/forms/EducationInputs.dart';
-
+import 'package:ui/SizeConfig.dart';
 import '../components/forms/PersonalInfoInputs.dart';
 import '../components/forms/DynamicForm.dart';
 import './CreateAccount2.dart';
@@ -19,7 +19,7 @@ class CreateCard1 extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           title: Text(
-            'Create Card',
+            'Create Card (1/3)',
             style: TextStyle(fontFamily: 'Montserrat'),
           ),
         ),
@@ -31,20 +31,18 @@ class CreateCard1 extends StatelessWidget {
                 PersonalInfoInputs(_createCard1FormKey),
                 SizedBox(height: 20),
                 DynamicForm('Education', EducationInputs()),
-                Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                  Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 16.0),
-                      child: RaisedButton(
-                        child: Text('Next'),
-                        textColor: Colors.white,
-                        color: Palette.primaryGreen,
-                        onPressed: () {
-                          if (_createCard1FormKey.currentState.validate()) {
-                            nextStep(context);
-                          }
-                        },
-                      ))
-                ]),
+                SizedBox(
+                    width: SizeConfig.screenWidth,
+                    child: RaisedButton(
+                      child: Text('Next'),
+                      textColor: Colors.white,
+                      color: Palette.primaryGreen,
+                      onPressed: () {
+                        if (_createCard1FormKey.currentState.validate()) {
+                          nextStep(context);
+                        }
+                      },
+                    )),
               ])),
             )));
   }

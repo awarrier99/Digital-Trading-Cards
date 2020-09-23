@@ -123,14 +123,14 @@ class Education extends Serializable {
     final resultFutures = results.map((e) async =>
         Education.create(
             user: user,
-            institution: await Institution.get(e[2] as String),
-            degree: stringToDegree(e[3] as String),
-            field: fld.Field.create(name: e[4] as String),
-            current: (e[5] as int) == 1,
-            startDate: (e[6] as DateTime).toLocal(),
-            endDate: (e[7] as DateTime)?.toLocal()
+            institution: await Institution.get(e['institution'] as String),
+            degree: stringToDegree(e['degree'] as String),
+            field: fld.Field.create(name: e['field'] as String),
+            current: (e['current'] as int) == 1,
+            startDate: (e['start_date'] as DateTime).toLocal(),
+            endDate: (e['end_date'] as DateTime)?.toLocal()
         )
-          ..id = e[0] as int
+          ..id = e['id'] as int
     );
     return Future.wait(resultFutures);
   }

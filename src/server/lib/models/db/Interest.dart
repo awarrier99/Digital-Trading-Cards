@@ -29,7 +29,7 @@ class Interest extends Serializable {
     ''';
     final results = await ServerChannel.db.query(sql, [user.id]);
 
-    return results.map((e) => Interest.create(title: e[1] as String))
+    return results.map((e) => Interest.create(title: e['title'] as String))
         .toList();
   }
 }

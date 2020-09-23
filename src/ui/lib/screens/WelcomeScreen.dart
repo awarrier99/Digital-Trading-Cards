@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ui/palette.dart';
-
+import 'package:ui/SizeConfig.dart';
 import 'package:ui/screens/CreateCard1.dart';
 
 class WelcomeScreen extends StatefulWidget {
@@ -19,6 +19,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
+
     return Scaffold(
         body: SingleChildScrollView(
             child: Container(
