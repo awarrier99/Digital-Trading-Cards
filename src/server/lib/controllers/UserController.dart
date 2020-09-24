@@ -28,11 +28,7 @@ class UserController extends ResourceController {
   Future<Response> getUser({@Bind.path('id') int userId}) async {
     try {
       final user = await User.get(userId);
-      if (user == null) {
-        return Response.notFound(body: {'success': false});
-      }
-
-      return Response.ok(user)..contentType = ContentType.json;
+      return Response.ok(user);
     } catch (err, stackTrace) {
       print('An error occurred while trying to get a user:');
       print(err);

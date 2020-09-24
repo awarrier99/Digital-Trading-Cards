@@ -41,12 +41,12 @@ class Education {
 
   Map<String, dynamic> toJson() {
     return {
-      'institution': institution == null ? {} : institution.toJson(),
+      'institution': institution?.toJson(),
       'degree': degree,
-      'field': field == null ? {} : field.toJson(),
+      'field': field?.toJson(),
       'current': current,
-      'startDate': startDate == null ? null : startDate.toIso8601String(),
-      'endDate': endDate == null ? null : endDate.toIso8601String()
+      'startDate': startDate.toIso8601String(),
+      'endDate': endDate?.toIso8601String()
     };
   }
 }
@@ -66,7 +66,7 @@ class Work {
       'description': description,
       'current': current,
       'startDate': startDate.toIso8601String(),
-      'endDate': endDate.toIso8601String()
+      'endDate': endDate?.toIso8601String()
     };
   }
 }
@@ -83,25 +83,25 @@ class Volunteering {
       'company': company == null ? {} : company.toJson(),
       'title': title,
       'description': description,
-      'startDate': startDate.toIso8601String(),
-      'endDate': endDate.toIso8601String()
+      'startDate': startDate?.toIso8601String(),
+      'endDate': endDate?.toIso8601String()
     };
   }
 }
 
 class Skill {
-  String name;
+  String title;
 
   Map<String, dynamic> toJson() {
-    return {'name': name};
+    return {'title': title};
   }
 }
 
 class Interest {
-  String name;
+  String title;
 
   Map<String, dynamic> toJson() {
-    return {'name': name};
+    return {'title': title};
   }
 }
 
@@ -116,11 +116,11 @@ class CardInfo {
   Map<String, dynamic> toJson() {
     return {
       'user': user.toJson(),
-      'education': education.map((e) => e.toJson()),
-      'work': work.map((e) => e.toJson()),
-      'volunteering': volunteering.map((e) => e.toJson()),
-      'skills': skills.map((e) => e.toJson()),
-      'interests': interests.map((e) => e.toJson())
+      'education': education.map((e) => e.toJson()).toList(),
+      'work': work.map((e) => e.toJson()).toList(),
+      'volunteering': volunteering.map((e) => e.toJson()).toList(),
+      'skills': skills.map((e) => e.toJson()).toList(),
+      'interests': interests.map((e) => e.toJson()).toList()
     };
   }
 }
@@ -129,12 +129,21 @@ class CardInfoModel {
   final CardInfo _createUser = CardInfo();
   CardInfo get createUser => _createUser;
 
-  Future<void> createCard() async {
-    final res = await post('/api/cards', headers: {
+  Future<bool> createCard() async {
+    print(_createUser.toJson());
+    final res = await post('http://10.0.2.2:8888/api/cards', headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
-    }, body: _createUser.toJson());
-    print(json.decode(res.body));
+    }, body: json.encode(_createUser.toJson()));
+    Map<String, dynamic> body;
+    try {
+      body = json.decode(res.body);
+    } catch (err) {
+      print('An error occurred while trying to create a card:');
+      print(err);
+      return false;
+    }
+    return body['success'] as bool;
   }
 
   void updateUser(User user) {
@@ -143,5 +152,21 @@ class CardInfoModel {
 
   void updateEducation(List<Education> education) {
     _createUser.education = education;
+  }
+
+  void updateWork(List<Work> work) {
+    _createUser.work = work;
+  }
+
+  void updateVolunteering(List<Volunteering> volunteering) {
+    _createUser.volunteering = volunteering;
+  }
+
+  void updateSkills(List<Skill> skills) {
+    _createUser.skills = skills;
+  }
+
+  void updateInterests(List<Interest> interests) {
+    _createUser.interests = interests;
   }
 }

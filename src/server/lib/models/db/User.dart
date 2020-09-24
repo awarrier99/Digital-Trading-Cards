@@ -274,7 +274,8 @@ class Recruiter extends User {
   void readFromMap(Map<String, dynamic> object) {
     super.readFromMap(object);
     type = UserType.recruiter;
-    company = Company()..readFromMap(object['company'] as Map<String, dynamic>);
+    company = Company()
+      ..readFromMap(object['company'] as Map<String, dynamic>);
     website = object['website'] as String;
   }
 

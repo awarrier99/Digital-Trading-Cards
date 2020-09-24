@@ -8,12 +8,14 @@ class MonthYearPicker extends StatefulWidget {
   final DateTime firstDate;
   final DateTime lastDate;
   final DateTime initialDate;
+  final bool isRequired;
   final Function onChanged;
 
   MonthYearPicker({
     @required this.firstDate,
     @required this.lastDate,
     this.initialDate,
+    this.isRequired = true,
     @required this.onChanged
   });
 
@@ -23,12 +25,16 @@ class MonthYearPicker extends StatefulWidget {
 
 class _MonthYearPickerState extends State<MonthYearPicker> {
   DateTime _parseDate(String text) {
+    if (text.isEmpty) return null;
     final components = text.split('/');
     return DateTime(int.parse(components[1]), int.parse(components[0]));
   }
 
   String _validateDate(String text) {
-    if (text.isEmpty) return 'Invalid date format (expected mm/yyyy)';
+    if (text.isEmpty) {
+      if (!widget.isRequired) return null;
+      return 'Invalid date format (expected mm/yyyy)';
+    }
 
     final isParseableRegExp = new RegExp(r'((?:0[1-9]|1[0-2])/\d{4})');
     final match = isParseableRegExp.firstMatch(text);
@@ -52,8 +58,8 @@ class _MonthYearPickerState extends State<MonthYearPicker> {
 
   @override
   Widget build(BuildContext context) {
-    DateTime initial = widget.initialDate ?? DateTime.now();
-    String dateString = '${pad(initial.month)}/${initial.year}';
+    DateTime initial = widget.initialDate;
+    String dateString = initial == null ? '' : '${pad(initial.month)}/${initial.year}';
     return TextFormField(
       decoration: InputDecoration(border: OutlineInputBorder()),
       validator: _validateDate,

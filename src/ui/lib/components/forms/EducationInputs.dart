@@ -109,7 +109,6 @@ class EducationInputsState extends State<EducationInputs> {
           ],
           crossAxisAlignment: CrossAxisAlignment.center,
         ),
-        DropdownFormField(['Associate', 'Bachelor\'s', 'Master\'s', 'Doctoral']),
         Container(
             margin: EdgeInsets.only(top: 20),
             child: Text(
@@ -136,15 +135,11 @@ class EducationInputsState extends State<EducationInputs> {
           firstDate: DateTime(DateTime.now().year - 100),
           lastDate: DateTime(DateTime.now().year + 6, 12, 31),
           initialDate: DateTime(DateTime.now().year + 4),
+          isRequired: !_isCurrent,
           onChanged: (value) {
               widget.model.endDate = value;
           }
-        ),
-            
-        Row(children: [
-          DropdownFormField(['Fall', 'Spring', 'Summer']),
-          DropdownFormField(new List<String>.generate(10, (i) => (i + DateTime.now().year - 5).toString())),
-        ])
+        )
       ],
     );
   }

@@ -70,7 +70,7 @@ class Education extends Serializable {
       'field': field.asMap(),
       'current': current,
       'startDate': startDate.toIso8601String(),
-      'endDate': endDate.toIso8601String()
+      'endDate': endDate?.toIso8601String()
     };
   }
 
@@ -92,8 +92,10 @@ class Education extends Serializable {
     field = fld.Field()
       ..readFromMap(object['field'] as Map<String, dynamic>);
     current = object['current'] as bool;
-    startDate = DateTime.parse(object['startDate'] as String);
-    endDate = DateTime.parse(object['endDate'] as String);
+    final startDateStr = object['startDate'] as String;
+    startDate = startDateStr == null || startDateStr.isEmpty ? null : DateTime.parse(startDateStr);
+    final endDateStr = object['endDate'] as String;
+    endDate = endDateStr == null || endDateStr.isEmpty ? null : DateTime.parse(endDateStr);
   }
 
   Future<void> save() async {
@@ -109,7 +111,7 @@ class Education extends Serializable {
       field.name,
       current,
       startDate.toUtc(),
-      endDate.toUtc()
+      endDate?.toUtc()
     ]);
   }
 

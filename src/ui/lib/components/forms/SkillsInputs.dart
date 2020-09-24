@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 
 import 'DropdownFormField.dart';
+import '../../models/CardInfo.dart';
 
 class SkillsInputs extends StatelessWidget {
+  final Skill model;
+
+  SkillsInputs({@required this.model});
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -12,8 +17,10 @@ class SkillsInputs extends StatelessWidget {
         TextFormField(
           autofocus: true,
           textInputAction: TextInputAction.done,
-          decoration:
-              InputDecoration(hintText: 'Name', border: OutlineInputBorder()),
+          decoration: InputDecoration(
+              hintText: 'Name',
+              border: OutlineInputBorder()
+          ),
           textCapitalization: TextCapitalization.sentences,
           validator: (value) {
             if (value.isEmpty) {
@@ -21,6 +28,9 @@ class SkillsInputs extends StatelessWidget {
             }
             return null;
           },
+          onChanged: (value) {
+            model.title = value;
+          }
         ),
         Container(
             margin: EdgeInsets.only(top: 20),

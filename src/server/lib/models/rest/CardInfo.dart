@@ -43,7 +43,7 @@ class CardInfo extends Serializable {
   @override
   void readFromMap(Map<String, dynamic> object) {
     final userMap = object['user'] as Map<String, dynamic>;
-    if (userMap['type'] == UserType.student.toString()) {
+    if (userMap['type'] == userTypeToString(UserType.student)) {
       user = Student()
       ..readFromMap(userMap);
     } else {

@@ -32,8 +32,8 @@ class Volunteering extends Serializable {
       'company': company.asMap(),
       'title': title,
       'description': description,
-      'startDate': startDate.toIso8601String(),
-      'endDate': endDate.toIso8601String()
+      'startDate': startDate?.toIso8601String(),
+      'endDate': endDate?.toIso8601String()
     };
   }
 
@@ -53,8 +53,10 @@ class Volunteering extends Serializable {
     ..readFromMap(object['company'] as Map<String, dynamic>);
     title = object['title'] as String;
     description = object['description'] as String;
-    startDate = DateTime.parse(object['startDate'] as String);
-    endDate = DateTime.parse(object['endDate'] as String);
+    final startDateStr = object['startDate'] as String;
+    startDate = startDateStr == null || startDateStr.isEmpty ? null : DateTime.parse(startDateStr);
+    final endDateStr = object['endDate'] as String;
+    endDate = endDateStr == null || endDateStr.isEmpty ? null : DateTime.parse(endDateStr);
   }
 
   Future<void> save() async {
@@ -68,8 +70,8 @@ class Volunteering extends Serializable {
       company.name,
       title,
       description,
-      startDate.toUtc(),
-      endDate.toUtc()
+      startDate?.toUtc(),
+      endDate?.toUtc()
     ]);
   }
 
@@ -86,8 +88,8 @@ class Volunteering extends Serializable {
       company: Company.create(name: e['company'] as String),
       title: e['title'] as String,
       description: e['description'] as String,
-      startDate: (e['start_date'] as DateTime).toLocal(),
-      endDate: (e['end_date'] as DateTime).toLocal(),
+      startDate: (e['start_date'] as DateTime)?.toLocal(),
+      endDate: (e['end_date'] as DateTime)?.toLocal(),
     )
       ..id = e['id'] as int
     );

@@ -36,7 +36,7 @@ class Work extends Serializable {
       'description': description,
       'current': current,
       'startDate': startDate.toIso8601String(),
-      'endDate': endDate.toIso8601String()
+      'endDate': endDate?.toIso8601String()
     };
   }
 
@@ -57,8 +57,10 @@ class Work extends Serializable {
     jobTitle = object['jobTitle'] as String;
     description = object['description'] as String;
     current = object['current'] as bool;
-    startDate = DateTime.parse(object['startDate'] as String);
-    endDate = DateTime.parse(object['endDate'] as String);
+    final startDateStr = object['startDate'] as String;
+    startDate = startDateStr == null || startDateStr.isEmpty ? null : DateTime.parse(startDateStr);
+    final endDateStr = object['endDate'] as String;
+    endDate = endDateStr == null || endDateStr.isEmpty ? null : DateTime.parse(endDateStr);
   }
 
   Future<void> save() async {
@@ -74,7 +76,7 @@ class Work extends Serializable {
       description,
       current,
       startDate.toUtc(),
-      endDate.toUtc()
+      endDate?.toUtc()
     ]);
   }
 
@@ -93,7 +95,7 @@ class Work extends Serializable {
             description: e['description'] as String,
             current: (e['current'] as int) == 1,
             startDate: (e['start_date'] as DateTime).toLocal(),
-          endDate: (e['end_date'] as DateTime).toLocal(),
+            endDate: (e['end_date'] as DateTime)?.toLocal(),
         )
           ..id = e['id'] as int
     );

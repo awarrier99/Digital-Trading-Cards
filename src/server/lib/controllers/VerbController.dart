@@ -62,11 +62,15 @@ class VerbController extends Controller {
       if (verb == Verb.post) {
         return _commonPost(request, id, User.get);
       } else if (verb == Verb.get) {
-        if (id != null) {
-          return request;
+        if (id == null) {
+          return notAllowed();
         }
 
-        return notAllowed();
+        if (await User.get(id) == null) {
+          return Response.notFound(body: {'success': false});
+        }
+
+        return request;
       }
 
       return _commonPutOrPatchOrDelete(request, id, User);
@@ -74,11 +78,15 @@ class VerbController extends Controller {
       if (verb == Verb.post) {
         return _commonPost(request, id, User.get);
       } else if (verb == Verb.get) {
-        if (id != null) {
-          return request;
+        if (id == null) {
+          return notAllowed();
         }
 
-        return notAllowed();
+        if (await User.get(id) == null) {
+          return Response.notFound(body: {'success': false});
+        }
+
+        return request;
       }
     }
 

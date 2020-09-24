@@ -15,6 +15,7 @@ class WorkInputs extends StatefulWidget {
 
 class WorkInputsState extends State<WorkInputs> {
   FocusNode companyNode = FocusNode();
+  FocusNode descriptionNode = FocusNode();
   bool _isCurrent;
 
   @override
@@ -72,10 +73,29 @@ class WorkInputsState extends State<WorkInputs> {
             }
             return null;
           },
+          onFieldSubmitted: (term) {
+            FocusScope.of(context).requestFocus(descriptionNode);
+          },
           onChanged: (value) {
             widget.model.company = Company()
               ..name = value;
           }
+        ),
+        SizedBox(height: SizeConfig.safeBlockVertical * 2),
+        TextFormField(
+            focusNode: descriptionNode,
+            textInputAction: TextInputAction.done,
+            cursorColor: Color(0xFF92DAAF),
+            keyboardType: TextInputType.text,
+            decoration: InputDecoration(
+                labelText: 'Description',
+                border: OutlineInputBorder()
+            ),
+            textCapitalization: TextCapitalization.words,
+            maxLines: null,
+            onChanged: (value) {
+              widget.model.description = value;
+            }
         ),
         Row(
           children: [
