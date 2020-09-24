@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 
 import 'dart:convert';
+import 'package:ui/models/Users.dart';
 
 class Company {
   String name;
@@ -11,42 +12,7 @@ class Company {
   }
 }
 
-class User {
-  String firstName;
-  String lastName;
-  String username;
-  String country;
-  String state;
-  String city;
-  String type;
-  String password;
 
-  double gpa;
-
-  Company company;
-  String website;
-
-  Map<String, dynamic> toJson() {
-    final map = <String, dynamic>{
-      'firstName': firstName,
-      'lastName': lastName,
-      'username': username,
-      'country': country,
-      'state': state,
-      'city': city,
-      'password': 'password',
-      'type': type, 
-    };
-    if (type == 'Student') {
-      map.putIfAbsent('gpa', () => gpa);
-    } else {
-      map.putIfAbsent('company', () => company);
-      map.putIfAbsent('website', () => website);
-    }
-
-    return map;
-  }
-}
 
 class Institution {
   String name;

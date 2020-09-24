@@ -5,14 +5,19 @@ import 'package:ui/SizeConfig.dart';
 import 'package:ui/screens/CreateAccount.dart';
 import 'package:ui/screens/CreateCard1.dart';
 import '../models/CardInfo.dart';
+import '../models/Users.dart';
+import 'package:http/http.dart';
+import 'dart:convert';
 
+import 'package:ui/screens/Home.dart';
 
 class WelcomeScreen extends StatefulWidget {
   final String title;
-  final User model;
 
-  WelcomeScreen({Key key, this.title, @required this.model}) : super(key: key);
-
+  WelcomeScreen({
+    Key key,
+    this.title,
+  }) : super(key: key);
 
   @override
   _WelcomeScreenState createState() => _WelcomeScreenState();
@@ -21,10 +26,25 @@ class WelcomeScreen extends StatefulWidget {
 class _WelcomeScreenState extends State<WelcomeScreen> {
   FocusNode passwordNode = FocusNode();
   FocusNode usernameNode = FocusNode();
+  final User model = new User();
+
+  Future<bool> login() async {
+    final res = await post('http://10.0.2.2:8888/api/users/login',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: json.encode(model.toJson()));
+    return json.decode(res.body)['success'];
+  }
 
   Future createAccount(context) async {
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => CreateAccount()));
+  }
+
+  Future loginContext(context) async {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
   }
 
   @override
@@ -54,10 +74,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                             TextFormField(
                               keyboardType: TextInputType.emailAddress,
                               onChanged: (value) {
-                                  widget.model.username = value;
+                                model.username = value;
                               },
                               onFieldSubmitted: (term) {
-                                  FocusScope.of(context).requestFocus(usernameNode);
+                                FocusScope.of(context)
+                                    .requestFocus(usernameNode);
                               },
                               decoration: InputDecoration(
                                   labelText: 'EMAIL',
@@ -70,10 +91,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                             TextFormField(
                               obscureText: true,
                               onChanged: (value) {
-                                  widget.model.password = value;
+                                model.password = value;
                               },
                               onFieldSubmitted: (term) {
-                                  FocusScope.of(context).requestFocus(passwordNode);
+                                FocusScope.of(context)
+                                    .requestFocus(passwordNode);
                               },
                               decoration: InputDecoration(
                                   labelText: 'PASSWORD',
@@ -92,7 +114,15 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                   elevation: 7,
                                   child: GestureDetector(
                                     onTap: () {
-                                      //logIn(context);
+                                      final loginSuccessful = login();
+                                      print(loginSuccessful);
+                                      loginSuccessful.then((response) {
+                                        if (response == true) {
+                                          loginContext(context);
+                                        }
+                                      }).catchError((error) {
+                                        print('Caught $error');
+                                      });
                                     },
                                     child: Center(
                                       child: Text(

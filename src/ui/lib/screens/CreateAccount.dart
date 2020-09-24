@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:ui/models/Users.dart';
 
 import '../models/CardInfo.dart';
 import '../components/forms/PersonalInfoInputs.dart';
 import '../SizeConfig.dart';
 import '../palette.dart';
 import 'Home.dart';
+import 'dart:convert';
+import 'package:http/http.dart';
+
+
 
 class CreateAccount extends StatelessWidget {
   final _personalInfoInputsKey = GlobalKey<FormState>();
@@ -42,11 +47,13 @@ class CreateAccount extends StatelessWidget {
                       color: Palette.primaryGreen,
                       onPressed: () {
                         if (_personalInfoInputsKey.currentState.validate()) {
-                          final cardInfoModel = context.read<CardInfoModel>();
-                          cardInfoModel.updateUser(_personalInfoInputsModel);
-                          print(cardInfoModel.createUser.toJson());
+                          final userModel = context.read<UserModel>();
+                          userModel.updateUser(_personalInfoInputsModel);
+                          userModel.createUser();
+                          print(userModel.currentuser.toJson());
                           nextStep(context);
                         }
+
                       }
                     )
                 )
