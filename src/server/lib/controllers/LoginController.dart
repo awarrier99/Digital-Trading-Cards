@@ -5,12 +5,12 @@ class LoginController extends ResourceController {
   @Operation.post()
   Future<Response> loginUser(@Bind.body() User user) async {
     try {
-      final result = await user.checkAuth(user.username, user.password);
+      final result = await user.checkAuth();
       if (result == true) {
-        return Response.ok("Authenticated")..contentType = ContentType.text;
+        return Response.ok({"success": true});
       }
-      return Response.ok("Username or password incorrect")
-        ..contentType = ContentType.text;
+      print(result);
+      return Response.ok({"success": false});
     } catch (err, stackTrace) {
       print('An error occurred while trying login:');
       print(err);

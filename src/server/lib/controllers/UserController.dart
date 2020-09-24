@@ -13,7 +13,9 @@ class UserController extends ResourceController {
         newUser = Recruiter.of(user);
       }
       await newUser.save();
-      return Response.created('/users/${user.id}', body: {'success': true});
+      return Response.created('/users/${user.id}', body: {
+        'id': newUser.id,
+        'success': true});
     } catch (err, stackTrace) {
       print('An error occurred while trying to create a user:');
       print(err);

@@ -104,7 +104,7 @@ class User extends Serializable {
           city: userRow['city'] as String,
           password: userRow['password'] as String,
           gpa: studentRow['gpa'] as double)
-          ..id = id;
+        ..id = id;
     }
 
     const sql3 = '''
@@ -119,6 +119,7 @@ class User extends Serializable {
         country: userRow['country'] as String,
         state: userRow['state'] as String,
         city: userRow['city'] as String,
+        password: userRow['password'] as String,
         company: Company.create(name: recruiterRow['company'] as String),
         website: recruiterRow['website'] as String)
       ..id = id;
@@ -145,7 +146,7 @@ class User extends Serializable {
     id = results.insertId;
   }
 
-  Future<bool> checkAuth(String username, String password) async {
+  Future<bool> checkAuth() async {
     const sql = '''
       SELECT password FROM users
       WHERE username = ?
@@ -153,9 +154,10 @@ class User extends Serializable {
     final results = (await ServerChannel.db.query(sql, [username])).first;
     String hashedPass = results['password'].toString();
     if (results.isEmpty) {
-      return null;
+      return false;
     }
     var isCorrect = new DBCrypt().checkpw(password, hashedPass);
+    print(isCorrect);
     return isCorrect;
   }
 }
