@@ -11,6 +11,8 @@ dependencies:
   mysql1: ^0.17.1
   meta: ^1.2.3
   dbcrypt: ^1.0.0
+  dart_jsonwebtoken: ^1.1.0
+  jwt_decode_token: ^1.0.0
 
 dev_dependencies:
   test: ^1.0.0

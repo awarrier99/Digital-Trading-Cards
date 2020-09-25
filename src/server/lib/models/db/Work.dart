@@ -64,41 +64,50 @@ class Work extends Serializable {
   }
 
   Future<void> save() async {
-    const sql = '''
-      INSERT INTO work
-      (user, company, job_title, description, current, start_date, end_date)
-      VALUES (?, ?, ?, ?, ?, ?, ?)
-    ''';
-    await ServerChannel.db.query(sql, [
-      user.id,
-      company.name,
-      jobTitle,
-      description,
-      current,
-      startDate.toUtc(),
-      endDate?.toUtc()
-    ]);
+    try {
+      const sql = '''
+        INSERT INTO work
+        (user, company, job_title, description, current, start_date, end_date)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+      ''';
+      await ServerChannel.db.query(sql, [
+        user.id,
+        company.name,
+        jobTitle,
+        description,
+        current,
+        startDate.toUtc(),
+        endDate?.toUtc()
+      ]);
+    } catch (err, stackTrace) {
+      logError(err, stackTrace: stackTrace, message: 'An error occurred while trying to save user work info:');
+    }
   }
 
   static Future<List<Work>> getByUser(User user) async {
-    const sql = '''
-      SELECT * FROM work
-      WHERE user = ?
-    ''';
-    final results = await ServerChannel.db.query(sql, [user.id]);
+    try {
+      const sql = '''
+        SELECT * FROM work
+        WHERE user = ?
+      ''';
+      final results = await ServerChannel.db.query(sql, [user.id]);
 
-    final resultFutures = results.map((e) async =>
-        Work.create(
-            user: user,
-            company: Company.create(name: e['company'] as String),
-            jobTitle: e['job_title'] as String,
-            description: e['description'] as String,
-            current: (e['current'] as int) == 1,
-            startDate: (e['start_date'] as DateTime).toLocal(),
-            endDate: (e['end_date'] as DateTime)?.toLocal(),
-        )
-          ..id = e['id'] as int
-    );
-    return Future.wait(resultFutures);
+      final resultFutures = results.map((e) async =>
+      Work.create(
+        user: user,
+        company: Company.create(name: e['company'] as String),
+        jobTitle: e['job_title'] as String,
+        description: e['description'] as String,
+        current: (e['current'] as int) == 1,
+        startDate: (e['start_date'] as DateTime).toLocal(),
+        endDate: (e['end_date'] as DateTime)?.toLocal(),
+      )
+        ..id = e['id'] as int
+      );
+      return Future.wait(resultFutures);
+    } catch (err, stackTrace) {
+      logError(err, stackTrace: stackTrace, message: 'An error occurred while trying to get user work info:');
+      return [];
+    }
   }
 }

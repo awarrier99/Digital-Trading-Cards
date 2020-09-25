@@ -1,7 +1,6 @@
 import 'package:meta/meta.dart';
 
 import '../../server.dart';
-import '../db/models.dart';
 
 class CardInfo extends Serializable {
   CardInfo({

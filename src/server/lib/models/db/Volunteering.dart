@@ -60,39 +60,48 @@ class Volunteering extends Serializable {
   }
 
   Future<void> save() async {
-    const sql = '''
-      INSERT INTO volunteering
-      (user, company, title, description, start_date, end_date)
-      VALUES (?, ?, ?, ?, ?, ?)
-    ''';
-    await ServerChannel.db.query(sql, [
-      user.id,
-      company.name,
-      title,
-      description,
-      startDate?.toUtc(),
-      endDate?.toUtc()
-    ]);
+    try {
+      const sql = '''
+        INSERT INTO volunteering
+        (user, company, title, description, start_date, end_date)
+        VALUES (?, ?, ?, ?, ?, ?)
+      ''';
+      await ServerChannel.db.query(sql, [
+        user.id,
+        company.name,
+        title,
+        description,
+        startDate?.toUtc(),
+        endDate?.toUtc()
+      ]);
+    } catch (err, stackTrace) {
+      logError(err, stackTrace: stackTrace, message: 'An error occurred while trying to save user volunteering info:');
+    }
   }
 
   static Future<List<Volunteering>> getByUser(User user) async {
-    const sql = '''
-      SELECT * FROM volunteering
-      WHERE user = ?
-    ''';
-    final results = await ServerChannel.db.query(sql, [user.id]);
+    try {
+      const sql = '''
+        SELECT * FROM volunteering
+        WHERE user = ?
+      ''';
+      final results = await ServerChannel.db.query(sql, [user.id]);
 
-    final resultFutures = results.map((e) async =>
-    Volunteering.create(
-      user: user,
-      company: Company.create(name: e['company'] as String),
-      title: e['title'] as String,
-      description: e['description'] as String,
-      startDate: (e['start_date'] as DateTime)?.toLocal(),
-      endDate: (e['end_date'] as DateTime)?.toLocal(),
-    )
-      ..id = e['id'] as int
-    );
-    return Future.wait(resultFutures);
+      final resultFutures = results.map((e) async =>
+      Volunteering.create(
+        user: user,
+        company: Company.create(name: e['company'] as String),
+        title: e['title'] as String,
+        description: e['description'] as String,
+        startDate: (e['start_date'] as DateTime)?.toLocal(),
+        endDate: (e['end_date'] as DateTime)?.toLocal(),
+      )
+        ..id = e['id'] as int
+      );
+      return Future.wait(resultFutures);
+    } catch (err, stackTrace) {
+      logError(err, stackTrace: stackTrace, message: 'An error occurred while trying to get user volunteering info:');
+      return [];
+    }
   }
 }

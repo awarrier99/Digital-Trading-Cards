@@ -79,23 +79,41 @@ class User extends Serializable {
   }
 
   static Future<User> get(int id) async {
-    const sql = '''
-      SELECT * FROM users
-      WHERE id = ?
-    ''';
-    final results = await ServerChannel.db.query(sql, [id]);
-    if (results.isEmpty) {
-      return null;
-    }
-
-    final userRow = results.first;
-    if (stringToUserType(userRow['type'] as String) == UserType.student) {
-      const sql2 = '''
-        SELECT * FROM students
+    try {
+      const sql = '''
+        SELECT * FROM users
         WHERE id = ?
       ''';
-      final studentRow = (await ServerChannel.db.query(sql2, [id])).first;
-      return Student.create(
+      final results = await ServerChannel.db.query(sql, [id]);
+      if (results.isEmpty) {
+        return null;
+      }
+
+      final userRow = results.first;
+      if (stringToUserType(userRow['type'] as String) == UserType.student) {
+        const sql2 = '''
+          SELECT * FROM students
+          WHERE id = ?
+        ''';
+        final studentRow = (await ServerChannel.db.query(sql2, [id])).first;
+        return Student.create(
+            firstName: userRow['first_name'] as String,
+            lastName: userRow['last_name'] as String,
+            username: userRow['username'] as String,
+            country: userRow['country'] as String,
+            state: userRow['state'] as String,
+            city: userRow['city'] as String,
+            password: userRow['password'] as String,
+            gpa: studentRow['gpa'] as double)
+          ..id = id;
+      }
+
+      const sql3 = '''
+        SELECT * FROM recruiters
+        WHERE id = ?
+      ''';
+      final recruiterRow = (await ServerChannel.db.query(sql3, [id])).first;
+      return Recruiter.create(
           firstName: userRow['first_name'] as String,
           lastName: userRow['last_name'] as String,
           username: userRow['username'] as String,
@@ -103,29 +121,14 @@ class User extends Serializable {
           state: userRow['state'] as String,
           city: userRow['city'] as String,
           password: userRow['password'] as String,
-          gpa: studentRow['gpa'] as double)
+          company: Company.create(name: recruiterRow['company'] as String),
+          website: recruiterRow['website'] as String)
         ..id = id;
+    } catch (err, stackTrace) {
+      logError(err, stackTrace: stackTrace, message: 'An error occurred while trying to get a user:');
+      return null;
     }
-
-    const sql3 = '''
-      SELECT * FROM recruiters
-      WHERE id = ?
-    ''';
-    final recruiterRow = (await ServerChannel.db.query(sql3, [id])).first;
-    return Recruiter.create(
-        firstName: userRow['first_name'] as String,
-        lastName: userRow['last_name'] as String,
-        username: userRow['username'] as String,
-        country: userRow['country'] as String,
-        state: userRow['state'] as String,
-        city: userRow['city'] as String,
-        password: userRow['password'] as String,
-        company: Company.create(name: recruiterRow['company'] as String),
-        website: recruiterRow['website'] as String)
-      ..id = id;
   }
-
-  static Future<User> getLoginCreds(String username) {}
 
   Future<void> save() async {
     const sql = '''
@@ -147,18 +150,22 @@ class User extends Serializable {
   }
 
   Future<bool> checkAuth() async {
-    const sql = '''
-      SELECT password FROM users
+    try {
+      const sql = '''
+      SELECT id, password FROM users
       WHERE username = ?
     ''';
-    final results = (await ServerChannel.db.query(sql, [username])).first;
-    String hashedPass = results['password'].toString();
-    if (results.isEmpty) {
+      final results = (await ServerChannel.db.query(sql, [username])).first;
+      final hashedPass = results['password'] as String;
+      if (results.isEmpty) {
+        return false;
+      }
+      id = results['id'] as int;
+      return DBCrypt().checkpw(password, hashedPass);
+    } catch (err, stackTrace) {
+      logError(err, stackTrace: stackTrace, message: 'An error occurred while trying to authenticate a user:');
       return false;
     }
-    var isCorrect = new DBCrypt().checkpw(password, hashedPass);
-    print(isCorrect);
-    return isCorrect;
   }
 }
 
@@ -220,9 +227,8 @@ class Student extends User {
         VALUES (?, ?)
       ''';
       await ServerChannel.db.query(sql, [id, gpa]);
-    } catch (err) {
-      print('An error occurred while trying to save the user:');
-      print(err);
+    } catch (err, stackTrace) {
+      logError(err, stackTrace: stackTrace, message: 'An error occurred while trying to save a student:');
     }
   }
 }
@@ -281,12 +287,16 @@ class Recruiter extends User {
 
   @override
   Future<void> save() async {
-    await super.save();
-    const sql = '''
-      INSERT INTO recruiters
-      (id, company, website)
-      VALUES (?, ?, ?)
-    ''';
-    await ServerChannel.db.query(sql, [id, company.name, website]);
+    try {
+      await super.save();
+      const sql = '''
+        INSERT INTO recruiters
+        (id, company, website)
+        VALUES (?, ?, ?)
+      ''';
+      await ServerChannel.db.query(sql, [id, company.name, website]);
+    } catch (err, stackTrace) {
+      logError(err, stackTrace: stackTrace, message: 'An error occurred while trying to save a recruiter:');
+    }
   }
 }

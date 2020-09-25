@@ -1,9 +1,6 @@
 import 'package:meta/meta.dart';
-import 'package:server/server.dart';
 
-import 'Field.dart' as fld;
-import 'Institution.dart';
-import 'User.dart';
+import '../../server.dart';
 
 enum Degree {
   associate,
@@ -55,7 +52,7 @@ class Education extends Serializable {
   User user;
   Institution institution;
   Degree degree;
-  fld.Field field;
+  Field field;
   bool current;
   DateTime startDate;
   DateTime endDate;
@@ -89,7 +86,7 @@ class Education extends Serializable {
     institution = Institution()
       ..readFromMap(object['institution'] as Map<String, dynamic>);
     degree = stringToDegree(object['degree'] as String);
-    field = fld.Field()
+    field = Field()
       ..readFromMap(object['field'] as Map<String, dynamic>);
     current = object['current'] as bool;
     final startDateStr = object['startDate'] as String;
@@ -99,41 +96,50 @@ class Education extends Serializable {
   }
 
   Future<void> save() async {
-    const sql = '''
-      INSERT INTO education
-      (user, institution, degree, field, current, start_date, end_date)
-      VALUES (?, ?, ?, ?, ?, ?, ?)
-    ''';
-    await ServerChannel.db.query(sql, [
-      user.id,
-      institution.name,
-      degreeToString(degree),
-      field.name,
-      current,
-      startDate.toUtc(),
-      endDate?.toUtc()
-    ]);
+    try {
+      const sql = '''
+        INSERT INTO education
+        (user, institution, degree, field, current, start_date, end_date)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+      ''';
+      await ServerChannel.db.query(sql, [
+        user.id,
+        institution.name,
+        degreeToString(degree),
+        field.name,
+        current,
+        startDate.toUtc(),
+        endDate?.toUtc()
+      ]);
+    } catch (err, stackTrace) {
+      logError(err, stackTrace: stackTrace, message: 'An error occurred while trying to save user education info:');
+    }
   }
 
   static Future<List<Education>> getByUser(User user) async {
-    const sql = '''
-      SELECT * FROM education
-      WHERE user = ?
-    ''';
-    final results = await ServerChannel.db.query(sql, [user.id]);
+    try {
+      const sql = '''
+        SELECT * FROM education
+        WHERE user = ?
+      ''';
+      final results = await ServerChannel.db.query(sql, [user.id]);
 
-    final resultFutures = results.map((e) async =>
-        Education.create(
-            user: user,
-            institution: await Institution.get(e['institution'] as String),
-            degree: stringToDegree(e['degree'] as String),
-            field: fld.Field.create(name: e['field'] as String),
-            current: (e['current'] as int) == 1,
-            startDate: (e['start_date'] as DateTime).toLocal(),
-            endDate: (e['end_date'] as DateTime)?.toLocal()
-        )
-          ..id = e['id'] as int
-    );
-    return Future.wait(resultFutures);
+      final resultFutures = results.map((e) async =>
+      Education.create(
+          user: user,
+          institution: await Institution.get(e['institution'] as String),
+          degree: stringToDegree(e['degree'] as String),
+          field: Field.create(name: e['field'] as String),
+          current: (e['current'] as int) == 1,
+          startDate: (e['start_date'] as DateTime).toLocal(),
+          endDate: (e['end_date'] as DateTime)?.toLocal()
+      )
+        ..id = e['id'] as int
+      );
+      return Future.wait(resultFutures);
+    } catch (err, stackTrace) {
+      logError(err, stackTrace: stackTrace, message: 'An error occurred while trying to get user education info:');
+      return [];
+    }
   }
 }

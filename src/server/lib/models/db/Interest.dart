@@ -23,13 +23,18 @@ class Interest extends Serializable {
   }
 
   static Future<List<Interest>> getByUser(User user) async {
-    const sql = '''
-      SELECT * FROM user_interests
-      WHERE user = ?
-    ''';
-    final results = await ServerChannel.db.query(sql, [user.id]);
+    try {
+      const sql = '''
+        SELECT * FROM user_interests
+        WHERE user = ?
+      ''';
+      final results = await ServerChannel.db.query(sql, [user.id]);
 
-    return results.map((e) => Interest.create(title: e['title'] as String))
-        .toList();
+      return results.map((e) => Interest.create(title: e['title'] as String))
+          .toList();
+    } catch (err, stackTrace) {
+      logError(err, stackTrace: stackTrace, message: 'An error occurred while trying to get user interests:');
+      return [];
+    }
   }
 }

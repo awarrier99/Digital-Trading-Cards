@@ -8,6 +8,7 @@ import 'util/db.dart';
 /// database connections. See http://aqueduct.io/docs/http/channel/.
 class ServerChannel extends ApplicationChannel {
   static Database db;
+  static ServerConfig config;
 
   /// Initialize services in this method.
   ///
@@ -18,7 +19,7 @@ class ServerChannel extends ApplicationChannel {
   @override
   Future prepare() async {
     logger.onRecord.listen((rec) => print("$rec ${rec.error ?? ""} ${rec.stackTrace ?? ""}"));
-    final config = ServerConfig(options.configurationFilePath);
+    config = ServerConfig(options.configurationFilePath);
     db = Database(config);
   }
 
@@ -32,8 +33,15 @@ class ServerChannel extends ApplicationChannel {
   Controller get entryPoint => createRoutes();
 }
 
+class JwtConfig extends Configuration {
+  String key;
+  String aud;
+  String iss;
+}
+
 class ServerConfig extends Configuration {
   ServerConfig(String path): super.fromFile(File(path));
 
   DatabaseConfiguration database;
+  JwtConfig jwt;
 }
