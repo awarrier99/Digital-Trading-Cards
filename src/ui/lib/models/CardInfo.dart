@@ -111,6 +111,8 @@ class CardInfo {
   List<Skill> skills = [];
   List<Interest> interests = [];
 
+  CardInfo();
+
   Map<String, dynamic> toJson() {
     return {
       'user': user.toJson(),

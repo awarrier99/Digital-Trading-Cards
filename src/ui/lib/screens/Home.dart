@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ui/components/Cards/TradingCard.dart';
 import 'package:ui/models/CardInfo.dart';
-import 'package:http/http.dart';
-import 'dart:convert';
 
 import '../palette.dart';
 import 'CreateCard1.dart';
@@ -21,6 +19,11 @@ class _HomeState extends State<Home> {
         context, MaterialPageRoute(builder: (context) => CreateCard1()));
   }
 
+  Future editCard(context) async {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => CreateCard1()));
+  }
+
   @override
   void initState() {
     super.initState();
@@ -34,20 +37,25 @@ class _HomeState extends State<Home> {
             child: SizedBox(
                 child: Column(
       children: [
-        RaisedButton(
-            child: Text('Create Card'),
-            textColor: Colors.white,
-            color: Palette.primaryGreen,
-            onPressed: () {
-              createCard(context);
-            }),
         FutureBuilder<CardInfo>(
           future: userCardInfo,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return TradingCard(snapshot.data);
+              return TradingCard(
+                snapshot.data,
+                editCard: this.editCard(context),
+              );
             } else if (snapshot.hasError) {
-              return Text("${snapshot.error}");
+              // TODO: Best way to check if user already has a card?
+              return true
+                  ? RaisedButton(
+                      child: Text('Create Card'),
+                      textColor: Colors.white,
+                      color: Palette.primaryGreen,
+                      onPressed: () {
+                        createCard(context);
+                      })
+                  : Text("${snapshot.error}");
             }
             // By default, show a loading spinner.
             return CircularProgressIndicator();
