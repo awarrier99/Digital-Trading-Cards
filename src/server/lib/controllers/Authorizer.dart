@@ -69,7 +69,7 @@ class _AuthController extends Controller {
     if (mode == AuthMode.none) {
       return request;
     }
-    
+
     final jwt = checkValid(request);
     final jwtId = jwt?.payload == null ? null : jwt.payload['id'] as int;
     final idString = request.path.variables['id'];
