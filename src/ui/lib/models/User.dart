@@ -82,7 +82,7 @@ class UserModel {
   }
 
 
-  Future<bool> login() async { // TODO: add try/catch, strip whitespace
+  Future<User> login() async { // TODO: add try/catch, strip whitespace
     final res = await post('http://10.0.2.2:8888/api/users/login',
         headers: {
           'Accept': 'application/json',
@@ -91,13 +91,13 @@ class UserModel {
         body: json.encode(_currentUser.toJson()));
     final body = json.decode(res.body);
     final success = body['success'];
-    if (!success) return false;
+    if (!success) return null;
 
     final token = body['token'] as String;
     _token = token;
     final user = body['user'];
     _currentUser = User()..fromJson(user);
-    return true;
+    return _currentUser;
   }
 
   void updateUser(User user) {
