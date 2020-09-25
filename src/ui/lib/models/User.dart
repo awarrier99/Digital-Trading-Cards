@@ -94,7 +94,7 @@ class UserModel {
 
     final token = body['token'] as String;
     _token = token;
-    final user = body['id'];
+    final user = body['user'];
     _currentUser = User()..fromJson(user);
     return true;
   }
