@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:ui/models/Users.dart';
+import 'package:ui/models/User.dart';
 
 import '../models/CardInfo.dart';
 import '../components/forms/PersonalInfoInputs.dart';
@@ -47,7 +47,7 @@ class CreateAccount extends StatelessWidget {
                           final userModel = context.read<UserModel>();
                           userModel.updateUser(_personalInfoInputsModel);
                           userModel.createUser();
-                          print(userModel.currentuser.toJson());
+                          print(userModel.currentUser.toJson());
                           nextStep(context);
                         }
                       }))

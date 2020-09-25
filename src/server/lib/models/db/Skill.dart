@@ -12,9 +12,7 @@ class Skill extends Serializable {
 
   @override
   Map<String, dynamic> asMap() {
-    return {
-      'title': title
-    };
+    return {'title': title};
   }
 
   @override
@@ -30,10 +28,13 @@ class Skill extends Serializable {
       ''';
       final results = await ServerChannel.db.query(sql, [user.id]);
 
-      return results.map((e) => Skill.create(title: e['title'] as String))
+      return results
+          .map((e) => Skill.create(title: e['title'] as String))
           .toList();
     } catch (err, stackTrace) {
-      logError(err, stackTrace: stackTrace, message: 'An error occurred while trying to get user skills:');
+      logError(err,
+          stackTrace: stackTrace,
+          message: 'An error occurred while trying to get user skills:');
       return [];
     }
   }

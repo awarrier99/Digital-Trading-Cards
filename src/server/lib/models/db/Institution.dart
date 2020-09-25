@@ -12,10 +12,7 @@ class Institution extends Serializable {
 
   @override
   Map<String, dynamic> asMap() {
-    return{
-      'name': name,
-      'longName': longName
-    };
+    return {'name': name, 'longName': longName};
   }
 
   @override
@@ -34,7 +31,9 @@ class Institution extends Serializable {
       return Institution.create(
           name: name, longName: institution['long_name'] as String);
     } catch (err, stackTrace) {
-      logError(err, stackTrace: stackTrace, message: 'An error occurred while trying to get an institution:');
+      logError(err,
+          stackTrace: stackTrace,
+          message: 'An error occurred while trying to get an institution:');
       return null;
     }
   }

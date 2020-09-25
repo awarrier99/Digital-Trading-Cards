@@ -13,10 +13,7 @@ class Connection extends Serializable {
 
   @override
   Map<String, dynamic> asMap() {
-    return {
-      'user1': user1.asMap(),
-      'user2': user2.asMap()
-    };
+    return {'user1': user1.asMap(), 'user2': user2.asMap()};
   }
 
   @override
@@ -25,18 +22,14 @@ class Connection extends Serializable {
     final user2Map = object['user2'] as Map<String, dynamic>;
 
     if (stringToUserType(user1Map['type'] as String) == UserType.student) {
-      user1 = Student()
-        ..readFromMap(user1Map);
+      user1 = Student()..readFromMap(user1Map);
     } else {
-      user1 = Recruiter()
-        ..readFromMap(user1Map);
+      user1 = Recruiter()..readFromMap(user1Map);
     }
     if (stringToUserType(user2Map['type'] as String) == UserType.student) {
-      user2 = Student()
-        ..readFromMap(user2Map);
+      user2 = Student()..readFromMap(user2Map);
     } else {
-      user2 = Recruiter()
-        ..readFromMap(user2Map);
+      user2 = Recruiter()..readFromMap(user2Map);
     }
   }
 }

@@ -18,8 +18,7 @@ class Database {
         port: config.database.port,
         user: config.database.username,
         password: config.database.password,
-        db: config.database.databaseName
-    );
+        db: config.database.databaseName);
     return MySqlConnection.connect(settings);
   }
 

@@ -53,7 +53,8 @@ class VerbController extends Controller {
   @override
   Future<RequestOrResponse> handle(Request request) async {
     final idString = request.path.variables['id'];
-    final id = idString == null || idString.isEmpty ? null : int.parse(idString);
+    final id =
+        idString == null || idString.isEmpty ? null : int.parse(idString);
     final verb = stringToVerb(request.method);
 
     if (resource == Resource.card) {

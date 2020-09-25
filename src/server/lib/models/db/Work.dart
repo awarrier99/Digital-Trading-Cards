@@ -7,15 +7,14 @@ import 'User.dart';
 class Work extends Serializable {
   Work();
 
-  Work.create({
-    @required this.user,
-    @required this.company,
-    @required this.jobTitle,
-    @required this.current,
-    @required this.startDate,
-    this.endDate,
-    this.description
-  });
+  Work.create(
+      {@required this.user,
+      @required this.company,
+      @required this.jobTitle,
+      @required this.current,
+      @required this.startDate,
+      this.endDate,
+      this.description});
 
   int id;
   User user;
@@ -45,22 +44,23 @@ class Work extends Serializable {
     if (user == null) {
       final userMap = object['user'] as Map<String, dynamic>;
       if (stringToUserType(userMap['type'] as String) == UserType.student) {
-        user = Student()
-          ..readFromMap(userMap);
+        user = Student()..readFromMap(userMap);
       } else {
-        user = Recruiter()
-          ..readFromMap(userMap);
+        user = Recruiter()..readFromMap(userMap);
       }
     }
-    company = Company()
-      ..readFromMap(object['company'] as Map<String, dynamic>);
+    company = Company()..readFromMap(object['company'] as Map<String, dynamic>);
     jobTitle = object['jobTitle'] as String;
     description = object['description'] as String;
     current = object['current'] as bool;
     final startDateStr = object['startDate'] as String;
-    startDate = startDateStr == null || startDateStr.isEmpty ? null : DateTime.parse(startDateStr);
+    startDate = startDateStr == null || startDateStr.isEmpty
+        ? null
+        : DateTime.parse(startDateStr);
     final endDateStr = object['endDate'] as String;
-    endDate = endDateStr == null || endDateStr.isEmpty ? null : DateTime.parse(endDateStr);
+    endDate = endDateStr == null || endDateStr.isEmpty
+        ? null
+        : DateTime.parse(endDateStr);
   }
 
   Future<void> save() async {
@@ -80,7 +80,9 @@ class Work extends Serializable {
         endDate?.toUtc()
       ]);
     } catch (err, stackTrace) {
-      logError(err, stackTrace: stackTrace, message: 'An error occurred while trying to save user work info:');
+      logError(err,
+          stackTrace: stackTrace,
+          message: 'An error occurred while trying to save user work info:');
     }
   }
 
@@ -92,21 +94,20 @@ class Work extends Serializable {
       ''';
       final results = await ServerChannel.db.query(sql, [user.id]);
 
-      final resultFutures = results.map((e) async =>
-      Work.create(
-        user: user,
-        company: Company.create(name: e['company'] as String),
-        jobTitle: e['job_title'] as String,
-        description: e['description'] as String,
-        current: (e['current'] as int) == 1,
-        startDate: (e['start_date'] as DateTime).toLocal(),
-        endDate: (e['end_date'] as DateTime)?.toLocal(),
-      )
-        ..id = e['id'] as int
-      );
+      final resultFutures = results.map((e) async => Work.create(
+            user: user,
+            company: Company.create(name: e['company'] as String),
+            jobTitle: e['job_title'] as String,
+            description: e['description'] as String,
+            current: (e['current'] as int) == 1,
+            startDate: (e['start_date'] as DateTime).toLocal(),
+            endDate: (e['end_date'] as DateTime)?.toLocal(),
+          )..id = e['id'] as int);
       return Future.wait(resultFutures);
     } catch (err, stackTrace) {
-      logError(err, stackTrace: stackTrace, message: 'An error occurred while trying to get user work info:');
+      logError(err,
+          stackTrace: stackTrace,
+          message: 'An error occurred while trying to get user work info:');
       return [];
     }
   }

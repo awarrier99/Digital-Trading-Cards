@@ -6,7 +6,7 @@ import 'package:ui/palette.dart';
 import 'package:ui/SizeConfig.dart';
 
 import '../../models/CardInfo.dart';
-import '../../models/Users.dart';
+import '../../models/User.dart';
 
 // Create a Form widget.
 class PersonalInfoInputs extends StatefulWidget {

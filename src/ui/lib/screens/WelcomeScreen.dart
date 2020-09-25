@@ -1,14 +1,13 @@
-import 'package:flutter/material.dart';
-import 'package:ui/palette.dart';
-import 'package:provider/provider.dart';
-import 'package:ui/SizeConfig.dart';
-
-import '../models/CardInfo.dart';
-import '../models/Users.dart';
-import 'package:http/http.dart';
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
+import 'package:http/http.dart';
+import 'package:provider/provider.dart';
+import 'package:ui/SizeConfig.dart';
 import 'package:ui/screens/Home.dart';
+
+import '../models/User.dart';
+import '../palette.dart';
 
 class WelcomeScreen extends StatefulWidget {
   final String title;
@@ -26,16 +25,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   FocusNode passwordNode = FocusNode();
   FocusNode usernameNode = FocusNode();
   final User model = new User();
-
-  Future<bool> login() async {
-    final res = await post('http://10.0.2.2:8888/api/users/login',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: json.encode(model.toJson()));
-    return json.decode(res.body)['success'];
-  }
 
   Future createAccount(context) async {
     Navigator.of(context).pushNamed('/createAccount');
@@ -112,9 +101,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                   elevation: 7,
                                   child: GestureDetector(
                                     onTap: () {
-                                      final loginSuccessful = login();
-                                      print(loginSuccessful);
-                                      loginSuccessful.then((response) {
+                                      final userModel = context.read<UserModel>();
+                                      userModel.updateUser(model);
+                                      userModel.login().then((response) {
                                         if (response == true) {
                                           loginContext(context);
                                         }

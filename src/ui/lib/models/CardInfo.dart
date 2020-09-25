@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 
 import 'dart:convert';
-import 'package:ui/models/Users.dart';
+import 'package:ui/models/User.dart';
 
 class Company {
   String name;
@@ -130,20 +130,19 @@ class CardInfoModel {
   CardInfo get createUser => _createUser;
 
   Future<bool> createCard() async {
-    print(_createUser.toJson());
-    final res = await post('http://10.0.2.2:8888/api/cards', headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    }, body: json.encode(_createUser.toJson()));
-    Map<String, dynamic> body;
     try {
-      body = json.decode(res.body);
+      print(_createUser.toJson());
+      final res = await post('http://10.0.2.2:8888/api/cards', headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }, body: json.encode(_createUser.toJson()));
+      final body = json.decode(res.body);
+      return body['success'] as bool;
     } catch (err) {
       print('An error occurred while trying to create a card:');
       print(err);
       return false;
     }
-    return body['success'] as bool;
   }
 
   void updateUser(User user) {

@@ -1,7 +1,8 @@
 import '../server.dart';
 
 Response notAllowed() {
-  return Response(405, {'Content-Type': 'application/json'}, {'success': false});
+  return Response(
+      405, {'Content-Type': 'application/json'}, {'success': false});
 }
 
 void logError(dynamic err, {StackTrace stackTrace, String message}) {

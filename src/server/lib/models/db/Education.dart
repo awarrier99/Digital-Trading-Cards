@@ -2,12 +2,7 @@ import 'package:meta/meta.dart';
 
 import '../../server.dart';
 
-enum Degree {
-  associate,
-  bachelor,
-  master,
-  doctoral
-}
+enum Degree { associate, bachelor, master, doctoral }
 
 String degreeToString(Degree degree) {
   switch (degree) {
@@ -38,15 +33,14 @@ Degree stringToDegree(String string) {
 class Education extends Serializable {
   Education();
 
-  Education.create({
-    @required this.user,
-    @required this.institution,
-    @required this.degree,
-    @required this.field,
-    @required this.current,
-    @required this.startDate,
-    this.endDate
-  });
+  Education.create(
+      {@required this.user,
+      @required this.institution,
+      @required this.degree,
+      @required this.field,
+      @required this.current,
+      @required this.startDate,
+      this.endDate});
 
   int id;
   User user;
@@ -76,23 +70,24 @@ class Education extends Serializable {
     if (user == null) {
       final userMap = object['user'] as Map<String, dynamic>;
       if (stringToUserType(userMap['type'] as String) == UserType.student) {
-        user = Student()
-          ..readFromMap(userMap);
+        user = Student()..readFromMap(userMap);
       } else {
-        user = Recruiter()
-          ..readFromMap(userMap);
+        user = Recruiter()..readFromMap(userMap);
       }
     }
     institution = Institution()
       ..readFromMap(object['institution'] as Map<String, dynamic>);
     degree = stringToDegree(object['degree'] as String);
-    field = Field()
-      ..readFromMap(object['field'] as Map<String, dynamic>);
+    field = Field()..readFromMap(object['field'] as Map<String, dynamic>);
     current = object['current'] as bool;
     final startDateStr = object['startDate'] as String;
-    startDate = startDateStr == null || startDateStr.isEmpty ? null : DateTime.parse(startDateStr);
+    startDate = startDateStr == null || startDateStr.isEmpty
+        ? null
+        : DateTime.parse(startDateStr);
     final endDateStr = object['endDate'] as String;
-    endDate = endDateStr == null || endDateStr.isEmpty ? null : DateTime.parse(endDateStr);
+    endDate = endDateStr == null || endDateStr.isEmpty
+        ? null
+        : DateTime.parse(endDateStr);
   }
 
   Future<void> save() async {
@@ -112,7 +107,10 @@ class Education extends Serializable {
         endDate?.toUtc()
       ]);
     } catch (err, stackTrace) {
-      logError(err, stackTrace: stackTrace, message: 'An error occurred while trying to save user education info:');
+      logError(err,
+          stackTrace: stackTrace,
+          message:
+              'An error occurred while trying to save user education info:');
     }
   }
 
@@ -124,21 +122,21 @@ class Education extends Serializable {
       ''';
       final results = await ServerChannel.db.query(sql, [user.id]);
 
-      final resultFutures = results.map((e) async =>
-      Education.create(
+      final resultFutures = results.map((e) async => Education.create(
           user: user,
           institution: await Institution.get(e['institution'] as String),
           degree: stringToDegree(e['degree'] as String),
           field: Field.create(name: e['field'] as String),
           current: (e['current'] as int) == 1,
           startDate: (e['start_date'] as DateTime).toLocal(),
-          endDate: (e['end_date'] as DateTime)?.toLocal()
-      )
-        ..id = e['id'] as int
-      );
+          endDate: (e['end_date'] as DateTime)?.toLocal())
+        ..id = e['id'] as int);
       return Future.wait(resultFutures);
     } catch (err, stackTrace) {
-      logError(err, stackTrace: stackTrace, message: 'An error occurred while trying to get user education info:');
+      logError(err,
+          stackTrace: stackTrace,
+          message:
+              'An error occurred while trying to get user education info:');
       return [];
     }
   }

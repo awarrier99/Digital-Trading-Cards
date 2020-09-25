@@ -6,7 +6,6 @@ import 'Company.dart';
 
 enum UserType { student, recruiter }
 
-DBCrypt dbCrypt;
 String userTypeToString(UserType userType) {
   switch (userType) {
     case UserType.student:
@@ -78,42 +77,26 @@ class User extends Serializable {
     password = object['password'] as String;
   }
 
-  static Future<User> get(int id) async {
-    try {
-      const sql = '''
-        SELECT * FROM users
-        WHERE id = ?
-      ''';
-      final results = await ServerChannel.db.query(sql, [id]);
-      if (results.isEmpty) {
-        return null;
-      }
+  static Future<User> _createFromQuery(dynamic key, String sqlKey) async {
+    final sql = '''
+      SELECT * FROM users
+      WHERE $sqlKey = ?
+    ''';
 
-      final userRow = results.first;
-      if (stringToUserType(userRow['type'] as String) == UserType.student) {
-        const sql2 = '''
+    final results = await ServerChannel.db.query(sql, [key]);
+    if (results.isEmpty) {
+      return null;
+    }
+
+    final userRow = results.first;
+    final id = userRow['id'] as int;
+    if (stringToUserType(userRow['type'] as String) == UserType.student) {
+      const sql2 = '''
           SELECT * FROM students
           WHERE id = ?
         ''';
-        final studentRow = (await ServerChannel.db.query(sql2, [id])).first;
-        return Student.create(
-            firstName: userRow['first_name'] as String,
-            lastName: userRow['last_name'] as String,
-            username: userRow['username'] as String,
-            country: userRow['country'] as String,
-            state: userRow['state'] as String,
-            city: userRow['city'] as String,
-            password: userRow['password'] as String,
-            gpa: studentRow['gpa'] as double)
-          ..id = id;
-      }
-
-      const sql3 = '''
-        SELECT * FROM recruiters
-        WHERE id = ?
-      ''';
-      final recruiterRow = (await ServerChannel.db.query(sql3, [id])).first;
-      return Recruiter.create(
+      final studentRow = (await ServerChannel.db.query(sql2, [id])).first;
+      return Student.create(
           firstName: userRow['first_name'] as String,
           lastName: userRow['last_name'] as String,
           username: userRow['username'] as String,
@@ -121,21 +104,56 @@ class User extends Serializable {
           state: userRow['state'] as String,
           city: userRow['city'] as String,
           password: userRow['password'] as String,
-          company: Company.create(name: recruiterRow['company'] as String),
-          website: recruiterRow['website'] as String)
+          gpa: studentRow['gpa'] as double)
         ..id = id;
+    }
+
+    const sql3 = '''
+        SELECT * FROM recruiters
+        WHERE id = ?
+      ''';
+    final recruiterRow = (await ServerChannel.db.query(sql3, [id])).first;
+    return Recruiter.create(
+        firstName: userRow['first_name'] as String,
+        lastName: userRow['last_name'] as String,
+        username: userRow['username'] as String,
+        country: userRow['country'] as String,
+        state: userRow['state'] as String,
+        city: userRow['city'] as String,
+        password: userRow['password'] as String,
+        company: Company.create(name: recruiterRow['company'] as String),
+        website: recruiterRow['website'] as String)
+      ..id = id;
+  }
+
+  static Future<User> get(int id) async {
+    try {
+      return _createFromQuery(id, 'id');
     } catch (err, stackTrace) {
-      logError(err, stackTrace: stackTrace, message: 'An error occurred while trying to get a user:');
+      logError(err,
+          stackTrace: stackTrace,
+          message: 'An error occurred while trying to get a user:');
+      return null;
+    }
+  }
+
+  static Future<User> getByUsername(String username) {
+    try {
+      return _createFromQuery(username, 'username');
+    } catch (err, stackTrace) {
+      logError(err,
+          stackTrace: stackTrace,
+          message: 'An error occurred while trying to get a user:');
       return null;
     }
   }
 
   Future<void> save() async {
     const sql = '''
-        INSERT INTO users
-        (first_name, last_name, username, country, state, city, password, type)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-      ''';
+      INSERT INTO users
+      (first_name, last_name, username, country, state, city, password, type)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    ''';
     final results = await ServerChannel.db.query(sql, [
       firstName,
       lastName,
@@ -149,21 +167,13 @@ class User extends Serializable {
     id = results.insertId;
   }
 
-  Future<bool> checkAuth() async {
+  Future<bool> checkAuth(String plaintext) async {
     try {
-      const sql = '''
-      SELECT id, password FROM users
-      WHERE username = ?
-    ''';
-      final results = (await ServerChannel.db.query(sql, [username])).first;
-      final hashedPass = results['password'] as String;
-      if (results.isEmpty) {
-        return false;
-      }
-      id = results['id'] as int;
-      return DBCrypt().checkpw(password, hashedPass);
+      return DBCrypt().checkpw(plaintext, password);
     } catch (err, stackTrace) {
-      logError(err, stackTrace: stackTrace, message: 'An error occurred while trying to authenticate a user:');
+      logError(err,
+          stackTrace: stackTrace,
+          message: 'An error occurred while trying to authenticate a user:');
       return false;
     }
   }
@@ -228,7 +238,9 @@ class Student extends User {
       ''';
       await ServerChannel.db.query(sql, [id, gpa]);
     } catch (err, stackTrace) {
-      logError(err, stackTrace: stackTrace, message: 'An error occurred while trying to save a student:');
+      logError(err,
+          stackTrace: stackTrace,
+          message: 'An error occurred while trying to save a student:');
     }
   }
 }
@@ -280,8 +292,7 @@ class Recruiter extends User {
   void readFromMap(Map<String, dynamic> object) {
     super.readFromMap(object);
     type = UserType.recruiter;
-    company = Company()
-      ..readFromMap(object['company'] as Map<String, dynamic>);
+    company = Company()..readFromMap(object['company'] as Map<String, dynamic>);
     website = object['website'] as String;
   }
 
@@ -296,7 +307,9 @@ class Recruiter extends User {
       ''';
       await ServerChannel.db.query(sql, [id, company.name, website]);
     } catch (err, stackTrace) {
-      logError(err, stackTrace: stackTrace, message: 'An error occurred while trying to save a recruiter:');
+      logError(err,
+          stackTrace: stackTrace,
+          message: 'An error occurred while trying to save a recruiter:');
     }
   }
 }
