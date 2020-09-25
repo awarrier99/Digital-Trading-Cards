@@ -35,11 +35,15 @@ class UserSkill extends Serializable {
   }
 
   Future<void> save() async {
-    const sql = '''
-      INSERT INTO user_skills
-      (user, skill)
-      VALUES (?, ?)
-    ''';
-    await ServerChannel.db.query(sql, [user.id, skill.title]);
+    try {
+      const sql = '''
+        INSERT INTO user_skills
+        (user, skill)
+        VALUES (?, ?)
+      ''';
+      await ServerChannel.db.query(sql, [user.id, skill.title]);
+    } catch (err, stackTrace) {
+      logError(err, stackTrace: stackTrace, message: 'An error occurred while trying to save a user skill:');
+    }
   }
 }

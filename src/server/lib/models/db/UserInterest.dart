@@ -35,11 +35,15 @@ class UserInterest extends Serializable {
   }
 
   Future<void> save() async {
-    const sql = '''
-      INSERT INTO user_interests
-      (user, interest)
-      VALUES (?, ?)
-    ''';
-    await ServerChannel.db.query(sql, [user.id, interest.title]);
+    try {
+      const sql = '''
+        INSERT INTO user_interests
+        (user, interest)
+        VALUES (?, ?)
+      ''';
+      await ServerChannel.db.query(sql, [user.id, interest.title]);
+    } catch (err, stackTrace) {
+      logError(err, stackTrace: stackTrace, message: 'An error occurred while trying to save a user interest:');
+    }
   }
 }

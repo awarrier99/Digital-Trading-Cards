@@ -4,3 +4,7 @@ database:
   username: root
   password: digitaltradingcards14
   databaseName: digital_trading_cards
+jwt:
+  key: jwt_digitaltradingcards
+  aud: wisteria@ui
+  iss: wisteria@api

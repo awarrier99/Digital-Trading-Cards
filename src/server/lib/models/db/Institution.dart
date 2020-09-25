@@ -25,11 +25,17 @@ class Institution extends Serializable {
   }
 
   static Future<Institution> get(String name) async {
-    const sql = '''
-      SELECT * FROM institutions
-      WHERE name = ?
-    ''';
-    final institution = (await ServerChannel.db.query(sql, [name])).first;
-    return Institution.create(name: name, longName: institution['long_name'] as String);
+    try {
+      const sql = '''
+        SELECT * FROM institutions
+        WHERE name = ?
+      ''';
+      final institution = (await ServerChannel.db.query(sql, [name])).first;
+      return Institution.create(
+          name: name, longName: institution['long_name'] as String);
+    } catch (err, stackTrace) {
+      logError(err, stackTrace: stackTrace, message: 'An error occurred while trying to get an institution:');
+      return null;
+    }
   }
 }

@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 
+import '../../models/CardInfo.dart';
+
 class InterestsInputs extends StatelessWidget {
+  final Interest model;
+
+  InterestsInputs({@required this.model});
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -18,6 +24,9 @@ class InterestsInputs extends StatelessWidget {
             }
             return null;
           },
+          onChanged: (value) {
+            model.title = value;
+          }
         ),
       ],
     );

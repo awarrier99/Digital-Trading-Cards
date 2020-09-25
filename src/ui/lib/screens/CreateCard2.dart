@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:ui/screens/CreateAccount3.dart';
+import 'package:provider/provider.dart';
+import 'package:ui/components/forms/VolunteeringInputs.dart';
+import 'package:ui/screens/CreateCard3.dart';
 import 'package:ui/components/forms/WorkInputs.dart';
 import 'package:ui/SizeConfig.dart';
 
@@ -8,12 +10,13 @@ import '../components/forms/DynamicForm.dart';
 import '../models/CardInfo.dart';
 
 class CreateCard2 extends StatelessWidget {
+  final _createCard2FormKey = GlobalKey<FormState>();
   final workInputsModel = <Work>[];
   final volunteeringInputsModel = <Volunteering>[];
 
-  Future navigateToCreateAccount3(context) async {
+  Future nextStep(context) async {
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => CreateAccount3()));
+        context, MaterialPageRoute(builder: (context) => CreateCard3()));
   }
 
   @override
@@ -26,6 +29,7 @@ class CreateCard2 extends StatelessWidget {
           margin: EdgeInsets.all(20),
           child: SingleChildScrollView(
             child: Form(
+              key: _createCard2FormKey,
               child: Column(
                 children: [
                   DynamicForm(
@@ -35,8 +39,10 @@ class CreateCard2 extends StatelessWidget {
                     dynamicModelBuilder: () => Work(),
                   ),
                   DynamicForm(
-                      title: 'Volunteer Experience',
-                      inputBuilder: (model) => WorkInputs(model: model)
+                    title: 'Volunteer Experience',
+                    inputBuilder: (model) => VolunteeringInputs(model: model),
+                    dynamicModelList: volunteeringInputsModel,
+                    dynamicModelBuilder: () => Volunteering(),
                   ),
                   SizedBox(
                       width: SizeConfig.screenWidth,
@@ -45,7 +51,13 @@ class CreateCard2 extends StatelessWidget {
                         textColor: Colors.white,
                         color: Palette.primaryGreen,
                         onPressed: () {
-                          navigateToCreateAccount3(context);
+                          if (_createCard2FormKey.currentState.validate()) {
+                            final cardInfoModel = context.read<CardInfoModel>();
+                            cardInfoModel.updateWork(workInputsModel);
+                            cardInfoModel.updateVolunteering(volunteeringInputsModel);
+                            print(cardInfoModel.createUser.toJson());
+                            nextStep(context);
+                          }
                         },
                       )),
                 ],

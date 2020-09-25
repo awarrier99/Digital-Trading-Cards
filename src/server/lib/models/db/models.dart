@@ -1,5 +1,3 @@
-library models;
-
 export 'Company.dart';
 export 'Connection.dart';
 export 'Education.dart';
