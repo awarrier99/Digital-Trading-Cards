@@ -10,38 +10,35 @@ import 'Home.dart';
 import 'dart:convert';
 import 'package:http/http.dart';
 
-
-
 class CreateAccount extends StatelessWidget {
   final _personalInfoInputsKey = GlobalKey<FormState>();
   final _personalInfoInputsModel = User();
 
   Future nextStep(context) async {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+    Navigator.of(context).pushNamed('/home');
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Create Account',
-          style: TextStyle(fontFamily: 'Montserrat'),
+        appBar: AppBar(
+          title: Text(
+            'Create Account',
+            style: TextStyle(fontFamily: 'Montserrat'),
+          ),
         ),
-      ),
-      body: Container(
-        margin: EdgeInsets.all(20),
-        child: SingleChildScrollView(
-          child: Form(
-            child: Column(
-              children: <Widget>[
-                PersonalInfoInputs(
-                  key: _personalInfoInputsKey,
-                  model: _personalInfoInputsModel,
-                ),
-                SizedBox(height: SizeConfig.safeBlockVertical * 10),
-                SizedBox(
-                    child: RaisedButton(
+        body: Container(
+            margin: EdgeInsets.all(20),
+            child: SingleChildScrollView(
+                child: Form(
+                    child: Column(children: <Widget>[
+              PersonalInfoInputs(
+                key: _personalInfoInputsKey,
+                model: _personalInfoInputsModel,
+              ),
+              SizedBox(height: SizeConfig.safeBlockVertical * 10),
+              SizedBox(
+                  child: RaisedButton(
                       child: Text('Sign Up'),
                       textColor: Colors.white,
                       color: Palette.primaryGreen,
@@ -53,15 +50,7 @@ class CreateAccount extends StatelessWidget {
                           print(userModel.currentuser.toJson());
                           nextStep(context);
                         }
-
-                      }
-                    )
-                )
-              ]
-            )
-          )
-        )
-      )
-    );
+                      }))
+            ])))));
   }
 }

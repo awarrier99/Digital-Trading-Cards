@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ui/palette.dart';
 import 'package:provider/provider.dart';
 import 'package:ui/SizeConfig.dart';
-import 'package:ui/screens/CreateAccount.dart';
-import 'package:ui/screens/CreateCard1.dart';
+
 import '../models/CardInfo.dart';
 import '../models/Users.dart';
 import 'package:http/http.dart';
@@ -16,7 +15,7 @@ class WelcomeScreen extends StatefulWidget {
 
   WelcomeScreen({
     Key key,
-    this.title,
+    this.title = "Wisteria.",
   }) : super(key: key);
 
   @override
@@ -39,8 +38,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   }
 
   Future createAccount(context) async {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => CreateAccount()));
+    Navigator.of(context).pushNamed('/createAccount');
   }
 
   Future loginContext(context) async {
