@@ -12,8 +12,6 @@ class Company {
   }
 }
 
-
-
 class Institution {
   String name;
   String longName;
@@ -113,6 +111,8 @@ class CardInfo {
   List<Skill> skills = [];
   List<Interest> interests = [];
 
+  CardInfo();
+
   Map<String, dynamic> toJson() {
     return {
       'user': user.toJson(),
@@ -123,6 +123,15 @@ class CardInfo {
       'interests': interests.map((e) => e.toJson()).toList()
     };
   }
+
+  CardInfo.fromJson(Map<String, dynamic> json) {
+    user = json['user'];
+    education = json['education'];
+    work = json['work'];
+    volunteering = json['volunteering'];
+    skills = json['skills'];
+    interests = json['interests'];
+  }
 }
 
 class CardInfoModel {
@@ -131,10 +140,12 @@ class CardInfoModel {
 
   Future<bool> createCard() async {
     print(_createUser.toJson());
-    final res = await post('http://10.0.2.2:8888/api/cards', headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    }, body: json.encode(_createUser.toJson()));
+    final res = await post('http://10.0.2.2:8888/api/cards',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: json.encode(_createUser.toJson()));
     Map<String, dynamic> body;
     try {
       body = json.decode(res.body);
@@ -168,5 +179,15 @@ class CardInfoModel {
 
   void updateInterests(List<Interest> interests) {
     _createUser.interests = interests;
+  }
+}
+
+// TODO: where should this fetch method go?
+Future<CardInfo> fetchCardInfo(int id) async {
+  final response = await get("http://10.0.2.2:8888/api/cards/$id");
+  if (response.statusCode == 200) {
+    return CardInfo.fromJson(json.decode(response.body));
+  } else {
+    throw Exception('Failed to load user info');
   }
 }
