@@ -167,6 +167,15 @@ class User extends Serializable {
     id = results.insertId;
   }
 
+  Future<void> saveConnections(int user1_id, int user2_id) async {
+    const sql = '''
+      INSERT INTO connections
+      (user1_id, user2_id)
+      VALUES (?, ?)
+    ''';
+     await ServerChannel.db.query(sql, [user1_id, user2_id]);
+  }
+
   Future<bool> checkAuth(String plaintext) async {
     try {
       return DBCrypt().checkpw(plaintext, password);
