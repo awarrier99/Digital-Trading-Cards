@@ -11,7 +11,7 @@ class LoginController extends ResourceController {
       }
       final result = await newUser.checkAuth(user.password);
       if (result) {
-        final token = generateToken(user);
+        final token = generateToken(newUser);
         return Response.ok({'success': true, 'token': token, 'user': newUser.asMap()});
       }
       return Response.ok({'success': false});

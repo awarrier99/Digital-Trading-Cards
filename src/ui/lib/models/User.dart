@@ -81,7 +81,7 @@ class UserModel {
     }
   }
 
-  Future<bool> login() async { // TODO: add try/catch
+  Future<bool> login() async { // TODO: add try/catch, strip whitespace
     final res = await post('http://10.0.2.2:8888/api/users/login',
         headers: {
           'Accept': 'application/json',

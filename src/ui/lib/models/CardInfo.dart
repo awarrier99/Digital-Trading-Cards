@@ -134,7 +134,7 @@ class CardInfo {
   }
 }
 
-class CardInfoModel {
+class CardInfoModel { // TODO strip whitespace from inputs
   final CardInfo _createUser = CardInfo();
   CardInfo get createUser => _createUser;
 
