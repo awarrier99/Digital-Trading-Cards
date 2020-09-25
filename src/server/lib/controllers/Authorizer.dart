@@ -65,13 +65,17 @@ class _AuthController extends Controller {
 
   @override
   FutureOr<RequestOrResponse> handle(Request request) async {
+    final mode = authModeMap[stringToVerb(request.method)];
+    if (mode == AuthMode.none) {
+      return request;
+    }
+    
     final jwt = checkValid(request);
     final jwtId = jwt?.payload == null ? null : jwt.payload['id'] as int;
     final idString = request.path.variables['id'];
     final id =
         idString == null || idString.isEmpty ? null : int.parse(idString);
 
-    final mode = authModeMap[stringToVerb(request.method)];
     if (mode == AuthMode.bearer) {
       if (jwt == null || jwtId == null) {
         return Response.unauthorized(body: {'success': false});
