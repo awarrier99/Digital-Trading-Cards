@@ -11,9 +11,7 @@ class Field extends Serializable {
 
   @override
   Map<String, dynamic> asMap() {
-    return {
-      'name': name
-    };
+    return {'name': name};
   }
 
   @override

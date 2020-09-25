@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ui/components/Cards/TradingCard.dart';
 import 'package:ui/models/CardInfo.dart';
-<<<<<<< HEAD
-import 'package:http/http.dart';
-import 'dart:convert';
-=======
->>>>>>> 8bd8a7701d1f22bf2138475e0687644d02169ae0
 
 import '../palette.dart';
 import 'CreateCard1.dart';

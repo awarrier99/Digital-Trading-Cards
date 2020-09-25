@@ -14,24 +14,19 @@ class UserInterest extends Serializable {
 
   @override
   Map<String, dynamic> asMap() {
-    return {
-      'user': user.asMap(),
-      'interest': interest.asMap()
-    };
+    return {'user': user.asMap(), 'interest': interest.asMap()};
   }
 
   @override
   void readFromMap(Map<String, dynamic> object) {
     final userMap = object['user'] as Map<String, dynamic>;
     if (stringToUserType(userMap['type'] as String) == UserType.student) {
-      user = Student()
-        ..readFromMap(userMap);
+      user = Student()..readFromMap(userMap);
     } else {
-      user = Recruiter()
-        ..readFromMap(userMap);
+      user = Recruiter()..readFromMap(userMap);
     }
     interest = Interest()
-    ..readFromMap(object['interest'] as Map<String, dynamic>);
+      ..readFromMap(object['interest'] as Map<String, dynamic>);
   }
 
   Future<void> save() async {
@@ -43,7 +38,9 @@ class UserInterest extends Serializable {
       ''';
       await ServerChannel.db.query(sql, [user.id, interest.title]);
     } catch (err, stackTrace) {
-      logError(err, stackTrace: stackTrace, message: 'An error occurred while trying to save a user interest:');
+      logError(err,
+          stackTrace: stackTrace,
+          message: 'An error occurred while trying to save a user interest:');
     }
   }
 }

@@ -38,6 +38,7 @@ class CreateCard2 extends StatelessWidget {
                     dynamicModelList: workInputsModel,
                     dynamicModelBuilder: () => Work(),
                   ),
+                  SizedBox(height: 20),
                   DynamicForm(
                     title: 'Volunteer Experience',
                     inputBuilder: (model) => VolunteeringInputs(model: model),
@@ -54,7 +55,8 @@ class CreateCard2 extends StatelessWidget {
                           if (_createCard2FormKey.currentState.validate()) {
                             final cardInfoModel = context.read<CardInfoModel>();
                             cardInfoModel.updateWork(workInputsModel);
-                            cardInfoModel.updateVolunteering(volunteeringInputsModel);
+                            cardInfoModel
+                                .updateVolunteering(volunteeringInputsModel);
                             print(cardInfoModel.createUser.toJson());
                             nextStep(context);
                           }

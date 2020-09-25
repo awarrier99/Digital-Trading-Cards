@@ -27,37 +27,34 @@ class CreateCard1 extends StatelessWidget {
           ),
         ),
         body: Container(
-          margin: EdgeInsets.all(20),
-          child: SingleChildScrollView(
-            child: Form(
-              key: _createCard1FormKey,
-              child: Column(children: <Widget>[
-                DynamicForm(
-                  title: 'Education',
-                  inputBuilder: (model) => EducationInputs(model: model),
-                  dynamicModelList: educationInputsModel,
-                  dynamicModelBuilder: () => Education()
-                ),
-                SizedBox(
-                  width: SizeConfig.screenWidth,
-                  child: RaisedButton(
-                    child: Text('Next'),
-                    textColor: Colors.white,
-                    color: Palette.primaryGreen,
-                    onPressed: () {
-                      if (_createCard1FormKey.currentState.validate()) {
-                        final cardInfoModel = context.read<CardInfoModel>();
-                        cardInfoModel.updateEducation(educationInputsModel);
-                        print(cardInfoModel.createUser.toJson());
-                        nextStep(context);
-                      }
-                    }
-                  )
-                )
-              ])
-            )
-          )
-        )
-    );
+            margin: EdgeInsets.all(20),
+            child: SingleChildScrollView(
+                child: Form(
+                    key: _createCard1FormKey,
+                    child: Column(children: <Widget>[
+                      DynamicForm(
+                          title: 'Education',
+                          inputBuilder: (model) =>
+                              EducationInputs(model: model),
+                          dynamicModelList: educationInputsModel,
+                          dynamicModelBuilder: () => Education()),
+                      SizedBox(
+                          width: SizeConfig.screenWidth,
+                          child: RaisedButton(
+                              child: Text('Next'),
+                              textColor: Colors.white,
+                              color: Palette.primaryGreen,
+                              onPressed: () {
+                                if (_createCard1FormKey.currentState
+                                    .validate()) {
+                                  final cardInfoModel =
+                                      context.read<CardInfoModel>();
+                                  cardInfoModel
+                                      .updateEducation(educationInputsModel);
+                                  print(cardInfoModel.createUser.toJson());
+                                  nextStep(context);
+                                }
+                              }))
+                    ])))));
   }
 }

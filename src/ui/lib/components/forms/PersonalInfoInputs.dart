@@ -6,8 +6,7 @@ import 'package:ui/palette.dart';
 import 'package:ui/SizeConfig.dart';
 
 import '../../models/CardInfo.dart';
-import '../../models/Users.dart';
-
+import '../../models/User.dart';
 
 // Create a Form widget.
 class PersonalInfoInputs extends StatefulWidget {
@@ -31,7 +30,6 @@ class PersonalInfoInputsState extends State<PersonalInfoInputs> {
   FocusNode stateNode = FocusNode();
   FocusNode cityNode = FocusNode();
   FocusNode passwordNode = FocusNode();
-
 
   @override
   void initState() {
@@ -163,6 +161,7 @@ class PersonalInfoInputsState extends State<PersonalInfoInputs> {
                   }),
               SizedBox(height: SizeConfig.safeBlockVertical * 2),
               TextFormField(
+                  obscureText: true,
                   focusNode: passwordNode,
                   textInputAction: TextInputAction.next,
                   decoration: InputDecoration(
@@ -177,7 +176,6 @@ class PersonalInfoInputsState extends State<PersonalInfoInputs> {
                   onChanged: (value) {
                     widget.model.password = value;
                   }),
-                  
               SizedBox(height: SizeConfig.safeBlockVertical * 2),
               Container(
                   margin: EdgeInsets.only(top: 20),

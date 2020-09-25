@@ -7,14 +7,13 @@ import 'User.dart';
 class Volunteering extends Serializable {
   Volunteering();
 
-  Volunteering.create({
-    @required this.user,
-    @required this.company,
-    this.title,
-    this.description,
-    this.startDate,
-    this.endDate
-  });
+  Volunteering.create(
+      {@required this.user,
+      @required this.company,
+      this.title,
+      this.description,
+      this.startDate,
+      this.endDate});
 
   int id;
   User user;
@@ -42,21 +41,22 @@ class Volunteering extends Serializable {
     if (user == null) {
       final userMap = object['user'] as Map<String, dynamic>;
       if (stringToUserType(userMap['type'] as String) == UserType.student) {
-        user = Student()
-          ..readFromMap(userMap);
+        user = Student()..readFromMap(userMap);
       } else {
-        user = Recruiter()
-          ..readFromMap(userMap);
+        user = Recruiter()..readFromMap(userMap);
       }
     }
-    company = Company()
-    ..readFromMap(object['company'] as Map<String, dynamic>);
+    company = Company()..readFromMap(object['company'] as Map<String, dynamic>);
     title = object['title'] as String;
     description = object['description'] as String;
     final startDateStr = object['startDate'] as String;
-    startDate = startDateStr == null || startDateStr.isEmpty ? null : DateTime.parse(startDateStr);
+    startDate = startDateStr == null || startDateStr.isEmpty
+        ? null
+        : DateTime.parse(startDateStr);
     final endDateStr = object['endDate'] as String;
-    endDate = endDateStr == null || endDateStr.isEmpty ? null : DateTime.parse(endDateStr);
+    endDate = endDateStr == null || endDateStr.isEmpty
+        ? null
+        : DateTime.parse(endDateStr);
   }
 
   Future<void> save() async {
@@ -75,7 +75,10 @@ class Volunteering extends Serializable {
         endDate?.toUtc()
       ]);
     } catch (err, stackTrace) {
-      logError(err, stackTrace: stackTrace, message: 'An error occurred while trying to save user volunteering info:');
+      logError(err,
+          stackTrace: stackTrace,
+          message:
+              'An error occurred while trying to save user volunteering info:');
     }
   }
 
@@ -87,20 +90,20 @@ class Volunteering extends Serializable {
       ''';
       final results = await ServerChannel.db.query(sql, [user.id]);
 
-      final resultFutures = results.map((e) async =>
-      Volunteering.create(
-        user: user,
-        company: Company.create(name: e['company'] as String),
-        title: e['title'] as String,
-        description: e['description'] as String,
-        startDate: (e['start_date'] as DateTime)?.toLocal(),
-        endDate: (e['end_date'] as DateTime)?.toLocal(),
-      )
-        ..id = e['id'] as int
-      );
+      final resultFutures = results.map((e) async => Volunteering.create(
+            user: user,
+            company: Company.create(name: e['company'] as String),
+            title: e['title'] as String,
+            description: e['description'] as String,
+            startDate: (e['start_date'] as DateTime)?.toLocal(),
+            endDate: (e['end_date'] as DateTime)?.toLocal(),
+          )..id = e['id'] as int);
       return Future.wait(resultFutures);
     } catch (err, stackTrace) {
-      logError(err, stackTrace: stackTrace, message: 'An error occurred while trying to get user volunteering info:');
+      logError(err,
+          stackTrace: stackTrace,
+          message:
+              'An error occurred while trying to get user volunteering info:');
       return [];
     }
   }
