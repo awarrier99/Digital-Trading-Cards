@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 import 'package:ui/SizeConfig.dart';
+import 'package:ui/models/CardInfo.dart';
 import 'package:ui/screens/Home.dart';
 
 import '../models/User.dart';
@@ -102,9 +103,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                   child: GestureDetector(
                                     onTap: () {
                                       final userModel = context.read<UserModel>();
+                                      final cardInfoModel = context.read<CardInfoModel>();
                                       userModel.updateUser(model);
-                                      userModel.login().then((response) {
-                                        if (response == true) {
+                                      userModel.login().then((user) {
+                                        if (user != null) {
+                                          cardInfoModel.updateUser(user);
                                           loginContext(context);
                                         }
                                       }).catchError((error) {
