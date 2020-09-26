@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:ui/models/User.dart';
 import 'package:ui/palette.dart';
 import 'package:ui/components/forms/InterestsInputs.dart';
 import '../components/forms/DynamicForm.dart';
@@ -53,11 +54,15 @@ class CreateCard3 extends StatelessWidget {
                       textColor: Colors.white,
                       color: Palette.primaryGreen,
                       onPressed: () {
+                        final userModel = context.read<UserModel>();
+
                         if (_createCard3FormKey.currentState.validate()) {
                           final cardInfoModel = context.read<CardInfoModel>();
                           cardInfoModel.updateSkills(skillsInputsModel);
                           cardInfoModel.updateInterests(interestsInputsModel);
-                          cardInfoModel.createCard().then((success) {
+                          cardInfoModel
+                              .createCard(userModel.token)
+                              .then((success) {
                             if (success) nextStep(context);
                           });
                         }

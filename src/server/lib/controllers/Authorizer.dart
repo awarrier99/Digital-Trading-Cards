@@ -76,11 +76,6 @@ class _AuthController extends Controller {
     final id =
         idString == null || idString.isEmpty ? null : int.parse(idString);
 
-    print(mode);
-    print(jwt);
-    print(jwt.payload);
-    print(jwtId);
-    print(id);
     if (mode == AuthMode.bearer) {
       if (jwt == null || jwtId == null) {
         return Response.unauthorized(body: {'success': false});

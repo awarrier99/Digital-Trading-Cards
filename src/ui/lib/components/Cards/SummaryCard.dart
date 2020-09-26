@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ui/components/forms/ColorBadge.dart';
+import 'package:ui/components/BadgeGroup.dart';
 
 class SummaryCard extends StatefulWidget {
   final String fullName;
@@ -103,36 +103,10 @@ class _SummaryCardState extends State<SummaryCard> {
           ),
 
           // Container for the users skills
-          Container(
-            padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
-            height: 45,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: [
-                for (var skill in widget.skills)
-                  Container(
-                    padding: EdgeInsets.fromLTRB(0, 0, 5, 0),
-                    child: ColorBadge(skill, Colors.cyan, Colors.blue),
-                  ),
-              ],
-            ),
-          ),
+          BadgeGroup(widget.skills, "skills"),
 
           // Container for the interests
-          Container(
-            padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
-            height: 45,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: [
-                for (var skill in widget.interests)
-                  Container(
-                    padding: EdgeInsets.fromLTRB(0, 0, 5, 0),
-                    child: ColorBadge(skill, Colors.purple, Colors.pink[200]),
-                  ),
-              ],
-            ),
-          ),
+          BadgeGroup(widget.interests, "interests"),
         ],
       ),
     );

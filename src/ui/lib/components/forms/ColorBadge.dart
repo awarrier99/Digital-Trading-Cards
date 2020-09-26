@@ -1,18 +1,32 @@
 import 'package:flutter/material.dart';
 
+class BadgeColors {
+  final Color startColor;
+  final Color endColor;
+  BadgeColors(this.startColor, this.endColor);
+}
+
 class ColorBadge extends StatelessWidget {
   final String text;
-  final Color color1;
-  final Color color2;
+  final String badgeType;
 
-  ColorBadge(this.text, this.color1, this.color2);
+  final Map<String, BadgeColors> _colors = {
+    "skills": BadgeColors(Color(0xff56D4D4), Colors.blue),
+    "interests": BadgeColors(Color(0xff8098EF), Color(0xffE080F0))
+  };
+
+  ColorBadge(this.text, this.badgeType);
 
   @override
   Widget build(BuildContext context) {
+    print(badgeType.runtimeType);
     return Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [color1, color2],
+            colors: [
+              _colors[badgeType].startColor,
+              _colors[badgeType].endColor
+            ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),

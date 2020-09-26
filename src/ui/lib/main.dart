@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:ui/RouteGenerator.dart';
 import 'package:ui/models/CardInfo.dart';
 import 'package:ui/models/User.dart';
-
 import 'palette.dart';
 
 void main() {

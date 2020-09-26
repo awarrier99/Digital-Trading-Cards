@@ -19,6 +19,11 @@ class Institution {
   Map<String, dynamic> toJson() {
     return {'name': name, 'longName': longName};
   }
+
+  void fromJson(Map<String, dynamic> json) {
+    name = json["name"];
+    longName = json["longName"];
+  }
 }
 
 class Field {
@@ -26,6 +31,10 @@ class Field {
 
   Map<String, dynamic> toJson() {
     return {'name': name};
+  }
+
+  void fromJson(Map<String, dynamic> json) {
+    name = json["name"];
   }
 }
 
@@ -37,6 +46,14 @@ class Education {
   DateTime startDate;
   DateTime endDate;
 
+  Education(
+      {this.institution,
+      this.degree,
+      this.field,
+      this.current,
+      this.startDate,
+      this.endDate});
+
   Map<String, dynamic> toJson() {
     return {
       'institution': institution?.toJson(),
@@ -46,6 +63,15 @@ class Education {
       'startDate': startDate.toIso8601String(),
       'endDate': endDate?.toIso8601String()
     };
+  }
+
+  void fromJson(Map<String, dynamic> json) {
+    institution = Institution()..fromJson(json['institution']);
+    degree = json['degree'];
+    field = Field()..fromJson(json['field']);
+    current = json['current'];
+    startDate = json['startDate'];
+    endDate = json['endDate'];
   }
 }
 
@@ -111,7 +137,13 @@ class CardInfo {
   List<Skill> skills = [];
   List<Interest> interests = [];
 
-  CardInfo();
+  CardInfo(
+      {this.user,
+      this.education,
+      this.work,
+      this.volunteering,
+      this.skills,
+      this.interests});
 
   Map<String, dynamic> toJson() {
     return {
@@ -124,32 +156,55 @@ class CardInfo {
     };
   }
 
-  CardInfo.fromJson(Map<String, dynamic> json) {
-    user = json['user'];
-    education = json['education'];
-    work = json['work'];
-    volunteering = json['volunteering'];
-    skills = json['skills'];
-    interests = json['interests'];
+  void fromJson(Map<String, dynamic> json) {
+    user = User()..fromJson(json['user']);
+    // education = json['education'].map((e) => Education()..fromJson(e));
+    // work = json['work'];
+    // volunteering = json['volunteering'];
+    // skills = json['skills'];
+    // interests = json['interests'];
   }
 }
 
-class CardInfoModel { // TODO strip whitespace from inputs
+class CardInfoModel {
+  // TODO strip whitespace from inputs
   final CardInfo _createUser = CardInfo();
   CardInfo get createUser => _createUser;
 
-  Future<bool> createCard() async {
+  Future<bool> createCard(String token) async {
     try {
-      final res = await post('http://10.0.2.2:8888/api/cards', headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      }, body: json.encode(_createUser.toJson()));
+      final res = await post('http://10.0.2.2:8888/api/cards',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+          body: json.encode(_createUser.toJson()));
       final body = json.decode(res.body);
       return body['success'] as bool;
     } catch (err) {
       print('An error occurred while trying to create a card:');
       print(err);
       return false;
+    }
+  }
+
+  Future<CardInfo> fetchCardInfo(int id, String token) async {
+    final response = await get(
+      "http://10.0.2.2:8888/api/cards/$id",
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    final body = json.decode(response.body);
+
+    if (response.statusCode == 200) {
+      print(body);
+      return CardInfo()..fromJson(body);
+    } else {
+      throw Exception('Failed to load user info');
     }
   }
 
@@ -175,15 +230,5 @@ class CardInfoModel { // TODO strip whitespace from inputs
 
   void updateInterests(List<Interest> interests) {
     _createUser.interests = interests;
-  }
-}
-
-// TODO: where should this fetch method go?
-Future<CardInfo> fetchCardInfo(int id) async {
-  final response = await get("http://10.0.2.2:8888/api/cards/$id");
-  if (response.statusCode == 200) {
-    return CardInfo.fromJson(json.decode(response.body));
-  } else {
-    throw Exception('Failed to load user info');
   }
 }

@@ -32,7 +32,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   }
 
   Future loginContext(context) async {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+    Navigator.of(context).pushNamed('/main');
   }
 
   @override
@@ -102,8 +102,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                   elevation: 7,
                                   child: GestureDetector(
                                     onTap: () {
-                                      final userModel = context.read<UserModel>();
-                                      final cardInfoModel = context.read<CardInfoModel>();
+                                      final userModel =
+                                          context.read<UserModel>();
+                                      final cardInfoModel =
+                                          context.read<CardInfoModel>();
                                       userModel.updateUser(model);
                                       userModel.login().then((user) {
                                         if (user != null) {

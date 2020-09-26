@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:ui/components/Cards/TradingCard.dart';
 import 'package:ui/models/CardInfo.dart';
-
+import 'package:provider/provider.dart';
+import 'package:ui/models/User.dart';
 import '../palette.dart';
-import 'CreateCard1.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -11,57 +11,65 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  int userID = 1;
   Future<CardInfo> userCardInfo;
-
-  Future createCard(context) async {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => CreateCard1()));
-  }
-
-  Future editCard(context) async {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => CreateCard1()));
-  }
 
   @override
   void initState() {
     super.initState();
-    userCardInfo = fetchCardInfo(userID);
+    final cardInfoModel = context.read<CardInfoModel>();
+    final userModel = context.read<UserModel>();
+    userCardInfo =
+        cardInfoModel.fetchCardInfo(userModel.currentUser.id, userModel.token);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Container(
-            child: SizedBox(
-                child: Column(
-      children: [
-        FutureBuilder<CardInfo>(
-          future: userCardInfo,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return TradingCard(
-                snapshot.data,
-                editCard: this.editCard(context),
-              );
-            } else if (snapshot.hasError) {
-              // TODO: Best way to check if user already has a card?
-              return true
-                  ? RaisedButton(
-                      child: Text('Create Card'),
-                      textColor: Colors.white,
-                      color: Palette.primaryGreen,
-                      onPressed: () {
-                        createCard(context);
-                      })
-                  : Text("${snapshot.error}");
-            }
-            // By default, show a loading spinner.
-            return CircularProgressIndicator();
-          },
-        ),
-      ],
-    ))));
+    return SafeArea(
+        child: Container(
+            child: SingleChildScrollView(
+      child: true // TODO: Only display button OR card
+          ? FutureBuilder<CardInfo>(
+              future: userCardInfo,
+              builder: (context, snapshot) {
+                List<Widget> children;
+                if (snapshot.hasData) {
+                  print(snapshot.data);
+                  children = [
+                    TradingCard(
+                      snapshot.data,
+                    )
+                  ];
+                } else if (snapshot.hasError) {
+                  children = [
+                    Center(
+                      child: Container(
+                        child: Text("${snapshot.error}"),
+                      ),
+                    )
+                  ];
+                } else {
+                  children = [
+                    Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  ];
+                }
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: children,
+                  ),
+                );
+              },
+            )
+          : RaisedButton(
+              child: Text('Create Card'),
+              textColor: Colors.white,
+              color: Palette.primaryGreen,
+              onPressed: () {
+                Navigator.of(context).pushNamed('/createCard1');
+              }),
+    )));
   }
 }

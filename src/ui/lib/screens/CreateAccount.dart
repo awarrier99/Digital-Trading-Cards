@@ -15,7 +15,7 @@ class CreateAccount extends StatelessWidget {
   final _personalInfoInputsModel = User();
 
   Future nextStep(context) async {
-    Navigator.of(context).pushNamed('/home');
+    Navigator.of(context).pushNamed('/main');
   }
 
   @override
