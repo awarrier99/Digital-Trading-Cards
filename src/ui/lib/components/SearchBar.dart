@@ -30,7 +30,9 @@ class SearchBar extends StatelessWidget {
 
 class StudentCardSearch extends SearchDelegate<StudentCardItem> {
   final bool listIsShown;
-  StudentCardSearch(this.listIsShown);
+  StudentCardSearch(this.listIsShown); // contructor
+
+  // Edit the String at the end to change the 'hint text' for the SearchBar
   @override
   // TODO: implement searchFieldLabel
   String get searchFieldLabel => 'Enter an Email Address';
