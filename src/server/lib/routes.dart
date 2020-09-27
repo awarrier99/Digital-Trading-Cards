@@ -3,6 +3,7 @@ import 'controllers/CardController.dart';
 import 'controllers/LoginController.dart';
 import 'controllers/UserController.dart';
 import 'controllers/VerbController.dart';
+import 'controllers/SaveCardController.dart';
 import 'server.dart';
 
 Controller createRoutes() {
@@ -24,6 +25,17 @@ Controller createRoutes() {
       .route('/users/login')
       .link(() => VerbController(Resource.user))
       .link(() => LoginController());
+
+  router
+      .route('/connections[/:id]')
+      .link(() => VerbController(Resource.connection))
+      .link(() => SaveCardController());
+
+  router
+      .route('/cards/saved[/:username]')
+      .link(Authorizer.bearer)
+      .link(() => VerbController(Resource.user))
+      .link(() => SaveCardController());
 
   return router;
 }

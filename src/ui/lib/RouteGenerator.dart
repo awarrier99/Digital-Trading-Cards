@@ -4,6 +4,7 @@ import 'package:ui/screens/WelcomeScreen.dart';
 import 'package:ui/screens/CreateAccount.dart';
 import 'package:ui/screens/Home.dart';
 import 'package:ui/screens/CreateCard1.dart';
+import 'package:ui/screens/ViewSavedCards.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {

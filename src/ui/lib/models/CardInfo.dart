@@ -69,9 +69,12 @@ class Education {
     institution = Institution()..fromJson(json['institution']);
     degree = json['degree'];
     field = Field()..fromJson(json['field']);
-    current = json['current'];
-    startDate = json['startDate'];
-    endDate = json['endDate'];
+    // current = (json['current']).getAsBoolean();
+    current = true;
+    startDate = DateTime.now();
+    endDate = DateTime.now();
+    // startDate = DateTime.parse(json['startDate'].toString());
+    // endDate = DateTime.parse(json['endDate'].toString());
   }
 }
 
@@ -158,7 +161,9 @@ class CardInfo {
 
   void fromJson(Map<String, dynamic> json) {
     user = User()..fromJson(json['user']);
-    // education = json['education'].map((e) => Education()..fromJson(e));
+    // education = new List<Education>.from(json['education']
+    //     .map((element) => Education()..fromJson(element))
+    //     .toList());
     // work = json['work'];
     // volunteering = json['volunteering'];
     // skills = json['skills'];
