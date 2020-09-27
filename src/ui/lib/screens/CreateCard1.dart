@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:ui/components/forms/EducationInputs.dart';
 import 'package:ui/SizeConfig.dart';
 import 'package:provider/provider.dart';
-import '../components/forms/PersonalInfoInputs.dart';
 import '../components/forms/DynamicForm.dart';
 import './CreateCard2.dart';
 import '../palette.dart';

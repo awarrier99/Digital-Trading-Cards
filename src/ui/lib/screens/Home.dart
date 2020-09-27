@@ -33,12 +33,20 @@ class _HomeState extends State<Home> {
         builder: (context, snapshot) {
           List<Widget> children;
           if (snapshot.hasData) {
-            print("SNAPSHOT DATA");
-            print(snapshot.data);
+            CardInfo cardData = snapshot.data;
+            bool hasCard = (cardData.education.isNotEmpty |
+                cardData.work.isNotEmpty |
+                cardData.volunteering.isNotEmpty);
             children = [
-              TradingCard(
-                snapshot.data,
-              )
+              hasCard
+                  ? TradingCard(snapshot.data, currentUser: true)
+                  : RaisedButton(
+                      child: Text('Create Card'),
+                      textColor: Colors.white,
+                      color: Palette.primaryGreen,
+                      onPressed: () {
+                        Navigator.of(context).pushNamed('/createCard1');
+                      }),
             ];
           } else if (snapshot.hasError) {
             children = [
@@ -64,13 +72,6 @@ class _HomeState extends State<Home> {
           );
         },
       ),
-      RaisedButton(
-          child: Text('Create Card'),
-          textColor: Colors.white,
-          color: Palette.primaryGreen,
-          onPressed: () {
-            Navigator.of(context).pushNamed('/createCard1');
-          }),
     ]))));
   }
 }

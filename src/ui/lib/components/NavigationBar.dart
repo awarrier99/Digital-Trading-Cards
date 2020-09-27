@@ -9,7 +9,7 @@ class NavigationBar extends StatefulWidget {
 
 class _NavigationBarState extends State<NavigationBar> {
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
-  int _currentIndex = 0;
+  int _currentIndex = 1;
 
   Widget _bottomNavigationBar() {
     return BottomNavigationBar(
@@ -24,7 +24,7 @@ class _NavigationBarState extends State<NavigationBar> {
           title: Text("Home"),
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.plus_one),
+          icon: Icon(Icons.add),
           title: Text("Add Card"),
         ),
       ],
