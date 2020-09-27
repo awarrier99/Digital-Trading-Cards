@@ -41,11 +41,10 @@ class ConnectionInfo {
 
   ConnectionInfo.fromJson(Map<String, dynamic> json) {
     user = User()..fromJson(json['user']);
-    for(connection in json['connections']) {
-      connections.add(Connection..fromJson(connection))
-    }
-    //
-
+    // for(connection in json['connections']) {
+    //   connections.add(Connection..fromJson(connection));
+    // }
+    connections = json['connections'];
     connectedUsers = json['connectedUsers'];
   }
 }
