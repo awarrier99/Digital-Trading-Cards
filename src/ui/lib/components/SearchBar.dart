@@ -14,16 +14,13 @@ class SearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return Scaffold(
-      body: Center(
-          child: RaisedButton(
-        child: Text('Add Card'),
-        textColor: Colors.white,
-        color: Palette.primaryGreen,
-        onPressed: () {
-          showSearch(context: context, delegate: StudentCardSearch(showList));
-        },
-      )),
+    return RaisedButton(
+      child: Text('Add Card'),
+      textColor: Colors.white,
+      color: Palette.primaryGreen,
+      onPressed: () {
+        showSearch(context: context, delegate: StudentCardSearch(showList));
+      },
     );
   }
 }

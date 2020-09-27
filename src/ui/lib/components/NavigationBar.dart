@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ui/RouteGenerator.dart';
+import 'package:ui/components/SearchBar.dart';
 
 class NavigationBar extends StatefulWidget {
   @override
@@ -15,13 +16,17 @@ class _NavigationBarState extends State<NavigationBar> {
       type: BottomNavigationBarType.fixed,
       items: [
         BottomNavigationBarItem(
+          icon: Icon(Icons.bookmark),
+          title: Text("Saved Cards"),
+        ),
+        BottomNavigationBarItem(
           icon: Icon(Icons.home),
           title: Text("Home"),
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.bookmark),
-          title: Text("Saved Cards"),
-        )
+          icon: Icon(Icons.plus_one),
+          title: Text("Add Card"),
+        ),
       ],
       onTap: _onTap,
       currentIndex: _currentIndex,
@@ -31,10 +36,13 @@ class _NavigationBarState extends State<NavigationBar> {
   _onTap(int tabIndex) {
     switch (tabIndex) {
       case 0:
-        _navigatorKey.currentState.pushReplacementNamed("/home");
+        _navigatorKey.currentState.pushReplacementNamed("/savedCards");
         break;
       case 1:
-        _navigatorKey.currentState.pushReplacementNamed("/savedCards");
+        _navigatorKey.currentState.pushReplacementNamed("/home");
+        break;
+      case 2:
+        showSearch(context: context, delegate: StudentCardSearch(false));
         break;
     }
     setState(() {

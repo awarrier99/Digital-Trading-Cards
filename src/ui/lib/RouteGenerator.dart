@@ -23,10 +23,7 @@ class RouteGenerator {
       case '/createCard1':
         return MaterialPageRoute(builder: (_) => CreateCard1());
       case '/savedCards':
-        return MaterialPageRoute(
-            builder: (_) => SafeArea(
-                  child: Text("Saved Cards"),
-                ));
+        return MaterialPageRoute(builder: (_) => ViewSavedCards());
       default:
         // If there is no such named route in the switch statement
         return _errorRoute();
