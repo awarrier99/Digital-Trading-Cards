@@ -25,6 +25,7 @@ class SearchBar extends StatelessWidget {
   }
 }
 
+// SearchDelegate takes in a model of the data
 class StudentCardSearch extends SearchDelegate<StudentCardItem> {
   final bool listIsShown; // this is a new change
   StudentCardSearch(this.listIsShown); // contructor
@@ -33,6 +34,7 @@ class StudentCardSearch extends SearchDelegate<StudentCardItem> {
   @override
   String get searchFieldLabel => 'Enter an Email Address';
 
+  // changes the theme of the Search App Bar
   ThemeData appBarTheme(BuildContext context) {
     assert(context != null);
     final ThemeData theme = Theme.of(context);
@@ -88,7 +90,7 @@ class StudentCardSearch extends SearchDelegate<StudentCardItem> {
     // listIsShown = boolean value used to check if you want to see list of
     // items present if the List used.
 
-    //query is the user input passed into the searchbar
+    //This is where the list is populated and checked before the tiles are created
     List studentList;
     if (listIsShown == true) {
       studentList = query.isEmpty
@@ -119,6 +121,8 @@ class StudentCardSearch extends SearchDelegate<StudentCardItem> {
             itemBuilder: (context, index) {
               final StudentCardItem listCard = studentList[index];
 
+              // the 2 text widgets are what is being displayed in the tile in the
+              // list
               return ListTile(
                 onTap: () {
                   showResults(context);
