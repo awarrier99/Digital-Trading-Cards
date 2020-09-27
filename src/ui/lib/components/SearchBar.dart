@@ -29,7 +29,7 @@ class SearchBar extends StatelessWidget {
 }
 
 class StudentCardSearch extends SearchDelegate<StudentCardItem> {
-  final bool listIsShown;
+  final bool listIsShown; // this is a new change
   StudentCardSearch(this.listIsShown); // contructor
 
   // Edit the String at the end to change the 'hint text' for the SearchBar
