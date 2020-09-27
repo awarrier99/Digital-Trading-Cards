@@ -7,7 +7,7 @@ class SaveCardController extends ResourceController {
     try {
       final newUser = await User.getByUsername(username);
       final user = request.attachments['user'] as User;
-      await User.saveConnections(user.id, newUser.id);
+      await user.saveConnections(user.id, newUser.id);
       return Response.ok({"success": "true"});
     } catch (err, stackTrace) {
       logError(err,
