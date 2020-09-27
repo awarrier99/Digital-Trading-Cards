@@ -10,6 +10,10 @@ class Company {
   Map<String, dynamic> toJson() {
     return {'name': name};
   }
+
+  void fromJson(Map<String, dynamic> json) {
+    name = json[name];
+  }
 }
 
 class Institution {
@@ -69,12 +73,9 @@ class Education {
     institution = Institution()..fromJson(json['institution']);
     degree = json['degree'];
     field = Field()..fromJson(json['field']);
-    // current = (json['current']).getAsBoolean();
-    current = true;
-    startDate = DateTime.now();
-    endDate = DateTime.now();
-    // startDate = DateTime.parse(json['startDate'].toString());
-    // endDate = DateTime.parse(json['endDate'].toString());
+    current = (json['current']).getAsBoolean();
+    startDate = DateTime.parse(json['startDate'].toString());
+    endDate = DateTime.parse(json['endDate'].toString());
   }
 }
 
@@ -96,6 +97,15 @@ class Work {
       'endDate': endDate?.toIso8601String()
     };
   }
+
+  void fromJson(Map<String, dynamic> json) {
+    company = Company()..fromJson(json['company']);
+    jobTitle = json['jobTitle'];
+    description = json['description'];
+    current = (json['current']).getAsBoolean();
+    startDate = DateTime.parse(json['startDate'].toString());
+    endDate = DateTime.parse(json['endDate'].toString());
+  }
 }
 
 class Volunteering {
@@ -114,6 +124,14 @@ class Volunteering {
       'endDate': endDate?.toIso8601String()
     };
   }
+
+  void fromJson(Map<String, dynamic> json) {
+    company = Company()..fromJson(json['company']);
+    title = json['title'];
+    description = json['description'];
+    startDate = DateTime.parse(json['startDate'].toString());
+    endDate = DateTime.parse(json['endDate'].toString());
+  }
 }
 
 class Skill {
@@ -122,6 +140,10 @@ class Skill {
   Map<String, dynamic> toJson() {
     return {'title': title};
   }
+
+  void fromJson(Map<String, dynamic> json) {
+    title = json["title"];
+  }
 }
 
 class Interest {
@@ -129,6 +151,10 @@ class Interest {
 
   Map<String, dynamic> toJson() {
     return {'title': title};
+  }
+
+  void fromJson(Map<String, dynamic> json) {
+    title = json["title"];
   }
 }
 
@@ -151,23 +177,29 @@ class CardInfo {
   Map<String, dynamic> toJson() {
     return {
       'user': user.toJson(),
-      'education': education.map((e) => e.toJson()).toList(),
-      'work': work.map((e) => e.toJson()).toList(),
-      'volunteering': volunteering.map((e) => e.toJson()).toList(),
-      'skills': skills.map((e) => e.toJson()).toList(),
-      'interests': interests.map((e) => e.toJson()).toList()
+      'education': education?.map((e) => e.toJson())?.toList(),
+      'work': work?.map((e) => e.toJson())?.toList(),
+      'volunteering': volunteering?.map((e) => e.toJson())?.toList(),
+      'skills': skills?.map((e) => e.toJson())?.toList(),
+      'interests': interests?.map((e) => e.toJson())?.toList()
     };
   }
 
   void fromJson(Map<String, dynamic> json) {
     user = User()..fromJson(json['user']);
-    // education = new List<Education>.from(json['education']
-    //     .map((element) => Education()..fromJson(element))
-    //     .toList());
-    // work = json['work'];
-    // volunteering = json['volunteering'];
-    // skills = json['skills'];
-    // interests = json['interests'];
+    education = new List<Education>.from(json['education']
+        .map((element) => Education()..fromJson(element))
+        .toList());
+    work = new List<Work>.from(
+        json['work'].map((element) => Work()..fromJson(element)).toList());
+    volunteering = new List<Volunteering>.from(json['volunteering']
+        .map((element) => Volunteering()..fromJson(element))
+        .toList());
+    skills = new List<Skill>.from(
+        json['skills'].map((element) => Skill()..fromJson(element)).toList());
+    interests = new List<Interest>.from(json['interests']
+        .map((element) => Interest()..fromJson(element))
+        .toList());
   }
 }
 
@@ -204,6 +236,8 @@ class CardInfoModel {
     );
 
     final body = json.decode(response.body);
+    print("JSON RESPONSE");
+    print(body);
 
     if (response.statusCode == 200) {
       print(body);

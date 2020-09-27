@@ -81,15 +81,17 @@ class _TradingCardState extends State<TradingCard> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // widget.data.education[0].institution
+                      !widget.data.education.isEmpty
+                          ? Text(widget.data.education[0].institution.name)
+                          : Text("none"),
                       // widget.data.education[0].field
                       // widget.data.education[0].endDate
-                      Text("Georgia Tech",
-                          style: TextStyle(
-                              fontWeight: FontWeight.w600, fontSize: 16)),
-                      Text("Computer Science", style: TextStyle(fontSize: 16)),
-                      Text("Fall 2020",
-                          style: TextStyle(color: Colors.black54)),
+                      // Text("Georgia Tech",
+                      //     style: TextStyle(
+                      //         fontWeight: FontWeight.w600, fontSize: 16)),
+                      // Text("Computer Science", style: TextStyle(fontSize: 16)),
+                      // Text("Fall 2020",
+                      //     style: TextStyle(color: Colors.black54)),
                     ],
                   ),
                 ),

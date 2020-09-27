@@ -27,49 +27,50 @@ class _HomeState extends State<Home> {
     return SafeArea(
         child: Container(
             child: SingleChildScrollView(
-      child: true // TODO: Only display button OR card
-          ? FutureBuilder<CardInfo>(
-              future: userCardInfo,
-              builder: (context, snapshot) {
-                List<Widget> children;
-                if (snapshot.hasData) {
-                  print(snapshot.data);
-                  children = [
-                    TradingCard(
-                      snapshot.data,
-                    )
-                  ];
-                } else if (snapshot.hasError) {
-                  children = [
-                    Center(
-                      child: Container(
-                        child: Text("${snapshot.error}"),
-                      ),
-                    )
-                  ];
-                } else {
-                  children = [
-                    Center(
-                      child: CircularProgressIndicator(),
-                    )
-                  ];
-                }
-                return Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: children,
-                  ),
-                );
-              },
-            )
-          : RaisedButton(
-              child: Text('Create Card'),
-              textColor: Colors.white,
-              color: Palette.primaryGreen,
-              onPressed: () {
-                Navigator.of(context).pushNamed('/createCard1');
-              }),
-    )));
+                child: Column(children: [
+      FutureBuilder<CardInfo>(
+        future: userCardInfo,
+        builder: (context, snapshot) {
+          List<Widget> children;
+          if (snapshot.hasData) {
+            print("SNAPSHOT DATA");
+            print(snapshot.data);
+            children = [
+              TradingCard(
+                snapshot.data,
+              )
+            ];
+          } else if (snapshot.hasError) {
+            children = [
+              Center(
+                child: Container(
+                  child: Text("${snapshot.error}"),
+                ),
+              )
+            ];
+          } else {
+            children = [
+              Center(
+                child: CircularProgressIndicator(),
+              )
+            ];
+          }
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: children,
+            ),
+          );
+        },
+      ),
+      RaisedButton(
+          child: Text('Create Card'),
+          textColor: Colors.white,
+          color: Palette.primaryGreen,
+          onPressed: () {
+            Navigator.of(context).pushNamed('/createCard1');
+          }),
+    ]))));
   }
 }

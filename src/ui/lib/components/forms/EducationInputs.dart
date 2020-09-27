@@ -24,7 +24,8 @@ class EducationInputsState extends State<EducationInputs> {
     _isCurrent = false;
     widget.model.current = false;
     widget.model.degree = 'Associate';
-    widget.model.startDate = DateTime(DateTime.now().year, DateTime.now().month);
+    widget.model.startDate =
+        DateTime(DateTime.now().year, DateTime.now().month);
     widget.model.endDate = DateTime(DateTime.now().year + 4);
   }
 
@@ -38,9 +39,7 @@ class EducationInputsState extends State<EducationInputs> {
             autofocus: true,
             textInputAction: TextInputAction.next,
             decoration: InputDecoration(
-                labelText: 'Institution*',
-                border: OutlineInputBorder()
-            ),
+                labelText: 'Institution*', border: OutlineInputBorder()),
             textCapitalization: TextCapitalization.sentences,
             validator: (value) {
               if (value.isEmpty) {
@@ -49,21 +48,17 @@ class EducationInputsState extends State<EducationInputs> {
               return null;
             },
             onChanged: (value) {
-              widget.model.institution = Institution()
-                  ..name = value;
+              widget.model.institution = Institution()..name = value;
             },
             onFieldSubmitted: (term) {
               FocusScope.of(context).requestFocus(majorNode);
-            }
-        ),
+            }),
         SizedBox(height: SizeConfig.safeBlockVertical * 2),
         TextFormField(
           focusNode: majorNode,
           textInputAction: TextInputAction.done,
           decoration: InputDecoration(
-              labelText: 'Field of Study*',
-              border: OutlineInputBorder()
-          ),
+              labelText: 'Field of Study*', border: OutlineInputBorder()),
           textCapitalization: TextCapitalization.sentences,
           validator: (value) {
             if (value.isEmpty) {
@@ -72,8 +67,7 @@ class EducationInputsState extends State<EducationInputs> {
             return null;
           },
           onChanged: (value) {
-            widget.model.field = Field()
-                ..name = value;
+            widget.model.field = Field()..name = value;
           },
         ),
         Container(
@@ -81,8 +75,7 @@ class EducationInputsState extends State<EducationInputs> {
             child: Text(
               'Degree Type*',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-            )
-        ),
+            )),
         DropdownFormField(
           ['Associate', 'Bachelor\'s', 'Master\'s', 'Doctoral'],
           onChanged: (value) {
@@ -93,10 +86,9 @@ class EducationInputsState extends State<EducationInputs> {
           children: [
             Container(
                 child: Text(
-                  'Currently Attending',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                )
-            ),
+              'Currently Attending',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            )),
             Checkbox(
               value: _isCurrent,
               onChanged: (value) {
@@ -114,32 +106,27 @@ class EducationInputsState extends State<EducationInputs> {
             child: Text(
               'Start Date*',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-            )
-        ),
+            )),
         MonthYearPicker(
-          firstDate: DateTime(DateTime.now().year - 100),
-          lastDate: DateTime(DateTime.now().year + 1, 12, 31),
-          initialDate: DateTime(DateTime.now().year, DateTime.now().month),
-          onChanged: (value) {
-            widget.model.startDate = value;
-          }
-        ),
+            firstDate: DateTime(DateTime.now().year - 100),
+            lastDate: DateTime(DateTime.now().year + 1, 12, 31),
+            initialDate: DateTime(DateTime.now().year, DateTime.now().month),
+            onChanged: (value) {
+              widget.model.startDate = value;
+            }),
         Container(
             margin: EdgeInsets.only(top: 20),
             child: Text(
-              _isCurrent ? 'Expected Graduation Date' : 'Graduation Date*',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)
-            )
-        ),
+                _isCurrent ? 'Expected Graduation Date' : 'Graduation Date*',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16))),
         MonthYearPicker(
-          firstDate: DateTime(DateTime.now().year - 100),
-          lastDate: DateTime(DateTime.now().year + 6, 12, 31),
-          initialDate: DateTime(DateTime.now().year + 4),
-          isRequired: !_isCurrent,
-          onChanged: (value) {
+            firstDate: DateTime(DateTime.now().year - 100),
+            lastDate: DateTime(DateTime.now().year + 6, 12, 31),
+            initialDate: DateTime(DateTime.now().year + 4),
+            isRequired: !_isCurrent,
+            onChanged: (value) {
               widget.model.endDate = value;
-          }
-        )
+            })
       ],
     );
   }
