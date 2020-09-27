@@ -34,7 +34,6 @@ class StudentCardSearch extends SearchDelegate<StudentCardItem> {
 
   // Edit the String at the end to change the 'hint text' for the SearchBar
   @override
-  // TODO: implement searchFieldLabel
   String get searchFieldLabel => 'Enter an Email Address';
 
   ThemeData appBarTheme(BuildContext context) {
@@ -131,7 +130,7 @@ class StudentCardSearch extends SearchDelegate<StudentCardItem> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      listCard.name,
+                      listCard.name + ' - ' + listCard.emailAddress,
                       style: TextStyle(
                           fontFamily: 'Montserrat',
                           fontWeight: FontWeight.bold,
