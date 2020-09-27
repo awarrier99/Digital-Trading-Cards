@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:ui/components/forms/ColorBadge.dart';
+import 'package:ui/models/CardInfo.dart';
 
 class SummaryCard extends StatefulWidget {
-  final String fullName;
-  final String school;
-  final String degreeType;
-  final String major;
-  final List<String> skills;
-  final List<String> interests;
-  bool isFavorite;
+  CardInfo data;
+  bool isFavorite = false;
 
-  SummaryCard(this.fullName, this.school, this.degreeType, this.major,
-      this.skills, this.interests, this.isFavorite);
+  // final String fullName;
+  // final String school;
+  // final String degreeType;
+  // final String major;
+  // final List<String> skills;
+  // final List<String> interests;
+  // bool isFavorite;
+
+  SummaryCard(this.data);
 
   @override
   _SummaryCardState createState() => _SummaryCardState();
@@ -48,7 +51,15 @@ class _SummaryCardState extends State<SummaryCard> {
           Row(
             children: [
               Text(
-                widget.fullName,
+                widget.data.user.firstName,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 24,
+                  color: Colors.grey[700],
+                ),
+              ),
+              Text(
+                widget.data.user.lastName,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 24,
@@ -68,7 +79,7 @@ class _SummaryCardState extends State<SummaryCard> {
             padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
             alignment: Alignment.centerLeft,
             child: Text(
-              widget.school,
+              widget.data.education[0].institution.longName,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 18,
@@ -84,20 +95,20 @@ class _SummaryCardState extends State<SummaryCard> {
             child: Row(
               children: [
                 Text(
-                  widget.degreeType,
+                  widget.data.education[0].degree,
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.grey[700],
                   ),
                 ),
-                Text(" "),
-                Text(
-                  widget.major,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.grey[700],
-                  ),
-                ),
+                // Text(" "),
+                // Text(
+                //   widget.major,
+                //   style: TextStyle(
+                //     fontSize: 16,
+                //     color: Colors.grey[700],
+                //   ),
+                // ),
               ],
             ),
           ),
@@ -109,10 +120,10 @@ class _SummaryCardState extends State<SummaryCard> {
             child: ListView(
               scrollDirection: Axis.horizontal,
               children: [
-                for (var skill in widget.skills)
+                for (var skill in widget.data.skills)
                   Container(
                     padding: EdgeInsets.fromLTRB(0, 0, 5, 0),
-                    child: ColorBadge(skill, Colors.cyan, Colors.blue),
+                    child: ColorBadge(skill.title, Colors.cyan, Colors.blue),
                   ),
               ],
             ),
@@ -125,10 +136,10 @@ class _SummaryCardState extends State<SummaryCard> {
             child: ListView(
               scrollDirection: Axis.horizontal,
               children: [
-                for (var skill in widget.interests)
+                for (var interest in widget.data.interests)
                   Container(
                     padding: EdgeInsets.fromLTRB(0, 0, 5, 0),
-                    child: ColorBadge(skill, Colors.purple, Colors.pink[200]),
+                    child: ColorBadge(interest.title, Colors.purple, Colors.pink[200]),
                   ),
               ],
             ),

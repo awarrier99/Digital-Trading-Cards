@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:ui/RouteGenerator.dart';
 import 'package:ui/models/CardInfo.dart';
 import 'package:ui/models/User.dart';
+import 'package:ui/models/ConnectionInfo.dart';
 
 import 'palette.dart';
 
@@ -18,7 +19,8 @@ class MyApp extends StatelessWidget {
         Provider<CardInfoModel>(
           create: (context) => CardInfoModel(),
         ),
-        Provider<UserModel>(create: (context) => UserModel())
+        Provider<UserModel>(create: (context) => UserModel()),
+        Provider<ConnectionInfoModel>(create: (context) => ConnectionInfoModel())
       ],
       child: MaterialApp(
         title: 'Wisteria',

@@ -1,93 +1,28 @@
 import 'package:flutter/material.dart';
 
-//import './Basic_Info_Form.dart';
 import '../components/Cards/SummaryCard.dart';
+import 'package:ui/models/ConnectionInfo.dart';
+import 'package:ui/models/CardInfo.dart';
+import 'package:ui/models/User.dart';
+import 'package:provider/provider.dart';
 
-class ViewSavedCards extends StatelessWidget {
+class ViewSavedCards extends StatefulWidget {
+  @override
+  _ViewSavedCardsState createState() => _ViewSavedCardsState();
+}
+
+class _ViewSavedCardsState extends State<ViewSavedCards> {
+  int userId = 57;
+  Future<ConnectionInfo> userConnectionInfo;
+
+  @override
+  void initState() {
+    super.initState();
+    final connectionInfoModel = context.read<ConnectionInfoModel>();
+    userConnectionInfo = fetchConnectionInfo(userId);
+  }
+
   final _createAccountFormKey = GlobalKey<FormState>();
-  var savedCardsList = [
-    {
-      'fullname': 'Matt Oliver',
-      'school': 'Georgia Institute of Technology',
-      'degreeType': 'B.S.',
-      'major': 'Computer Science',
-      'skills': ['C#', 'Front End', 'iOS Development', 'XCode'],
-      'interests': ['Golf', 'Computers', 'Tennis'],
-      'isFavorite': true
-    },
-    {
-      'fullname': 'Diana Rodrigues',
-      'school': 'Georgia Institute of Technology',
-      'degreeType': 'M.S.',
-      'major': 'Civil Engineering',
-      'skills': ['AutoCAD', 'MatLab'],
-      'interests': ['Equestrian', 'Spanish', 'Traveling', 'Diving'],
-      'isFavorite': true
-    },
-    {
-      'fullname': 'Chad White',
-      'school': 'University of Georgia',
-      'degreeType': 'B.S.',
-      'major': 'Business Administration',
-      'skills': ['Accounting', 'Excel', 'Data Analysis'],
-      'interests': ['Lacrosse', 'Dogs', 'Football'],
-      'isFavorite': false
-    },
-    {
-      'fullname': 'Matt Oliver2',
-      'school': 'Georgia Tech2',
-      'degreeType': 'bachelors2',
-      'major': 'CS2',
-      'skills': ['golf2', 'computers2', 'tennis2', 'wonderwhat'],
-      'interests': ['yes', 'matt', 'hocky'],
-      'isFavorite': false
-    },
-    {
-      'fullname': 'Matt Oliver2',
-      'school': 'Georgia Tech2',
-      'degreeType': 'bachelors2',
-      'major': 'CS2',
-      'skills': ['golf2', 'computers2', 'tennis2', 'wonderwhat'],
-      'interests': ['yes', 'matt', 'hocky'],
-      'isFavorite': false
-    },
-    {
-      'fullname': 'Matt Oliver2',
-      'school': 'Georgia Tech2',
-      'degreeType': 'bachelors2',
-      'major': 'CS2',
-      'skills': ['golf2', 'computers2', 'tennis2', 'wonderwhat'],
-      'interests': ['yes', 'matt', 'hocky'],
-      'isFavorite': false
-    },
-    {
-      'fullname': 'Matt Oliver2',
-      'school': 'Georgia Tech2',
-      'degreeType': 'bachelors2',
-      'major': 'CS2',
-      'skills': ['golf2', 'computers2', 'tennis2', 'wonderwhat'],
-      'interests': ['yes', 'matt', 'hocky'],
-      'isFavorite': false
-    },
-    {
-      'fullname': 'Matt Oliver2',
-      'school': 'Georgia Tech2',
-      'degreeType': 'bachelors2',
-      'major': 'CS2',
-      'skills': ['golf2', 'computers2', 'tennis2', 'wonderwhat'],
-      'interests': ['yes', 'matt', 'hocky'],
-      'isFavorite': false
-    },
-    {
-      'fullname': 'Matt Oliver2',
-      'school': 'Georgia Tech2',
-      'degreeType': 'bachelors2',
-      'major': 'CS2',
-      'skills': ['golf2', 'computers2', 'tennis2', 'wonderwhat'],
-      'interests': ['yes', 'matt', 'hocky'],
-      'isFavorite': false
-    }
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -98,24 +33,95 @@ class ViewSavedCards extends StatelessWidget {
           style: TextStyle(fontFamily: 'Montserrat'),
         ),
       ),
-      body: ListView.separated(
-        separatorBuilder: (BuildContext context, int index) => const Divider(),
-        itemCount: savedCardsList.length,
-        itemBuilder: (BuildContext context, int index) {
-          return Container(
-            padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-            child: new SummaryCard(
-                savedCardsList[index]['fullname'],
-                savedCardsList[index]['school'],
-                savedCardsList[index]['degreeType'],
-                savedCardsList[index]['major'],
-                savedCardsList[index]['skills'],
-                savedCardsList[index]['interests'],
-                savedCardsList[index]['isFavorite']),
-          );
-        },
-        padding: EdgeInsets.only(top: 10, bottom: 10),
+      body: Container(
+        child: FutureBuilder<ConnectionInfo>(
+            future: userConnectionInfo,
+            builder: (context, AsyncSnapshot<ConnectionInfo> snapshot) {
+              List<Widget> children;
+              if (snapshot.hasData) {
+                print(snapshot.data);
+                children = [
+                ListView.separated(
+                  separatorBuilder: (BuildContext context,
+                      int index) => const Divider(),
+                  itemCount: snapshot.data.connectedUsers.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Container(
+                        padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                        child: SummaryCard(
+                            snapshot.data.connectedUsers[index]
+                          // snapshot.data.connectedUsers[index].toJson['fullname'],
+                          // snapshot.data.connectedUsers[index]['school'],
+                          // snapshot.data.connectedUsers[index]['degreeType'],
+                          // snapshot.data.connectedUsers[index]['major'],
+                          // snapshot.data.connectedUsers[index]['skills'],
+                          // snapshot.data.connectedUsers[index]['interests'],
+                          // false),
+                        )
+                    );
+                  },
+                  padding: EdgeInsets.only(top: 10, bottom: 10),
+                ),
+                ];
+              } else if (snapshot.hasError) {
+                print("it went bad");
+                children = [
+                  Center(
+                  child: Container(
+                    child: Text("${snapshot.error}"),
+                  ),
+                ),
+                ];
+              } else {
+                print("it went once");
+                children = [
+                  Center(
+                    child: Container(
+                      child: CircularProgressIndicator(),
+                    ),
+                  ),
+                ];
+              }
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: children,
+                ),
+              );
+            }
+        ),
       ),
     );
   }
 }
+// @override
+// Widget build(BuildContext context) {
+//   return Scaffold(
+//     appBar: AppBar(
+//       title: Text(
+//         'Saved Cards',
+//         style: TextStyle(fontFamily: 'Montserrat'),
+//       ),
+//     ),
+//     body: ListView.separated(
+//       separatorBuilder: (BuildContext context, int index) => const Divider(),
+//       itemCount: savedCardsList.length,
+//       itemBuilder: (BuildContext context, int index) {
+//         return Container(
+//           padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+//           child: new SummaryCard(
+//               savedCardsList[index]['fullname'],
+//               savedCardsList[index]['school'],
+//               savedCardsList[index]['degreeType'],
+//               savedCardsList[index]['major'],
+//               savedCardsList[index]['skills'],
+//               savedCardsList[index]['interests'],
+//               savedCardsList[index]['isFavorite']),
+//         );
+//       },
+//       padding: EdgeInsets.only(top: 10, bottom: 10),
+//     ),
+//   );
+// }
+

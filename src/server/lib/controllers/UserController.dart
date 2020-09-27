@@ -25,7 +25,7 @@ class UserController extends ResourceController {
   }
 
   @Operation.get('id')
-  Future<Response> getUser({@Bind.path('id') int userId}) async {
+  Future<Response> getConnectionsList({@Bind.path('id') int userId}) async {
     try {
       final user = request.attachments['user']
           as User; // only support getting the current user
