@@ -81,17 +81,12 @@ class _TradingCardState extends State<TradingCard> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      !widget.data.education.isEmpty
-                          ? Text(widget.data.education[0].institution.name)
-                          : Text("none"),
-                      // widget.data.education[0].field
-                      // widget.data.education[0].endDate
-                      // Text("Georgia Tech",
-                      //     style: TextStyle(
-                      //         fontWeight: FontWeight.w600, fontSize: 16)),
-                      // Text("Computer Science", style: TextStyle(fontSize: 16)),
-                      // Text("Fall 2020",
-                      //     style: TextStyle(color: Colors.black54)),
+                      Text(widget.data.education[0]?.institution.longName,
+                          style: TextStyle(
+                              fontWeight: FontWeight.w600, fontSize: 16)),
+                      Text(widget.data.education[0]?.degree +
+                          " " +
+                          widget.data.education[0]?.field.name),
                     ],
                   ),
                 ),
@@ -107,12 +102,11 @@ class _TradingCardState extends State<TradingCard> {
                               fontWeight: FontWeight.w600,
                               fontSize: 16,
                               color: Palette.darkGreen)),
-                      // widget.data.work[0].jobTitle
-                      // widget.data.work[0].company
-                      Text("Software Development Intern",
+                      Text(widget.data.work[0].jobTitle,
                           style: TextStyle(
                               fontWeight: FontWeight.w600, fontSize: 16)),
-                      Text("GTRI", style: TextStyle(fontSize: 16)),
+                      Text(widget.data.work[0].company.name,
+                          style: TextStyle(fontSize: 16)),
                     ],
                   ),
                 ),
@@ -128,17 +122,16 @@ class _TradingCardState extends State<TradingCard> {
                               fontWeight: FontWeight.w600,
                               fontSize: 16,
                               color: Palette.darkGreen)),
-                      // widget.data.volunteering[0].title
-                      // widget.data.volunteering[0].company
-                      Text("Fundraising Organizer",
+                      Text(widget.data.volunteering[0].title,
                           style: TextStyle(
                               fontWeight: FontWeight.w600, fontSize: 16)),
-                      Text("Girls Who Code", style: TextStyle(fontSize: 16)),
+                      Text(widget.data.volunteering[0].company.name,
+                          style: TextStyle(fontSize: 16)),
                     ],
                   ),
                 ),
 
-                // Skills
+                // Skills, TODO: get from api
                 Container(
                   padding: EdgeInsets.only(bottom: 20),
                   child: Column(
@@ -156,7 +149,7 @@ class _TradingCardState extends State<TradingCard> {
                   ),
                 ),
 
-                // Interests
+                // Interests, TODO: get from api
                 Container(
                   padding: EdgeInsets.only(bottom: 20),
                   child: Column(

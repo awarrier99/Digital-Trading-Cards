@@ -12,7 +12,7 @@ class Company {
   }
 
   void fromJson(Map<String, dynamic> json) {
-    name = json[name];
+    name = json["name"];
   }
 }
 
@@ -73,9 +73,11 @@ class Education {
     institution = Institution()..fromJson(json['institution']);
     degree = json['degree'];
     field = Field()..fromJson(json['field']);
-    current = (json['current']).getAsBoolean();
-    startDate = DateTime.parse(json['startDate'].toString());
-    endDate = DateTime.parse(json['endDate'].toString());
+    current = json['current'];
+    startDate = DateTime.parse(json['startDate']);
+    endDate = DateTime.parse(json['endDate']);
+    // startDate = DateTime.parse(json['startDate'].toString());
+    // endDate = DateTime.parse(json['endDate'].toString());
   }
 }
 
@@ -102,9 +104,11 @@ class Work {
     company = Company()..fromJson(json['company']);
     jobTitle = json['jobTitle'];
     description = json['description'];
-    current = (json['current']).getAsBoolean();
-    startDate = DateTime.parse(json['startDate'].toString());
-    endDate = DateTime.parse(json['endDate'].toString());
+    current = json['current'];
+    startDate = DateTime.parse(json['startDate']);
+    endDate = DateTime.parse(json['endDate']);
+    // startDate = DateTime.parse(json['startDate'].toString());
+    // endDate = DateTime.parse(json['endDate'].toString());
   }
 }
 
@@ -129,8 +133,10 @@ class Volunteering {
     company = Company()..fromJson(json['company']);
     title = json['title'];
     description = json['description'];
-    startDate = DateTime.parse(json['startDate'].toString());
-    endDate = DateTime.parse(json['endDate'].toString());
+    startDate = DateTime.parse(json['startDate']);
+    endDate = DateTime.parse(json['endDate']);
+    // startDate = DateTime.parse(json['startDate'].toString());
+    // endDate = DateTime.parse(json['endDate'].toString());
   }
 }
 
@@ -195,11 +201,11 @@ class CardInfo {
     volunteering = new List<Volunteering>.from(json['volunteering']
         .map((element) => Volunteering()..fromJson(element))
         .toList());
-    skills = new List<Skill>.from(
-        json['skills'].map((element) => Skill()..fromJson(element)).toList());
-    interests = new List<Interest>.from(json['interests']
-        .map((element) => Interest()..fromJson(element))
-        .toList());
+    // skills = new List<Skill>.from(
+    //     json['skills'].map((element) => Skill()..fromJson(element)).toList());
+    // interests = new List<Interest>.from(json['interests']
+    //     .map((element) => Interest()..fromJson(element))
+    //     .toList());
   }
 }
 
