@@ -2,22 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:ui/components/BadgeGroup.dart';
 import 'package:ui/models/CardInfo.dart';
 import 'package:ui/palette.dart';
+import 'package:flutter/material.dart';
+import 'package:ui/models/CardInfo.dart';
+import 'package:provider/provider.dart';
+import 'package:ui/models/User.dart';
 
 // Widget to display a user's Trading Card that will be shown to other users
 // User has the ability to edit the information in this card
 
 class TradingCard extends StatefulWidget {
   CardInfo data;
+  bool currentUser;
 
-  TradingCard(this.data);
+  TradingCard(this.data, {this.currentUser = false});
 
   @override
   _TradingCardState createState() => _TradingCardState();
 }
 
 class _TradingCardState extends State<TradingCard> {
-  bool editMode = false;
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -45,17 +48,19 @@ class _TradingCardState extends State<TradingCard> {
             FlatButton(
               textColor: Colors.grey,
               onPressed: () => Navigator.of(context).pushNamed('/createCard1'),
-              child: Column(
-                children: [
-                  Icon(
-                    Icons.edit,
-                  ),
-                  Text(
-                    "Edit Card",
-                    style: TextStyle(fontSize: 12),
-                  ),
-                ],
-              ),
+              child: widget.currentUser
+                  ? Column(
+                      children: [
+                        Icon(
+                          Icons.edit,
+                        ),
+                        Text(
+                          "Edit Card",
+                          style: TextStyle(fontSize: 12),
+                        ),
+                      ],
+                    )
+                  : null,
             )
           ]),
           Row(

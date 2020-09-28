@@ -24,7 +24,7 @@ class _NavigationBarState extends State<NavigationBar> {
           title: Text("Home"),
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.plus_one),
+          icon: Icon(Icons.add),
           title: Text("Add Card"),
         ),
       ],

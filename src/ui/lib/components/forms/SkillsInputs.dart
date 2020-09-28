@@ -15,23 +15,20 @@ class SkillsInputs extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TextFormField(
-          autofocus: true,
-          textInputAction: TextInputAction.done,
-          decoration: InputDecoration(
-              hintText: 'Name',
-              border: OutlineInputBorder()
-          ),
-          textCapitalization: TextCapitalization.sentences,
-          validator: (value) {
-            if (value.isEmpty) {
-              return 'Required';
-            }
-            return null;
-          },
-          onChanged: (value) {
-            model.title = value;
-          }
-        ),
+            autofocus: true,
+            textInputAction: TextInputAction.done,
+            decoration:
+                InputDecoration(hintText: 'Name', border: OutlineInputBorder()),
+            textCapitalization: TextCapitalization.sentences,
+            validator: (value) {
+              if (value.isEmpty) {
+                return 'Required';
+              }
+              return null;
+            },
+            onChanged: (value) {
+              model.title = value;
+            }),
         Container(
             margin: EdgeInsets.only(top: 20),
             child: Text(

@@ -39,9 +39,7 @@ class _HomeState extends State<Home> {
                 cardData.volunteering.isNotEmpty);
             children = [
               hasCard
-                  ? TradingCard(
-                      snapshot.data,
-                    )
+                  ? TradingCard(snapshot.data, currentUser: true)
                   : RaisedButton(
                       child: Text('Create Card'),
                       textColor: Colors.white,
