@@ -12,14 +12,16 @@ class ViewSavedCards extends StatefulWidget {
 }
 
 class _ViewSavedCardsState extends State<ViewSavedCards> {
-  int userId = 57;
-  Future<ConnectionInfo> userConnectionInfo;
+  int userId = 55;
+  Future<CardInfo> userCardInfo;
 
   @override
   void initState() {
     super.initState();
-    final connectionInfoModel = context.read<ConnectionInfoModel>();
-    userConnectionInfo = fetchConnectionInfo(userId);
+    final cardInfoModel = context.read<CardInfoModel>();
+    final userModel = context.read<UserModel>();
+    userCardInfo =
+        cardInfoModel.fetchCardInfo(userModel.currentUser.id, userModel.token);
   }
 
   final _createAccountFormKey = GlobalKey<FormState>();
@@ -34,35 +36,38 @@ class _ViewSavedCardsState extends State<ViewSavedCards> {
         ),
       ),
       body: Container(
-        child: FutureBuilder<ConnectionInfo>(
-            future: userConnectionInfo,
-            builder: (context, AsyncSnapshot<ConnectionInfo> snapshot) {
+        child: FutureBuilder<CardInfo>(
+            future: userCardInfo,
+            builder: (context, AsyncSnapshot<CardInfo> snapshot) {
               List<Widget> children;
               if (snapshot.hasData) {
-                print(snapshot.data);
                 children = [
-                ListView.separated(
-                  separatorBuilder: (BuildContext context,
-                      int index) => const Divider(),
-                  itemCount: snapshot.data.connectedUsers.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Container(
-                        padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                        child: SummaryCard(
-                            snapshot.data.connectedUsers[index]
-                          // snapshot.data.connectedUsers[index].toJson['fullname'],
-                          // snapshot.data.connectedUsers[index]['school'],
-                          // snapshot.data.connectedUsers[index]['degreeType'],
-                          // snapshot.data.connectedUsers[index]['major'],
-                          // snapshot.data.connectedUsers[index]['skills'],
-                          // snapshot.data.connectedUsers[index]['interests'],
-                          // false),
-                        )
-                    );
-                  },
-                  padding: EdgeInsets.only(top: 10, bottom: 10),
-                ),
+                  SummaryCard(snapshot.data, currentUser: true)
                 ];
+                // print(snapshot.data);
+                // children = [
+                // ListView.separated(
+                //   separatorBuilder: (BuildContext context,
+                //       int index) => const Divider(),
+                //   itemCount: snapshot.data.connectedUsers.length,
+                //   itemBuilder: (BuildContext context, int index) {
+                //     return Container(
+                //         padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                //         child: SummaryCard(
+                //             snapshot.data.connectedUsers[index].id
+                //           // snapshot.data.connectedUsers[index].toJson['fullname'],
+                //           // snapshot.data.connectedUsers[index]['school'],
+                //           // snapshot.data.connectedUsers[index]['degreeType'],
+                //           // snapshot.data.connectedUsers[index]['major'],
+                //           // snapshot.data.connectedUsers[index]['skills'],
+                //           // snapshot.data.connectedUsers[index]['interests'],
+                //           // false),
+                //         )
+                //     );
+                //   },
+                //   padding: EdgeInsets.only(top: 10, bottom: 10),
+                // ),
+                // ];
               } else if (snapshot.hasError) {
                 print("it went bad");
                 children = [
@@ -82,10 +87,9 @@ class _ViewSavedCardsState extends State<ViewSavedCards> {
                   ),
                 ];
               }
-              return Center(
+              return Container(
+                padding: EdgeInsets.fromLTRB(10, 20, 10, 0),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: children,
                 ),
               );

@@ -92,4 +92,15 @@ class CardInfo extends Serializable {
         skills: await Skill.getByUser(user),
         interests: await Interest.getByUser(user));
   }
+
+  static Future<CardInfo> getById(int id) async {
+    User user = await User.get(id);
+    return CardInfo(
+        user: user,
+        education: await Education.getByUser(user),
+        work: await Work.getByUser(user),
+        volunteering: await Volunteering.getByUser(user),
+        skills: await Skill.getByUser(user),
+        interests: await Interest.getByUser(user));
+  }
 }

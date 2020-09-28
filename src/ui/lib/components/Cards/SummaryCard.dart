@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:ui/components/forms/ColorBadge.dart';
 import 'package:ui/models/CardInfo.dart';
+import 'package:ui/components/BadgeGroupSmall.dart';
 
 class SummaryCard extends StatefulWidget {
   CardInfo data;
+  bool currentUser;
   bool isFavorite = false;
 
   // final String fullName;
@@ -14,7 +16,7 @@ class SummaryCard extends StatefulWidget {
   // final List<String> interests;
   // bool isFavorite;
 
-  SummaryCard(this.data);
+  SummaryCard(this.data, {this.currentUser = false});
 
   @override
   _SummaryCardState createState() => _SummaryCardState();
@@ -51,7 +53,7 @@ class _SummaryCardState extends State<SummaryCard> {
           Row(
             children: [
               Text(
-                widget.data.user.firstName,
+                "Ashvin",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 24,
@@ -59,7 +61,7 @@ class _SummaryCardState extends State<SummaryCard> {
                 ),
               ),
               Text(
-                widget.data.user.lastName,
+                "Warrier",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 24,
@@ -79,7 +81,7 @@ class _SummaryCardState extends State<SummaryCard> {
             padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
             alignment: Alignment.centerLeft,
             child: Text(
-              widget.data.education[0].institution.longName,
+              "Georgia Institute of Technology ",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 18,
@@ -95,7 +97,7 @@ class _SummaryCardState extends State<SummaryCard> {
             child: Row(
               children: [
                 Text(
-                  widget.data.education[0].degree,
+                  " Bachelor's Computer Science",
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.grey[700],
@@ -120,11 +122,14 @@ class _SummaryCardState extends State<SummaryCard> {
             child: ListView(
               scrollDirection: Axis.horizontal,
               children: [
-                for (var skill in widget.data.skills)
-                  Container(
-                    padding: EdgeInsets.fromLTRB(0, 0, 5, 0),
-                    child: ColorBadge(skill.title, "skill"),
-                  ),
+                BadgeGroupSmall([
+                  "Java",
+                ], "skills"),
+                // for (var skill in (widget.data.skills.toList()))
+                //   Container(
+                //     padding: EdgeInsets.fromLTRB(0, 0, 5, 0),
+                //     child: ColorBadge(skill.title, "skill"),
+                //   ),
               ],
             ),
           ),
@@ -136,11 +141,12 @@ class _SummaryCardState extends State<SummaryCard> {
             child: ListView(
               scrollDirection: Axis.horizontal,
               children: [
-                for (var interest in widget.data.interests)
-                  Container(
-                    padding: EdgeInsets.fromLTRB(0, 0, 5, 0),
-                    child: ColorBadge(interest.title, "interest"),
-                  ),
+                BadgeGroupSmall(["Money"], "interests"),
+                // for (var interest in (widget.data.interests).toList())
+                //   Container(
+                //     padding: EdgeInsets.fromLTRB(0, 0, 5, 0),
+                //     child: ColorBadge(interest.title, "interest"),
+                //   ),
               ],
             ),
           ),
