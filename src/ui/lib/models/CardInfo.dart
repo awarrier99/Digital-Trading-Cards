@@ -76,6 +76,8 @@ class Education {
     current = json['current'];
     startDate = DateTime.parse(json['startDate']);
     endDate = DateTime.parse(json['endDate']);
+    // startDate = DateTime.parse(json['startDate'].toString());
+    // endDate = DateTime.parse(json['endDate'].toString());
   }
 }
 
@@ -105,6 +107,8 @@ class Work {
     current = json['current'];
     startDate = DateTime.parse(json['startDate']);
     endDate = DateTime.parse(json['endDate']);
+    // startDate = DateTime.parse(json['startDate'].toString());
+    // endDate = DateTime.parse(json['endDate'].toString());
   }
 }
 
@@ -131,6 +135,8 @@ class Volunteering {
     description = json['description'];
     startDate = DateTime.parse(json['startDate']);
     endDate = DateTime.parse(json['endDate']);
+    // startDate = DateTime.parse(json['startDate'].toString());
+    // endDate = DateTime.parse(json['endDate'].toString());
   }
 }
 

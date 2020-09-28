@@ -32,7 +32,7 @@ Controller createRoutes() {
       .link(() => SaveCardController());
 
   router
-      .route('/cards/saved[/:username]')
+      .route('/cards/saved')
       .link(Authorizer.bearer)
       .link(() => VerbController(Resource.user))
       .link(() => SaveCardController());

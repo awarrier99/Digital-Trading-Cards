@@ -8,20 +8,22 @@ import 'package:ui/models/CardInfo.dart';
 class Connection {
   User user1;
   User user2;
+  String username;
 
+  // Map<String, dynamic> toJson() {
+  //   return {
+  //     'user1': user1.toJson(),
+  //     'user2': user2.toJson()
+  //   };
+  // }
   Map<String, dynamic> toJson() {
-    return {
-      'user1': user1.toJson(),
-      'user2': user2.toJson()
-    };
+    return {'username': username};
   }
-
 
   Connection.fromJson(Map<String, dynamic> json) {
     user1 = User()..fromJson(json['user1']);
     user2 = User()..fromJson(json['user2']);
   }
-
 }
 
 class ConnectionInfo {
@@ -49,16 +51,21 @@ class ConnectionInfo {
   }
 }
 
-class ConnectionInfoModel { // TODO strip whitespace from inputs
+class ConnectionInfoModel {
+  // TODO strip whitespace from inputs
   final ConnectionInfo _createConnectionInfo = ConnectionInfo();
   ConnectionInfo get createConnectionInfo => _createConnectionInfo;
+  String username;
 
-  Future<bool> createConnection() async {
+  Future<bool> createConnection(String token) async {
     try {
-      final res = await post('http://10.0.2.2:8888/api/connections', headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      }, body: json.encode(_createConnectionInfo.toJson()));
+      final res = await post('http://10.0.2.2:8888/api/cards/saved',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token'
+          },
+          body: json.encode({'username': username}));
       final body = json.decode(res.body);
       return body['success'] as bool;
     } catch (err) {

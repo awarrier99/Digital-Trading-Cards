@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:ui/SizeConfig.dart';
 import 'package:ui/palette.dart';
+import 'package:ui/models/ConnectionInfo.dart';
+import 'package:http/http.dart';
+import 'dart:convert';
+import 'package:ui/models/User.dart';
+
+import 'package:provider/provider.dart';
 
 class SearchBar extends StatelessWidget {
   final bool showList;
@@ -83,10 +89,16 @@ class StudentCardSearch extends SearchDelegate<StudentCardItem> {
     );
   }
 
+  Future saveCardContext(context) async {
+    Navigator.of(context).pushNamed('/main');
+  }
+
   // This method displays the list of cards available, and the results of the
   // search
   @override
   Widget buildSuggestions(BuildContext context) {
+    SizeConfig().init(context);
+
     // listIsShown = boolean value used to check if you want to see list of
     // items present if the List used.
 
@@ -125,7 +137,13 @@ class StudentCardSearch extends SearchDelegate<StudentCardItem> {
               // list
               return ListTile(
                 onTap: () {
-                  showResults(context);
+                  print(listCard.emailAddress);
+                  final connectionInfoModel =
+                      context.read<ConnectionInfoModel>();
+                  connectionInfoModel.username = listCard.emailAddress;
+                  final userModel = context.read<UserModel>();
+                  connectionInfoModel.createConnection(userModel.token);
+                  saveCardContext(context);
                 },
                 title: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -167,7 +185,7 @@ List<StudentCardItem> loadSudentCardItem() {
   var sI = <StudentCardItem>[
     StudentCardItem("Matt Olliver", "Undergraduate", "mOlliver@gatech.edu"),
     StudentCardItem("Noah Le", "Undergraduate", "noah3@gatech.edu"),
-    StudentCardItem("Ashvin Warrier", "Undergraduate", "aWarrier@gatech.edu"),
+    StudentCardItem("Ashvin Warrier", "Undergraduate", "warrierar@gmail.com"),
     StudentCardItem(
         "Pratik Nallamotu", "Undergraduate", "pNallamotu@gatech.edu"),
     StudentCardItem("Patrick Ufer", "Undergraduate", "pUfer@gatech.edu"),
