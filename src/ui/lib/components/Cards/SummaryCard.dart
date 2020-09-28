@@ -53,7 +53,7 @@ class _SummaryCardState extends State<SummaryCard> {
           Row(
             children: [
               Text(
-                "Ashvin",
+                widget.data.user.firstName,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 24,
@@ -61,7 +61,7 @@ class _SummaryCardState extends State<SummaryCard> {
                 ),
               ),
               Text(
-                "Warrier",
+                widget.data.user.lastName,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 24,
@@ -81,7 +81,7 @@ class _SummaryCardState extends State<SummaryCard> {
             padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
             alignment: Alignment.centerLeft,
             child: Text(
-              "Georgia Institute of Technology ",
+              widget.data.education[0].institution.longName,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 18,
@@ -97,7 +97,7 @@ class _SummaryCardState extends State<SummaryCard> {
             child: Row(
               children: [
                 Text(
-                  " Bachelor's Computer Science",
+                  widget.data.education[0].degree,
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.grey[700],
@@ -123,8 +123,8 @@ class _SummaryCardState extends State<SummaryCard> {
               scrollDirection: Axis.horizontal,
               children: [
                 BadgeGroupSmall([
-                  "Java",
-                ], "skills"),
+                  widget.data.skills,
+                ], "skill"),
                 // for (var skill in (widget.data.skills.toList()))
                 //   Container(
                 //     padding: EdgeInsets.fromLTRB(0, 0, 5, 0),
@@ -141,7 +141,9 @@ class _SummaryCardState extends State<SummaryCard> {
             child: ListView(
               scrollDirection: Axis.horizontal,
               children: [
-                BadgeGroupSmall(["Money"], "interests"),
+                BadgeGroupSmall([
+                  widget.data.interests,
+                  ], "interests"),
                 // for (var interest in (widget.data.interests).toList())
                 //   Container(
                 //     padding: EdgeInsets.fromLTRB(0, 0, 5, 0),
