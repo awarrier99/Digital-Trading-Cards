@@ -90,7 +90,7 @@ class StudentCardSearch extends SearchDelegate<StudentCardItem> {
   }
 
   Future saveCardContext(context) async {
-    Navigator.of(context).pushNamed('/main');
+    Navigator.of(context).pushNamed('/savedCards');
   }
 
   // This method displays the list of cards available, and the results of the
