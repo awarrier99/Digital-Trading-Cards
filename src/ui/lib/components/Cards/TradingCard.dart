@@ -41,11 +41,11 @@ class _TradingCardState extends State<TradingCard> {
           borderRadius: BorderRadius.all(Radius.circular(20.0)),
           boxShadow: [
             BoxShadow(
-              color: new Color(0xffD1D9E6),
-              spreadRadius: 10,
-              blurRadius: 30,
-              offset: Offset(10, 10),
-            )
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: Offset(0, 10),
+            ),
           ]),
       child: SingleChildScrollView(
           child: Column(

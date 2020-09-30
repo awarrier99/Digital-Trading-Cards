@@ -28,61 +28,54 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-        child: Container(
-            margin: EdgeInsets.all(40),
-            child: SingleChildScrollView(
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                  FutureBuilder<CardInfo>(
-                    future: userCardInfo,
-                    builder: (context, snapshot) {
-                      List<Widget> children;
-                      if (snapshot.hasData) {
-                        CardInfo cardData = snapshot.data;
-                        print(snapshot.data.toJson());
-                        bool hasCard = (cardData.education.isNotEmpty ||
-                            cardData.work.isNotEmpty ||
-                            cardData.volunteering.isNotEmpty);
-                        children = [
-                          hasCard
-                              ? TradingCard(snapshot.data, currentUser: true)
-                              : RaisedButton(
-                                  child: Text('Create Card'),
-                                  textColor: Colors.white,
-                                  color: Palette.primaryGreen,
-                                  onPressed: () {
-                                    final globalModel =
-                                        context.read<GlobalModel>();
-                                    globalModel.cardInfoModel.isEditing = false;
-                                    Navigator.of(context)
-                                        .pushNamed('/createCard1');
-                                  }),
-                        ];
-                      } else if (snapshot.hasError) {
-                        children = [
-                          Center(
-                            child: Container(
-                              child: Text("${snapshot.error}"),
-                            ),
-                          )
-                        ];
-                      } else {
-                        children = [
-                          Center(
-                            child: CircularProgressIndicator(),
-                          )
-                        ];
-                      }
-                      return Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: children,
-                        ),
-                      );
-                    },
-                  ),
-                ]))));
+        child: Center(
+      child: FutureBuilder<CardInfo>(
+        future: userCardInfo,
+        builder: (context, snapshot) {
+          List<Widget> children;
+          if (snapshot.hasData) {
+            CardInfo cardData = snapshot.data;
+            print(snapshot.data.toJson());
+            bool hasCard = (cardData.education.isNotEmpty ||
+                cardData.work.isNotEmpty ||
+                cardData.volunteering.isNotEmpty);
+            children = [
+              hasCard
+                  ? TradingCard(snapshot.data, currentUser: true)
+                  : RaisedButton(
+                      child: Text('Create Card'),
+                      textColor: Colors.white,
+                      color: Palette.primaryGreen,
+                      onPressed: () {
+                        final globalModel = context.read<GlobalModel>();
+                        globalModel.cardInfoModel.isEditing = false;
+                        Navigator.of(context).pushNamed('/createCard1');
+                      }),
+            ];
+          } else if (snapshot.hasError) {
+            children = [
+              Center(
+                child: Container(
+                  child: Text("${snapshot.error}"),
+                ),
+              )
+            ];
+          } else {
+            children = [
+              Center(
+                child: CircularProgressIndicator(),
+              )
+            ];
+          }
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: children,
+            ),
+          );
+        },
+      ),
+    ));
   }
 }
