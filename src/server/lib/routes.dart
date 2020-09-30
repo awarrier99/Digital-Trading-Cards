@@ -11,7 +11,10 @@ Controller createRoutes() {
 
   router
       .route('/cards[/:id]')
-      .link(Authorizer.bearer)
+      .link(() => Authorizer.multiple(
+          get: AuthMode.bearer,
+          post: AuthMode.bearer,
+          put: AuthMode.isRequestingUser))
       .link(() => VerbController(Resource.card))
       .link(() => CardController());
 

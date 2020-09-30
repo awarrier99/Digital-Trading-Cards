@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ui/models/Global.dart';
 
 import '../components/Cards/SummaryCard.dart';
 import 'package:ui/models/ConnectionInfo.dart';
@@ -18,8 +19,9 @@ class _ViewSavedCardsState extends State<ViewSavedCards> {
   @override
   void initState() {
     super.initState();
-    final cardInfoModel = context.read<CardInfoModel>();
-    final userModel = context.read<UserModel>();
+    final globalModel = context.read<GlobalModel>();
+    final cardInfoModel = globalModel.cardInfoModel;
+    final userModel = globalModel.userModel;
     userCardInfo =
         cardInfoModel.fetchCardInfo(userModel.currentUser.id, userModel.token);
   }

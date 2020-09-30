@@ -4,7 +4,7 @@ import 'DropdownFormField.dart';
 import '../../models/CardInfo.dart';
 
 class SkillsInputs extends StatelessWidget {
-  final Skill model;
+  final UserSkill model;
 
   SkillsInputs({@required this.model});
 
@@ -20,6 +20,7 @@ class SkillsInputs extends StatelessWidget {
             decoration:
                 InputDecoration(hintText: 'Name', border: OutlineInputBorder()),
             textCapitalization: TextCapitalization.sentences,
+            initialValue: model.skill?.title,
             validator: (value) {
               if (value.isEmpty) {
                 return 'Required';
@@ -27,7 +28,7 @@ class SkillsInputs extends StatelessWidget {
               return null;
             },
             onChanged: (value) {
-              model.title = value;
+              model.skill.title = value;
             }),
         Container(
             margin: EdgeInsets.only(top: 20),

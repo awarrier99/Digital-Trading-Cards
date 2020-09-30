@@ -21,12 +21,22 @@ class EducationInputsState extends State<EducationInputs> {
   @override
   void initState() {
     super.initState();
-    _isCurrent = false;
-    widget.model.current = false;
-    widget.model.degree = 'Associate';
-    widget.model.startDate =
-        DateTime(DateTime.now().year, DateTime.now().month);
-    widget.model.endDate = DateTime(DateTime.now().year + 4);
+    if (widget.model.current == null) {
+      _isCurrent = false;
+      widget.model.current = false;
+    } else {
+      _isCurrent = widget.model.current;
+    }
+    if (widget.model.degree == null) {
+      widget.model.degree = 'Associate';
+    }
+    if (widget.model.startDate == null) {
+      widget.model.startDate =
+          DateTime(DateTime.now().year, DateTime.now().month);
+    }
+    if (widget.model.endDate == null) {
+      widget.model.endDate = DateTime(DateTime.now().year + 4);
+    }
   }
 
   @override
@@ -41,6 +51,7 @@ class EducationInputsState extends State<EducationInputs> {
             decoration: InputDecoration(
                 labelText: 'Institution*', border: OutlineInputBorder()),
             textCapitalization: TextCapitalization.sentences,
+            initialValue: widget.model.institution?.name,
             validator: (value) {
               if (value.isEmpty) {
                 return 'Required';
@@ -60,6 +71,7 @@ class EducationInputsState extends State<EducationInputs> {
           decoration: InputDecoration(
               labelText: 'Field of Study*', border: OutlineInputBorder()),
           textCapitalization: TextCapitalization.sentences,
+          initialValue: widget.model.field?.name,
           validator: (value) {
             if (value.isEmpty) {
               return 'Required';
@@ -78,6 +90,7 @@ class EducationInputsState extends State<EducationInputs> {
             )),
         DropdownFormField(
           ['Associate', 'Bachelor\'s', 'Master\'s', 'Doctoral'],
+          initialValue: widget.model.degree,
           onChanged: (value) {
             widget.model.degree = value;
           },
@@ -110,7 +123,7 @@ class EducationInputsState extends State<EducationInputs> {
         MonthYearPicker(
             firstDate: DateTime(DateTime.now().year - 100),
             lastDate: DateTime(DateTime.now().year + 1, 12, 31),
-            initialDate: DateTime(DateTime.now().year, DateTime.now().month),
+            initialDate: widget.model.startDate,
             onChanged: (value) {
               widget.model.startDate = value;
             }),
@@ -122,7 +135,7 @@ class EducationInputsState extends State<EducationInputs> {
         MonthYearPicker(
             firstDate: DateTime(DateTime.now().year - 100),
             lastDate: DateTime(DateTime.now().year + 6, 12, 31),
-            initialDate: DateTime(DateTime.now().year + 4),
+            initialDate: widget.model.endDate,
             isRequired: !_isCurrent,
             onChanged: (value) {
               widget.model.endDate = value;

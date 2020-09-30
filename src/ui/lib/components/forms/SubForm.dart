@@ -38,7 +38,8 @@ class _SubFormState extends State<SubForm> {
               IconButton(
                 icon: Icon(Icons.delete_outline),
                 onPressed: () {
-                  widget.callback();
+                  print(widget.index);
+                  widget.callback(widget.index - 1);
                 },
               ),
             ]),

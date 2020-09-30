@@ -38,6 +38,7 @@ class Volunteering extends Serializable {
 
   @override
   void readFromMap(Map<String, dynamic> object) {
+    id = object['id'] as int;
     if (user == null) {
       final userMap = object['user'] as Map<String, dynamic>;
       if (stringToUserType(userMap['type'] as String) == UserType.student) {
@@ -59,26 +60,66 @@ class Volunteering extends Serializable {
         : DateTime.parse(endDateStr);
   }
 
-  Future<void> save() async {
+  Future<void> save({bool allowUpdate = true}) async {
     try {
-      const sql = '''
-        INSERT INTO volunteering
-        (user, company, title, description, start_date, end_date)
-        VALUES (?, ?, ?, ?, ?, ?)
-      ''';
-      await ServerChannel.db.query(sql, [
+      String sql;
+      final values = [
         user.id,
         company.name,
         title,
         description,
         startDate?.toUtc(),
         endDate?.toUtc()
-      ]);
+      ];
+      if (id == null) {
+        sql = '''
+          INSERT INTO volunteering
+          (user, company, title, description, start_date, end_date)
+          VALUES (?, ?, ?, ?, ?, ?)
+        ''';
+      } else if (allowUpdate) {
+        sql = '''
+          UPDATE volunteering
+          SET company = ?,
+            title = ?,
+            description = ?,
+            start_date = ?,
+            end_date = ?
+          WHERE id = ?
+        ''';
+        values.removeAt(0);
+        values.add(id);
+      } else {
+        return;
+      }
+
+      await ServerChannel.db.query(sql, values);
     } catch (err, stackTrace) {
       logError(err,
           stackTrace: stackTrace,
           message:
               'An error occurred while trying to save user volunteering info:');
+    }
+  }
+
+  Future<void> delete() async {
+    try {
+      if (id == null) {
+        print('Unsaved user volunteering info cannot be deleted');
+        return;
+      }
+
+      const sql = '''
+        DELETE FROM volunteering
+        WHERE id = ?
+      ''';
+
+      await ServerChannel.db.query(sql, [id]);
+    } catch (err, stackTrace) {
+      logError(err,
+          stackTrace: stackTrace,
+          message:
+              'An error occurred while trying to delete user volunteering info:');
     }
   }
 
@@ -90,15 +131,16 @@ class Volunteering extends Serializable {
       ''';
       final results = await ServerChannel.db.query(sql, [user.id]);
 
-      final resultFutures = results.map((e) async => Volunteering.create(
-            user: user,
-            company: Company.create(name: e['company'] as String),
-            title: e['title'] as String,
-            description: e['description'] as String,
-            startDate: (e['start_date'] as DateTime)?.toLocal(),
-            endDate: (e['end_date'] as DateTime)?.toLocal(),
-          )..id = e['id'] as int);
-      return Future.wait(resultFutures);
+      return results
+          .map((e) => Volunteering.create(
+                user: user,
+                company: Company.create(name: e['company'] as String),
+                title: e['title'] as String,
+                description: e['description'] as String,
+                startDate: (e['start_date'] as DateTime)?.toLocal(),
+                endDate: (e['end_date'] as DateTime)?.toLocal(),
+              )..id = e['id'] as int)
+          .toList();
     } catch (err, stackTrace) {
       logError(err,
           stackTrace: stackTrace,

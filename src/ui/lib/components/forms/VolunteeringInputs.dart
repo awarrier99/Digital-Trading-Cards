@@ -4,24 +4,12 @@ import 'package:ui/SizeConfig.dart';
 import '../MonthYearPicker.dart';
 import '../../models/CardInfo.dart';
 
-class VolunteeringInputs extends StatefulWidget {
+class VolunteeringInputs extends StatelessWidget {
   final Volunteering model;
+  final FocusNode companyNode = FocusNode();
+  final FocusNode descriptionNode = FocusNode();
 
   VolunteeringInputs({@required this.model});
-
-  @override
-  VolunteeringInputsState createState() => VolunteeringInputsState();
-}
-
-class VolunteeringInputsState extends State<VolunteeringInputs> {
-  FocusNode companyNode = FocusNode();
-  FocusNode descriptionNode = FocusNode();
-
-  @override
-  void initState() {
-    super.initState();
-    widget.model.startDate = DateTime(DateTime.now().year, DateTime.now().month);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,9 +24,9 @@ class VolunteeringInputsState extends State<VolunteeringInputs> {
             cursorColor: Color(0xFF92DAAF),
             keyboardType: TextInputType.text,
             decoration: InputDecoration(
-                labelText: 'Title*', border: OutlineInputBorder()
-            ),
+                labelText: 'Title*', border: OutlineInputBorder()),
             textCapitalization: TextCapitalization.words,
+            initialValue: model.title,
             validator: (value) {
               if (value.isEmpty) {
                 return 'Required';
@@ -49,9 +37,8 @@ class VolunteeringInputsState extends State<VolunteeringInputs> {
               FocusScope.of(context).requestFocus(companyNode);
             },
             onChanged: (value) {
-              widget.model.title = value;
-            }
-        ),
+              model.title = value;
+            }),
         SizedBox(height: SizeConfig.safeBlockVertical * 2),
         TextFormField(
             focusNode: companyNode,
@@ -59,10 +46,9 @@ class VolunteeringInputsState extends State<VolunteeringInputs> {
             cursorColor: Color(0xFF92DAAF),
             keyboardType: TextInputType.text,
             decoration: InputDecoration(
-                labelText: 'Company*',
-                border: OutlineInputBorder()
-            ),
+                labelText: 'Company*', border: OutlineInputBorder()),
             textCapitalization: TextCapitalization.words,
+            initialValue: model.company?.name,
             validator: (value) {
               if (value.isEmpty) {
                 return 'Required';
@@ -73,10 +59,8 @@ class VolunteeringInputsState extends State<VolunteeringInputs> {
               FocusScope.of(context).requestFocus(descriptionNode);
             },
             onChanged: (value) {
-              widget.model.company = Company()
-                ..name = value;
-            }
-        ),
+              model.company = Company()..name = value;
+            }),
         SizedBox(height: SizeConfig.safeBlockVertical * 2),
         TextFormField(
             focusNode: descriptionNode,
@@ -84,46 +68,39 @@ class VolunteeringInputsState extends State<VolunteeringInputs> {
             cursorColor: Color(0xFF92DAAF),
             keyboardType: TextInputType.text,
             decoration: InputDecoration(
-                labelText: 'Description',
-                border: OutlineInputBorder()
-            ),
+                labelText: 'Description', border: OutlineInputBorder()),
             textCapitalization: TextCapitalization.words,
             maxLines: null,
+            initialValue: model.description,
             onChanged: (value) {
-              widget.model.description = value;
-            }
-        ),
+              model.description = value;
+            }),
         Container(
             margin: EdgeInsets.only(top: 20),
             child: Text(
               'Start Date',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-            )
-        ),
+            )),
         MonthYearPicker(
             firstDate: DateTime(DateTime.now().year - 100),
             lastDate: DateTime(DateTime.now().year + 1, 12, 31),
-            initialDate: DateTime(DateTime.now().year, DateTime.now().month),
             isRequired: false,
+            initialDate: model.startDate,
             onChanged: (value) {
-              widget.model.startDate = value;
-            }
-        ),
+              model.startDate = value;
+            }),
         Container(
             margin: EdgeInsets.only(top: 20),
-            child: Text(
-                'End Date',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)
-            )
-        ),
+            child: Text('End Date',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16))),
         MonthYearPicker(
             firstDate: DateTime(DateTime.now().year - 100),
             lastDate: DateTime(DateTime.now().year, DateTime.now().month),
             isRequired: false,
+            initialDate: model.endDate,
             onChanged: (value) {
-              widget.model.endDate = value;
-            }
-        )
+              model.endDate = value;
+            })
       ],
     );
   }

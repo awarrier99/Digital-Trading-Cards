@@ -21,10 +21,20 @@ class WorkInputsState extends State<WorkInputs> {
   @override
   void initState() {
     super.initState();
-    _isCurrent = false;
-    widget.model.current = false;
-    widget.model.startDate = DateTime(DateTime.now().year, DateTime.now().month);
-    widget.model.endDate = DateTime(DateTime.now().year, DateTime.now().month);
+    if (widget.model.current == null) {
+      _isCurrent = false;
+      widget.model.current = false;
+    } else {
+      _isCurrent = widget.model.current;
+    }
+    if (widget.model.startDate == null) {
+      widget.model.startDate =
+          DateTime(DateTime.now().year, DateTime.now().month);
+    }
+    if (widget.model.endDate == null) {
+      widget.model.endDate =
+          DateTime(DateTime.now().year + 1, DateTime.now().month);
+    }
   }
 
   @override
@@ -35,52 +45,48 @@ class WorkInputsState extends State<WorkInputs> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TextFormField(
-          autofocus: true,
-          textInputAction: TextInputAction.next,
-          cursorColor: Color(0xFF92DAAF),
-          keyboardType: TextInputType.text,
-          decoration: InputDecoration(
-              labelText: 'Job Title*', border: OutlineInputBorder()
-          ),
-          textCapitalization: TextCapitalization.words,
-          validator: (value) {
-            if (value.isEmpty) {
-              return 'Required';
-            }
-            return null;
-          },
-          onFieldSubmitted: (term) {
-            FocusScope.of(context).requestFocus(companyNode);
-          },
-          onChanged: (value) {
-            widget.model.jobTitle = value;
-          }
-        ),
+            autofocus: true,
+            textInputAction: TextInputAction.next,
+            cursorColor: Color(0xFF92DAAF),
+            keyboardType: TextInputType.text,
+            decoration: InputDecoration(
+                labelText: 'Job Title*', border: OutlineInputBorder()),
+            textCapitalization: TextCapitalization.words,
+            initialValue: widget.model.jobTitle,
+            validator: (value) {
+              if (value.isEmpty) {
+                return 'Required';
+              }
+              return null;
+            },
+            onFieldSubmitted: (term) {
+              FocusScope.of(context).requestFocus(companyNode);
+            },
+            onChanged: (value) {
+              widget.model.jobTitle = value;
+            }),
         SizedBox(height: SizeConfig.safeBlockVertical * 2),
         TextFormField(
-          focusNode: companyNode,
-          textInputAction: TextInputAction.done,
-          cursorColor: Color(0xFF92DAAF),
-          keyboardType: TextInputType.text,
-          decoration: InputDecoration(
-              labelText: 'Company*',
-              border: OutlineInputBorder()
-          ),
-          textCapitalization: TextCapitalization.words,
-          validator: (value) {
-            if (value.isEmpty) {
-              return 'Required';
-            }
-            return null;
-          },
-          onFieldSubmitted: (term) {
-            FocusScope.of(context).requestFocus(descriptionNode);
-          },
-          onChanged: (value) {
-            widget.model.company = Company()
-              ..name = value;
-          }
-        ),
+            focusNode: companyNode,
+            textInputAction: TextInputAction.done,
+            cursorColor: Color(0xFF92DAAF),
+            keyboardType: TextInputType.text,
+            decoration: InputDecoration(
+                labelText: 'Company*', border: OutlineInputBorder()),
+            textCapitalization: TextCapitalization.words,
+            initialValue: widget.model.company?.name,
+            validator: (value) {
+              if (value.isEmpty) {
+                return 'Required';
+              }
+              return null;
+            },
+            onFieldSubmitted: (term) {
+              FocusScope.of(context).requestFocus(descriptionNode);
+            },
+            onChanged: (value) {
+              widget.model.company = Company()..name = value;
+            }),
         SizedBox(height: SizeConfig.safeBlockVertical * 2),
         TextFormField(
             focusNode: descriptionNode,
@@ -88,31 +94,31 @@ class WorkInputsState extends State<WorkInputs> {
             cursorColor: Color(0xFF92DAAF),
             keyboardType: TextInputType.text,
             decoration: InputDecoration(
-                labelText: 'Description',
-                border: OutlineInputBorder()
-            ),
+                labelText: 'Description', border: OutlineInputBorder()),
             textCapitalization: TextCapitalization.words,
             maxLines: null,
+            initialValue: widget.model.description,
             onChanged: (value) {
               widget.model.description = value;
-            }
-        ),
+            }),
         Row(
           children: [
             Container(
                 child: Text(
-                  'Currently Working',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                )
-            ),
+              'Currently Working',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            )),
             Checkbox(
               value: _isCurrent,
               onChanged: (value) {
                 setState(() {
                   _isCurrent = value;
                 });
-                if (value) widget.model.endDate = null;
-                else widget.model.endDate = DateTime(DateTime.now().year, DateTime.now().month);
+                if (value)
+                  widget.model.endDate = null;
+                else
+                  widget.model.endDate =
+                      DateTime(DateTime.now().year + 1, DateTime.now().month);
                 widget.model.current = value;
               },
             )
@@ -124,31 +130,31 @@ class WorkInputsState extends State<WorkInputs> {
             child: Text(
               'Start Date*',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-            )
-        ),
+            )),
         MonthYearPicker(
             firstDate: DateTime(DateTime.now().year - 100),
             lastDate: DateTime(DateTime.now().year + 1, 12, 31),
-            initialDate: DateTime(DateTime.now().year, DateTime.now().month),
+            initialDate: widget.model.startDate,
             onChanged: (value) {
               widget.model.startDate = value;
-            }
-        ),
-        _isCurrent ? SizedBox.shrink() : Container(
-            margin: EdgeInsets.only(top: 20),
-            child: Text(
-                'End Date*',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)
-            )
-        ),
-        _isCurrent ? SizedBox.shrink() : MonthYearPicker(
-            firstDate: DateTime(DateTime.now().year - 100),
-            lastDate: DateTime(DateTime.now().year, DateTime.now().month),
-            initialDate: DateTime(DateTime.now().year + 4),
-            onChanged: (value) {
-              widget.model.endDate = value;
-            }
-        )
+            }),
+        _isCurrent
+            ? SizedBox.shrink()
+            : Container(
+                margin: EdgeInsets.only(top: 20),
+                child: Text('End Date*',
+                    style:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 16))),
+        _isCurrent
+            ? SizedBox.shrink()
+            : MonthYearPicker(
+                firstDate: DateTime(DateTime.now().year - 100),
+                lastDate: DateTime(DateTime.now().year, DateTime.now().month),
+                initialDate: widget.model.endDate,
+                isRequired: !_isCurrent,
+                onChanged: (value) {
+                  widget.model.endDate = value;
+                })
       ],
     );
   }

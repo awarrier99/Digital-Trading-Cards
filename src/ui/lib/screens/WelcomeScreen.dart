@@ -1,10 +1,12 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 import 'package:ui/SizeConfig.dart';
 import 'package:ui/models/CardInfo.dart';
+import 'package:ui/models/Global.dart';
 import 'package:ui/screens/Home.dart';
 
 import '../models/User.dart';
@@ -24,7 +26,6 @@ class WelcomeScreen extends StatefulWidget {
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
   FocusNode passwordNode = FocusNode();
-  FocusNode usernameNode = FocusNode();
   final User model = new User();
 
   Future createAccount(context) async {
@@ -33,6 +34,24 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
   Future loginContext(context) async {
     Navigator.of(context).pushNamed('/main');
+  }
+
+  void login(BuildContext context) {
+    final globalModel =
+    context.read<GlobalModel>();
+    final userModel = globalModel.userModel;
+    final cardInfoModel =
+        globalModel.cardInfoModel;
+    userModel.updateUser(model);
+    userModel.login().then((success) {
+      if (success) {
+        final user = userModel.currentUser;
+        cardInfoModel.updateUser(user);
+        loginContext(context);
+      }
+    }).catchError((error) {
+      print('Caught $error');
+    });
   }
 
   @override
@@ -66,7 +85,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                               },
                               onFieldSubmitted: (term) {
                                 FocusScope.of(context)
-                                    .requestFocus(usernameNode);
+                                    .requestFocus(passwordNode);
                               },
                               decoration: InputDecoration(
                                   labelText: 'EMAIL',
@@ -77,13 +96,13 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                             ),
                             SizedBox(height: 20),
                             TextFormField(
+                              focusNode: passwordNode,
                               obscureText: true,
                               onChanged: (value) {
                                 model.password = value;
                               },
                               onFieldSubmitted: (term) {
-                                FocusScope.of(context)
-                                    .requestFocus(passwordNode);
+                                login(context);
                               },
                               decoration: InputDecoration(
                                   labelText: 'PASSWORD',
@@ -101,21 +120,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                   color: Palette.primaryGreen,
                                   elevation: 7,
                                   child: GestureDetector(
-                                    onTap: () {
-                                      final userModel =
-                                          context.read<UserModel>();
-                                      final cardInfoModel =
-                                          context.read<CardInfoModel>();
-                                      userModel.updateUser(model);
-                                      userModel.login().then((user) {
-                                        if (user != null) {
-                                          cardInfoModel.updateUser(user);
-                                          loginContext(context);
-                                        }
-                                      }).catchError((error) {
-                                        print('Caught $error');
-                                      });
-                                    },
+                                    onTap: () => login(context),
                                     child: Center(
                                       child: Text(
                                         'LOGIN',

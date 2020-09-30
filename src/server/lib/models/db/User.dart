@@ -67,6 +67,7 @@ class User extends Serializable {
 
   @override
   void readFromMap(Map<String, dynamic> object) {
+    id = object['id'] as int;
     firstName = object['firstName'] as String;
     lastName = object['lastName'] as String;
     username = object['username'] as String;

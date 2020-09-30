@@ -12,7 +12,7 @@ class Company {
   }
 
   void fromJson(Map<String, dynamic> json) {
-    name = json["name"];
+    name = json['name'];
   }
 }
 
@@ -25,8 +25,8 @@ class Institution {
   }
 
   void fromJson(Map<String, dynamic> json) {
-    name = json["name"];
-    longName = json["longName"];
+    name = json['name'];
+    longName = json['longName'];
   }
 }
 
@@ -38,11 +38,12 @@ class Field {
   }
 
   void fromJson(Map<String, dynamic> json) {
-    name = json["name"];
+    name = json['name'];
   }
 }
 
 class Education {
+  int id;
   Institution institution;
   String degree;
   Field field;
@@ -60,6 +61,7 @@ class Education {
 
   Map<String, dynamic> toJson() {
     return {
+      'id': id,
       'institution': institution?.toJson(),
       'degree': degree,
       'field': field?.toJson(),
@@ -70,6 +72,7 @@ class Education {
   }
 
   void fromJson(Map<String, dynamic> json) {
+    id = json['id'];
     institution = Institution()..fromJson(json['institution']);
     degree = json['degree'];
     field = Field()..fromJson(json['field']);
@@ -82,6 +85,7 @@ class Education {
 }
 
 class Work {
+  int id;
   Company company;
   String jobTitle;
   String description;
@@ -91,6 +95,7 @@ class Work {
 
   Map<String, dynamic> toJson() {
     return {
+      'id': id,
       'company': company == null ? {} : company.toJson(),
       'jobTitle': jobTitle,
       'description': description,
@@ -101,18 +106,21 @@ class Work {
   }
 
   void fromJson(Map<String, dynamic> json) {
+    id = json['id'];
     company = Company()..fromJson(json['company']);
     jobTitle = json['jobTitle'];
     description = json['description'];
     current = json['current'];
-    startDate = DateTime.parse(json['startDate']);
-    endDate = DateTime.parse(json['endDate']);
+    startDate =
+        json['startDate'] == null ? null : DateTime.parse(json['startDate']);
+    endDate = json['endDate'] == null ? null : DateTime.parse(json['endDate']);
     // startDate = DateTime.parse(json['startDate'].toString());
     // endDate = DateTime.parse(json['endDate'].toString());
   }
 }
 
 class Volunteering {
+  int id;
   Company company;
   String title;
   String description;
@@ -121,6 +129,7 @@ class Volunteering {
 
   Map<String, dynamic> toJson() {
     return {
+      'id': id,
       'company': company == null ? {} : company.toJson(),
       'title': title,
       'description': description,
@@ -130,11 +139,13 @@ class Volunteering {
   }
 
   void fromJson(Map<String, dynamic> json) {
+    id = json['id'];
     company = Company()..fromJson(json['company']);
     title = json['title'];
     description = json['description'];
-    startDate = DateTime.parse(json['startDate']);
-    endDate = DateTime.parse(json['endDate']);
+    startDate =
+        json['startDate'] == null ? null : DateTime.parse(json['startDate']);
+    endDate = json['endDate'] == null ? null : DateTime.parse(json['endDate']);
     // startDate = DateTime.parse(json['startDate'].toString());
     // endDate = DateTime.parse(json['endDate'].toString());
   }
@@ -148,7 +159,7 @@ class Skill {
   }
 
   void fromJson(Map<String, dynamic> json) {
-    title = json["title"];
+    title = json['title'];
   }
 }
 
@@ -160,7 +171,35 @@ class Interest {
   }
 
   void fromJson(Map<String, dynamic> json) {
-    title = json["title"];
+    title = json['title'];
+  }
+}
+
+class UserSkill {
+  int id;
+  Skill skill = Skill();
+
+  Map<String, dynamic> toJson() {
+    return {'id': id, 'skill': skill.toJson()};
+  }
+
+  void fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    skill = Skill()..fromJson(json['skill']);
+  }
+}
+
+class UserInterest {
+  int id;
+  Interest interest = Interest();
+
+  Map<String, dynamic> toJson() {
+    return {'id': id, 'interest': interest.toJson()};
+  }
+
+  void fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    interest = Interest()..fromJson(json['interest']);
   }
 }
 
@@ -169,8 +208,8 @@ class CardInfo {
   List<Education> education = [];
   List<Work> work = [];
   List<Volunteering> volunteering = [];
-  List<Skill> skills = [];
-  List<Interest> interests = [];
+  List<UserSkill> skills = [];
+  List<UserInterest> interests = [];
 
   CardInfo(
       {this.user,
@@ -201,18 +240,29 @@ class CardInfo {
     volunteering = new List<Volunteering>.from(json['volunteering']
         .map((element) => Volunteering()..fromJson(element))
         .toList());
-    // skills = new List<Skill>.from(
-    //     json['skills'].map((element) => Skill()..fromJson(element)).toList());
-    // interests = new List<Interest>.from(json['interests']
-    //     .map((element) => Interest()..fromJson(element))
-    //     .toList());
+    skills = new List<UserSkill>.from(json['skills']
+        .map((element) => UserSkill()..fromJson(element))
+        .toList());
+    interests = new List<UserInterest>.from(json['interests']
+        .map((element) => UserInterest()..fromJson(element))
+        .toList());
   }
 }
 
 class CardInfoModel {
   // TODO strip whitespace from inputs
-  final CardInfo _createUser = CardInfo();
-  CardInfo get createUser => _createUser;
+  final CardInfo _currentUserCardInfo = CardInfo();
+  CardInfo get currentUserCardInfo => _currentUserCardInfo;
+
+  bool isEditing = false;
+
+  Map<String, List<dynamic>> deleteLists = {
+    'education': <Education>[],
+    'work': <Work>[],
+    'volunteering': <Volunteering>[],
+    'skills': <UserSkill>[],
+    'interests': <UserInterest>[]
+  };
 
   Future<bool> createCard(String token) async {
     try {
@@ -222,9 +272,9 @@ class CardInfoModel {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer $token',
           },
-          body: json.encode(_createUser.toJson()));
+          body: json.encode(_currentUserCardInfo.toJson()));
       final body = json.decode(res.body);
-      return body['success'] as bool;
+      return body['success'];
     } catch (err) {
       print('An error occurred while trying to create a card:');
       print(err);
@@ -232,9 +282,31 @@ class CardInfoModel {
     }
   }
 
-  Future<CardInfo> fetchCardInfo(int id, String token) async {
+  Future<bool> updateCard(int id, String token) async {
+    try {
+      final res = await put('http://10.0.2.2:8888/api/cards/$id',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+          body: json.encode({
+            'cardInfo': _currentUserCardInfo.toJson(),
+            'deleteLists': deleteLists
+          }));
+      final body = json.decode(res.body);
+      return body['success'];
+    } catch (err) {
+      print('An error occurred while trying to update a card:');
+      print(err);
+      return false;
+    }
+  }
+
+  Future<CardInfo> fetchCardInfo(int id, String token,
+      {isCurrentUser: false}) async {
     final response = await get(
-      "http://10.0.2.2:8888/api/cards/$id",
+      'http://10.0.2.2:8888/api/cards/$id',
       headers: {
         'Accept': 'application/json',
         'Authorization': 'Bearer $token',
@@ -242,38 +314,38 @@ class CardInfoModel {
     );
 
     final body = json.decode(response.body);
-    print("JSON RESPONSE");
-    print(body);
-
     if (response.statusCode == 200) {
-      print(body);
+      if (isCurrentUser) {
+        _currentUserCardInfo.fromJson(body);
+        return currentUserCardInfo;
+      }
       return CardInfo()..fromJson(body);
     } else {
-      throw Exception('Failed to load user info');
+      return null;
     }
   }
 
   void updateUser(User user) {
-    _createUser.user = user;
+    _currentUserCardInfo.user = user;
   }
 
   void updateEducation(List<Education> education) {
-    _createUser.education = education;
+    _currentUserCardInfo.education = education;
   }
 
   void updateWork(List<Work> work) {
-    _createUser.work = work;
+    _currentUserCardInfo.work = work;
   }
 
   void updateVolunteering(List<Volunteering> volunteering) {
-    _createUser.volunteering = volunteering;
+    _currentUserCardInfo.volunteering = volunteering;
   }
 
-  void updateSkills(List<Skill> skills) {
-    _createUser.skills = skills;
+  void updateSkills(List<UserSkill> skills) {
+    _currentUserCardInfo.skills = skills;
   }
 
-  void updateInterests(List<Interest> interests) {
-    _createUser.interests = interests;
+  void updateInterests(List<UserInterest> interests) {
+    _currentUserCardInfo.interests = interests;
   }
 }

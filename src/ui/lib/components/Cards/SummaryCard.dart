@@ -116,42 +116,48 @@ class _SummaryCardState extends State<SummaryCard> {
           ),
 
           // Container for the users skills
-          Container(
-            padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
-            height: 45,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: [
-                BadgeGroupSmall([
-                  widget.data.skills,
-                ], "skill"),
-                // for (var skill in (widget.data.skills.toList()))
-                //   Container(
-                //     padding: EdgeInsets.fromLTRB(0, 0, 5, 0),
-                //     child: ColorBadge(skill.title, "skill"),
-                //   ),
-              ],
-            ),
-          ),
+          widget.data.skills.isNotEmpty
+              ? Container(
+                  padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+                  height: 45,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: [
+                      BadgeGroupSmall(
+                          widget.data.skills.map((e) => e.skill.title).toList(),
+                          "skill"),
+                      // for (var skill in (widget.data.skills.toList()))
+                      //   Container(
+                      //     padding: EdgeInsets.fromLTRB(0, 0, 5, 0),
+                      //     child: ColorBadge(skill.title, "skill"),
+                      //   ),
+                    ],
+                  ),
+                )
+              : SizedBox.shrink(),
 
           // Container for the interests
-          Container(
-            padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
-            height: 45,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: [
-                BadgeGroupSmall([
-                  widget.data.interests,
-                  ], "interests"),
-                // for (var interest in (widget.data.interests).toList())
-                //   Container(
-                //     padding: EdgeInsets.fromLTRB(0, 0, 5, 0),
-                //     child: ColorBadge(interest.title, "interest"),
-                //   ),
-              ],
-            ),
-          ),
+          widget.data.interests.isNotEmpty
+              ? Container(
+                  padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+                  height: 45,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: [
+                      BadgeGroupSmall(
+                          widget.data.interests
+                              .map((e) => e.interest.title)
+                              .toList(),
+                          "interests"),
+                      // for (var interest in (widget.data.interests).toList())
+                      //   Container(
+                      //     padding: EdgeInsets.fromLTRB(0, 0, 5, 0),
+                      //     child: ColorBadge(interest.title, "interest"),
+                      //   ),
+                    ],
+                  ),
+                )
+              : SizedBox.shrink(),
         ],
       ),
     );

@@ -14,6 +14,7 @@ class LoginController extends ResourceController {
         final token = generateToken(newUser);
         return Response.ok({'success': true, 'token': token, 'user': newUser.asMap()});
       }
+      print('Login failed');
       return Response.ok({'success': false});
     } catch (err, stackTrace) {
       logError(err,
