@@ -42,15 +42,16 @@ class User {
     return map;
   }
 
-  void fromJson(Map<String, dynamic> map) {
-    id = map['id'];
-    firstName = map['firstName'];
-    lastName = map['lastName'];
-    username = map['username'];
-    country = map['country'];
-    state = map['state'];
-    city = map['city'];
-    type = map['type'];
+  void fromJson(Map<String, dynamic> json) {
+    json = json ?? {};
+    id = json['id'];
+    firstName = json['firstName'];
+    lastName = json['lastName'];
+    username = json['username'];
+    country = json['country'];
+    state = json['state'];
+    city = json['city'];
+    type = json['type'];
   }
 }
 
@@ -98,6 +99,11 @@ class UserModel {
     final user = body['user'];
     _currentUser = User()..fromJson(user);
     return true;
+  }
+
+  void empty() {
+    _currentUser = null;
+    _token = null;
   }
 
   void updateUser(User user) {

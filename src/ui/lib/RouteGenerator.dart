@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ui/components/NavigationBar.dart';
+import 'package:ui/screens/Profile.dart';
 import 'package:ui/screens/WelcomeScreen.dart';
 import 'package:ui/screens/CreateAccount.dart';
 import 'package:ui/screens/Home.dart';
@@ -16,6 +17,14 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => WelcomeScreen());
       case '/main':
         return MaterialPageRoute(builder: (_) => NavigationBar());
+      default:
+        // If there is no such named route in the switch statement
+        return _errorRoute();
+    }
+  }
+
+  static Route<dynamic> generateNavigationBarRoute(RouteSettings settings) {
+    switch (settings.name) {
       case '/createAccount':
         return MaterialPageRoute(builder: (_) => CreateAccount());
       case '/home':
@@ -23,12 +32,14 @@ class RouteGenerator {
       case '/createCard1':
         return MaterialPageRoute(
             builder: (context) => CreateCard1(
-                  context: context,
-                ));
+              context: context,
+            ));
       case '/savedCards':
         return MaterialPageRoute(builder: (_) => ViewSavedCards());
+      case '/profile':
+        return MaterialPageRoute(builder: (_) => Profile());
       default:
-        // If there is no such named route in the switch statement
+      // If there is no such named route in the switch statement
         return _errorRoute();
     }
   }

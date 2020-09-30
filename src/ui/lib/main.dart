@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ui/RouteGenerator.dart';
-import 'package:ui/models/CardInfo.dart';
 import 'package:ui/models/Global.dart';
-import 'package:ui/models/User.dart';
-import 'package:ui/models/ConnectionInfo.dart';
 
 import 'palette.dart';
 
@@ -13,10 +10,12 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+  final navigatorKey = GlobalKey<NavigatorState>();
+
   @override
   Widget build(BuildContext context) {
     return Provider<GlobalModel>(
-      create: (context) => GlobalModel(),
+      create: (context) => GlobalModel(navigatorKey),
       child: MaterialApp(
         title: 'Wisteria',
         theme: ThemeData(
@@ -26,6 +25,7 @@ class MyApp extends StatelessWidget {
         ),
         initialRoute: '/',
         onGenerateRoute: RouteGenerator.generateRoute,
+        navigatorKey: navigatorKey,
       ),
     );
   }

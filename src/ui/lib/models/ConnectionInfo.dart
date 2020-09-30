@@ -20,7 +20,7 @@ class Connection {
     return {'username': username};
   }
 
-  Connection.fromJson(Map<String, dynamic> json) {
+  void fromJson(Map<String, dynamic> json) {
     user1 = User()..fromJson(json['user1']);
     user2 = User()..fromJson(json['user2']);
   }
@@ -41,7 +41,7 @@ class ConnectionInfo {
     };
   }
 
-  ConnectionInfo.fromJson(Map<String, dynamic> json) {
+  void fromJson(Map<String, dynamic> json) {
     user = User()..fromJson(json['user']);
     // for(connection in json['connections']) {
     //   connections.add(Connection..fromJson(connection));
@@ -75,13 +75,19 @@ class ConnectionInfoModel {
       return false;
     }
   }
+
+  void empty() {
+    _createConnectionInfo.fromJson({});
+    username = null;
+  }
 }
 
 // TODO: where should this fetch method go?
 Future<ConnectionInfo> fetchConnectionInfo(int id) async {
   final response = await get("http://10.0.2.2:8888/api/connections/$id");
   if (response.statusCode == 200) {
-    return ConnectionInfo.fromJson(json.decode(response.body));
+    print(json.decode(response.body));
+    return ConnectionInfo()..fromJson(json.decode(response.body));
   } else {
     throw Exception('Failed to load connection info');
   }
