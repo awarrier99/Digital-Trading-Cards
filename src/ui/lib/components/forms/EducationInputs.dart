@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ui/SizeConfig.dart';
+import 'package:ui/components/TextInput.dart';
 
 import 'DropdownFormField.dart';
 import '../../models/CardInfo.dart';
@@ -45,7 +46,7 @@ class EducationInputsState extends State<EducationInputs> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        TextFormField(
+        TextInput(
             autofocus: true,
             textInputAction: TextInputAction.next,
             decoration: InputDecoration(
@@ -65,7 +66,7 @@ class EducationInputsState extends State<EducationInputs> {
               FocusScope.of(context).requestFocus(majorNode);
             }),
         SizedBox(height: SizeConfig.safeBlockVertical * 2),
-        TextFormField(
+        TextInput(
           focusNode: majorNode,
           textInputAction: TextInputAction.done,
           decoration: InputDecoration(

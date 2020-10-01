@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:ui/components/TextInput.dart';
 import 'package:ui/components/forms/DropdownFormField.dart';
 import 'package:ui/palette.dart';
 import 'package:ui/SizeConfig.dart';
@@ -50,7 +50,7 @@ class PersonalInfoInputsState extends State<PersonalInfoInputs> {
                     style: TextStyle(fontSize: 20, color: Palette.darkGreen)),
               ),
               SizedBox(height: SizeConfig.safeBlockVertical * 2),
-              TextFormField(
+              TextInput(
                   textInputAction: TextInputAction.next,
                   decoration: InputDecoration(
                       labelText: 'First Name*', border: OutlineInputBorder()),
@@ -68,7 +68,7 @@ class PersonalInfoInputsState extends State<PersonalInfoInputs> {
                     FocusScope.of(context).requestFocus(lastNameNode);
                   }),
               SizedBox(height: SizeConfig.safeBlockVertical * 2),
-              TextFormField(
+              TextInput(
                   focusNode: lastNameNode,
                   textInputAction: TextInputAction.next,
                   decoration: InputDecoration(
@@ -87,7 +87,7 @@ class PersonalInfoInputsState extends State<PersonalInfoInputs> {
                     FocusScope.of(context).requestFocus(emailNode);
                   }),
               SizedBox(height: SizeConfig.safeBlockVertical * 2),
-              TextFormField(
+              TextInput(
                   focusNode: emailNode,
                   textInputAction: TextInputAction.next,
                   decoration: InputDecoration(
@@ -106,7 +106,7 @@ class PersonalInfoInputsState extends State<PersonalInfoInputs> {
                     FocusScope.of(context).requestFocus(countryNode);
                   }),
               SizedBox(height: SizeConfig.safeBlockVertical * 2),
-              TextFormField(
+              TextInput(
                   focusNode: countryNode,
                   textInputAction: TextInputAction.next,
                   decoration: InputDecoration(
@@ -125,7 +125,7 @@ class PersonalInfoInputsState extends State<PersonalInfoInputs> {
                     FocusScope.of(context).requestFocus(stateNode);
                   }),
               SizedBox(height: SizeConfig.safeBlockVertical * 2),
-              TextFormField(
+              TextInput(
                   focusNode: stateNode,
                   textInputAction: TextInputAction.next,
                   decoration: InputDecoration(
@@ -144,7 +144,7 @@ class PersonalInfoInputsState extends State<PersonalInfoInputs> {
                     FocusScope.of(context).requestFocus(cityNode);
                   }),
               SizedBox(height: SizeConfig.safeBlockVertical * 2),
-              TextFormField(
+              TextInput(
                   focusNode: cityNode,
                   textInputAction: TextInputAction.next,
                   decoration: InputDecoration(
@@ -160,7 +160,7 @@ class PersonalInfoInputsState extends State<PersonalInfoInputs> {
                     widget.model.city = value;
                   }),
               SizedBox(height: SizeConfig.safeBlockVertical * 2),
-              TextFormField(
+              TextInput(
                   obscureText: true,
                   focusNode: passwordNode,
                   textInputAction: TextInputAction.next,

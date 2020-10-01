@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ui/components/TextInput.dart';
 
 String pad(int num) {
   return num < 10 ? '0$num' : num.toString();
@@ -60,7 +61,7 @@ class _MonthYearPickerState extends State<MonthYearPicker> {
   Widget build(BuildContext context) {
     DateTime initial = widget.initialDate;
     String dateString = initial == null ? '' : '${pad(initial.month)}/${initial.year}';
-    return TextFormField(
+    return TextInput(
       decoration: InputDecoration(border: OutlineInputBorder()),
       validator: _validateDate,
       keyboardType: TextInputType.datetime,

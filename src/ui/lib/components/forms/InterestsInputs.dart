@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ui/components/TextInput.dart';
 
 import '../../models/CardInfo.dart';
 
@@ -12,7 +13,7 @@ class InterestsInputs extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        TextFormField(
+        TextInput(
             autofocus: true,
             textInputAction: TextInputAction.done,
             decoration:

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ui/components/TextInput.dart';
 
 import 'DropdownFormField.dart';
 import '../../models/CardInfo.dart';
@@ -14,7 +15,7 @@ class SkillsInputs extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        TextFormField(
+        TextInput(
             autofocus: true,
             textInputAction: TextInputAction.done,
             decoration:

@@ -108,13 +108,13 @@ class StudentCardSearch extends SearchDelegate<StudentCardItem> {
       studentList = query.isEmpty
           ? loadSudentCardItem()
           : loadSudentCardItem()
-              .where((p) => p.emailAddress.toLowerCase().contains(query))
+              .where((p) => p.emailAddress.toLowerCase().contains(query.toLowerCase()))
               .toList();
     } else if (listIsShown == false) {
       studentList = query.isEmpty
           ? <StudentCardItem>[]
           : loadSudentCardItem()
-              .where((p) => p.emailAddress.toLowerCase().contains(query))
+              .where((p) => p.emailAddress.toLowerCase().contains(query.toLowerCase()))
               .toList();
     }
 

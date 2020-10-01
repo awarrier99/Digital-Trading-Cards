@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ui/SizeConfig.dart';
+import 'package:ui/components/TextInput.dart';
 
 import '../MonthYearPicker.dart';
 import '../../models/CardInfo.dart';
@@ -18,13 +19,10 @@ class VolunteeringInputs extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        TextFormField(
+        TextInput(
             autofocus: true,
-            textInputAction: TextInputAction.next,
             cursorColor: Color(0xFF92DAAF),
-            keyboardType: TextInputType.text,
-            decoration: InputDecoration(
-                labelText: 'Title*', border: OutlineInputBorder()),
+            label: 'Title*',
             textCapitalization: TextCapitalization.words,
             initialValue: model.title,
             validator: (value) {
@@ -40,13 +38,11 @@ class VolunteeringInputs extends StatelessWidget {
               model.title = value;
             }),
         SizedBox(height: SizeConfig.safeBlockVertical * 2),
-        TextFormField(
+        TextInput(
             focusNode: companyNode,
             textInputAction: TextInputAction.done,
             cursorColor: Color(0xFF92DAAF),
-            keyboardType: TextInputType.text,
-            decoration: InputDecoration(
-                labelText: 'Company*', border: OutlineInputBorder()),
+            label: 'Company*',
             textCapitalization: TextCapitalization.words,
             initialValue: model.company?.name,
             validator: (value) {
@@ -62,11 +58,10 @@ class VolunteeringInputs extends StatelessWidget {
               model.company = Company()..name = value;
             }),
         SizedBox(height: SizeConfig.safeBlockVertical * 2),
-        TextFormField(
+        TextInput(
             focusNode: descriptionNode,
             textInputAction: TextInputAction.done,
             cursorColor: Color(0xFF92DAAF),
-            keyboardType: TextInputType.text,
             decoration: InputDecoration(
                 labelText: 'Description', border: OutlineInputBorder()),
             textCapitalization: TextCapitalization.words,

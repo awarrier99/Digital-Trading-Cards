@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 import 'package:ui/SizeConfig.dart';
+import 'package:ui/components/TextInput.dart';
 import 'package:ui/models/CardInfo.dart';
 import 'package:ui/models/Global.dart';
 import 'package:ui/screens/Home.dart';
@@ -90,7 +91,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         padding: EdgeInsets.only(top: 30, left: 20, right: 20),
                         child: Column(
                           children: <Widget>[
-                            TextFormField(
+                            TextInput(
                               keyboardType: TextInputType.emailAddress,
                               onChanged: (value) {
                                 model.username = value;
@@ -107,7 +108,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                       color: Colors.grey)),
                             ),
                             SizedBox(height: 20),
-                            TextFormField(
+                            TextInput(
                               focusNode: passwordNode,
                               obscureText: true,
                               onChanged: (value) {
