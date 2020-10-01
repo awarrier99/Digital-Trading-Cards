@@ -15,7 +15,6 @@ class InterestsInputs extends StatelessWidget {
       children: [
         TextInput(
             autofocus: true,
-            textInputAction: TextInputAction.done,
             decoration:
                 InputDecoration(hintText: 'Name', border: OutlineInputBorder()),
             textCapitalization: TextCapitalization.sentences,

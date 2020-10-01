@@ -17,6 +17,8 @@ class WorkInputs extends StatefulWidget {
 class WorkInputsState extends State<WorkInputs> {
   FocusNode companyNode = FocusNode();
   FocusNode descriptionNode = FocusNode();
+  FocusNode startDateNode = FocusNode();
+  FocusNode endDateNode = FocusNode();
   bool _isCurrent;
 
   @override
@@ -47,7 +49,6 @@ class WorkInputsState extends State<WorkInputs> {
       children: [
         TextInput(
             autofocus: true,
-            textInputAction: TextInputAction.next,
             cursorColor: Color(0xFF92DAAF),
             keyboardType: TextInputType.text,
             decoration: InputDecoration(
@@ -60,7 +61,7 @@ class WorkInputsState extends State<WorkInputs> {
               }
               return null;
             },
-            onFieldSubmitted: (term) {
+            onEditingComplete: () {
               FocusScope.of(context).requestFocus(companyNode);
             },
             onChanged: (value) {
@@ -69,7 +70,6 @@ class WorkInputsState extends State<WorkInputs> {
         SizedBox(height: SizeConfig.safeBlockVertical * 2),
         TextInput(
             focusNode: companyNode,
-            textInputAction: TextInputAction.done,
             cursorColor: Color(0xFF92DAAF),
             keyboardType: TextInputType.text,
             decoration: InputDecoration(
@@ -82,7 +82,7 @@ class WorkInputsState extends State<WorkInputs> {
               }
               return null;
             },
-            onFieldSubmitted: (term) {
+            onEditingComplete: () {
               FocusScope.of(context).requestFocus(descriptionNode);
             },
             onChanged: (value) {
@@ -91,16 +91,18 @@ class WorkInputsState extends State<WorkInputs> {
         SizedBox(height: SizeConfig.safeBlockVertical * 2),
         TextInput(
             focusNode: descriptionNode,
-            textInputAction: TextInputAction.done,
             cursorColor: Color(0xFF92DAAF),
             keyboardType: TextInputType.text,
             decoration: InputDecoration(
                 labelText: 'Description', border: OutlineInputBorder()),
-            textCapitalization: TextCapitalization.words,
+            textCapitalization: TextCapitalization.sentences,
             maxLines: null,
             initialValue: widget.model.description,
             onChanged: (value) {
               widget.model.description = value;
+            },
+            onEditingComplete: () {
+              FocusScope.of(context).requestFocus(startDateNode);
             }),
         Row(
           children: [
@@ -133,11 +135,15 @@ class WorkInputsState extends State<WorkInputs> {
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
             )),
         MonthYearPicker(
+            focusNode: startDateNode,
             firstDate: DateTime(DateTime.now().year - 100),
             lastDate: DateTime(DateTime.now().year + 1, 12, 31),
             initialDate: widget.model.startDate,
             onChanged: (value) {
               widget.model.startDate = value;
+            },
+            onEditingComplete: () {
+              FocusScope.of(context).requestFocus(endDateNode);
             }),
         _isCurrent
             ? SizedBox.shrink()
@@ -149,6 +155,7 @@ class WorkInputsState extends State<WorkInputs> {
         _isCurrent
             ? SizedBox.shrink()
             : MonthYearPicker(
+                focusNode: endDateNode,
                 firstDate: DateTime(DateTime.now().year - 100),
                 lastDate: DateTime(DateTime.now().year, DateTime.now().month),
                 initialDate: widget.model.endDate,

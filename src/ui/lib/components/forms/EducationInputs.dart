@@ -17,6 +17,8 @@ class EducationInputs extends StatefulWidget {
 
 class EducationInputsState extends State<EducationInputs> {
   FocusNode majorNode = FocusNode();
+  FocusNode startDateNode = FocusNode();
+  FocusNode endDateNode = FocusNode();
   bool _isCurrent;
 
   @override
@@ -48,10 +50,8 @@ class EducationInputsState extends State<EducationInputs> {
       children: [
         TextInput(
             autofocus: true,
-            textInputAction: TextInputAction.next,
             decoration: InputDecoration(
                 labelText: 'Institution*', border: OutlineInputBorder()),
-            textCapitalization: TextCapitalization.sentences,
             initialValue: widget.model.institution?.name,
             validator: (value) {
               if (value.isEmpty) {
@@ -62,16 +62,14 @@ class EducationInputsState extends State<EducationInputs> {
             onChanged: (value) {
               widget.model.institution = Institution()..name = value;
             },
-            onFieldSubmitted: (term) {
+            onEditingComplete: () {
               FocusScope.of(context).requestFocus(majorNode);
             }),
         SizedBox(height: SizeConfig.safeBlockVertical * 2),
         TextInput(
           focusNode: majorNode,
-          textInputAction: TextInputAction.done,
           decoration: InputDecoration(
               labelText: 'Field of Study*', border: OutlineInputBorder()),
-          textCapitalization: TextCapitalization.sentences,
           initialValue: widget.model.field?.name,
           validator: (value) {
             if (value.isEmpty) {
@@ -81,6 +79,9 @@ class EducationInputsState extends State<EducationInputs> {
           },
           onChanged: (value) {
             widget.model.field = Field()..name = value;
+          },
+          onEditingComplete: () {
+            FocusScope.of(context).requestFocus(startDateNode);
           },
         ),
         Container(
@@ -122,11 +123,15 @@ class EducationInputsState extends State<EducationInputs> {
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
             )),
         MonthYearPicker(
+            focusNode: startDateNode,
             firstDate: DateTime(DateTime.now().year - 100),
             lastDate: DateTime(DateTime.now().year + 1, 12, 31),
             initialDate: widget.model.startDate,
             onChanged: (value) {
               widget.model.startDate = value;
+            },
+            onEditingComplete: () {
+              FocusScope.of(context).requestFocus(endDateNode);
             }),
         Container(
             margin: EdgeInsets.only(top: 20),
@@ -134,6 +139,7 @@ class EducationInputsState extends State<EducationInputs> {
                 _isCurrent ? 'Expected Graduation Date' : 'Graduation Date*',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16))),
         MonthYearPicker(
+            focusNode: endDateNode,
             firstDate: DateTime(DateTime.now().year - 100),
             lastDate: DateTime(DateTime.now().year + 6, 12, 31),
             initialDate: widget.model.endDate,

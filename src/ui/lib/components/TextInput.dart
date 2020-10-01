@@ -15,23 +15,23 @@ class TextInput extends StatelessWidget {
   final int maxLines;
   final Function validator;
   final Function onChanged;
-  final Function onFieldSubmitted;
+  final Function onEditingComplete;
 
   TextInput(
-      {this.label,
+      {this.label = '',
       this.initialValue = '',
       this.focusNode,
       this.decoration,
       this.keyboardType = TextInputType.text,
-      this.textInputAction = TextInputAction.next,
+      this.textInputAction = TextInputAction.done,
       this.textCapitalization = TextCapitalization.words,
-        this.cursorColor,
+      this.cursorColor,
       this.obscureText = false,
       this.autofocus = false,
-        this.maxLines = 1,
+      this.maxLines = 1,
       this.validator,
       this.onChanged,
-      this.onFieldSubmitted});
+      this.onEditingComplete});
 
   @override
   Widget build(BuildContext context) {
@@ -42,8 +42,7 @@ class TextInput extends StatelessWidget {
         textInputAction: textInputAction,
         keyboardType: keyboardType,
         decoration: decoration ??
-            InputDecoration(
-                labelText: label ?? '', border: OutlineInputBorder()),
+            InputDecoration(labelText: label, border: OutlineInputBorder()),
         textCapitalization: textCapitalization,
         maxLines: maxLines,
         obscureText: obscureText,
@@ -53,8 +52,8 @@ class TextInput extends StatelessWidget {
           final cleanValue = value.trim();
           if (onChanged != null) onChanged(cleanValue);
         },
-        onFieldSubmitted: (term) {
-          if (onFieldSubmitted != null) onFieldSubmitted(term);
+        onEditingComplete: () {
+          if (onEditingComplete != null) onEditingComplete();
         });
   }
 }
