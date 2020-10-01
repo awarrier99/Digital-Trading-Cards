@@ -4,6 +4,8 @@ import 'controllers/LoginController.dart';
 import 'controllers/UserController.dart';
 import 'controllers/VerbController.dart';
 import 'controllers/SaveCardController.dart';
+import 'controllers/EventController.dart';
+
 import 'server.dart';
 
 Controller createRoutes() {
@@ -34,6 +36,12 @@ Controller createRoutes() {
       .link(Authorizer.bearer)
       .link(() => VerbController(Resource.user))
       .link(() => SaveCardController());
+  router
+      .route('/events[/:id]')
+      .link(Authorizer.bearer)
+      .link(() => VerbController(Resource.user))
+      .link(() => VerbController(Resource.event))
+      .link(() => EventController());
 
   return router;
 }

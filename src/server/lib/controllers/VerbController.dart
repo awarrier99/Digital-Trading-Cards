@@ -1,6 +1,8 @@
+import 'package:server/models/db/Event.dart';
+
 import '../server.dart';
 
-enum Resource { card, user, connection }
+enum Resource { card, user, connection, event }
 
 enum Verb { post, get, put, patch, delete }
 
@@ -103,6 +105,22 @@ class VerbController extends Controller {
         }
 
         final user = await User.get(id);
+        if (user == null) {
+          return Response.notFound(body: {'success': false});
+        }
+
+        request.attachments.putIfAbsent('connectionUser', () => user);
+        return request;
+      }
+    } else if (resource == Resource.event) {
+      if (verb == Verb.post) {
+        return _commonPost(request, id, Event.get);
+      } else if (verb == Verb.get) {
+        if (id == null) {
+          return notAllowed();
+        }
+
+        final user = await Event.get(id);
         if (user == null) {
           return Response.notFound(body: {'success': false});
         }
