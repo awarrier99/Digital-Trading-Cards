@@ -1,3 +1,4 @@
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:ui/components/Cards/TradingCard.dart';
 import 'package:ui/models/CardInfo.dart';
@@ -35,7 +36,6 @@ class _HomeState extends State<Home> {
           List<Widget> children;
           if (snapshot.hasData) {
             CardInfo cardData = snapshot.data;
-            print(snapshot.data.toJson());
             bool hasCard = (cardData.education.isNotEmpty ||
                 cardData.work.isNotEmpty ||
                 cardData.volunteering.isNotEmpty);
@@ -54,11 +54,14 @@ class _HomeState extends State<Home> {
             ];
           } else if (snapshot.hasError) {
             children = [
-              Center(
-                child: Container(
-                  child: Text("${snapshot.error}"),
-                ),
-              )
+              Flushbar(
+                flushbarPosition: FlushbarPosition.TOP,
+                title: snapshot.error,
+                duration: Duration(seconds: 5),
+                margin: EdgeInsets.all(8),
+                borderRadius: 8,
+                backgroundColor: Color(0xffDF360E),
+              )..show(context)
             ];
           } else {
             children = [

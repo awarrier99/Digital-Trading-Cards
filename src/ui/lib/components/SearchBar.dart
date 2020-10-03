@@ -137,7 +137,6 @@ class StudentCardSearch extends SearchDelegate<StudentCardItem> {
               // list
               return ListTile(
                 onTap: () {
-                  print(listCard.emailAddress);
                   final connectionInfoModel =
                       context.read<ConnectionInfoModel>();
                   connectionInfoModel.username = listCard.emailAddress;

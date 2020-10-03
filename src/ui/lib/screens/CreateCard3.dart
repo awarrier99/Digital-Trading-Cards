@@ -66,7 +66,6 @@ class CreateCard3State extends State<CreateCard3> {
                       if (isEditing && id != null)
                         globalModel.cardInfoModel.deleteLists['skills']
                             .add(skillsInputsModel[idx]);
-                      print(globalModel.cardInfoModel.deleteLists['skills']);
                     }),
                 SizedBox(height: 20),
                 DynamicForm(
@@ -80,7 +79,6 @@ class CreateCard3State extends State<CreateCard3> {
                       if (isEditing && id != null)
                         globalModel.cardInfoModel.deleteLists['interests']
                             .add(interestsInputsModel[idx]);
-                      print(globalModel.cardInfoModel.deleteLists['interests']);
                     }),
                 SizedBox(
                     width: SizeConfig.screenWidth,
@@ -93,10 +91,8 @@ class CreateCard3State extends State<CreateCard3> {
                           final globalModel = context.read<GlobalModel>();
                           final userModel = globalModel.userModel;
                           final cardInfoModel = globalModel.cardInfoModel;
-                          print(skillsInputsModel);
                           cardInfoModel.updateSkills(skillsInputsModel);
                           cardInfoModel.updateInterests(interestsInputsModel);
-                          print(cardInfoModel.currentUserCardInfo.toJson());
                           if (isEditing) {
                             cardInfoModel
                                 .updateCard(

@@ -43,10 +43,7 @@ class _ViewSavedCardsState extends State<ViewSavedCards> {
             builder: (context, AsyncSnapshot<CardInfo> snapshot) {
               List<Widget> children;
               if (snapshot.hasData) {
-                children = [
-                  SummaryCard(snapshot.data, currentUser: true)
-                ];
-                // print(snapshot.data);
+                children = [SummaryCard(snapshot.data, currentUser: true)];
                 // children = [
                 // ListView.separated(
                 //   separatorBuilder: (BuildContext context,
@@ -71,16 +68,14 @@ class _ViewSavedCardsState extends State<ViewSavedCards> {
                 // ),
                 // ];
               } else if (snapshot.hasError) {
-                print("it went bad");
                 children = [
                   Center(
-                  child: Container(
-                    child: Text("${snapshot.error}"),
+                    child: Container(
+                      child: Text("${snapshot.error}"),
+                    ),
                   ),
-                ),
                 ];
               } else {
-                print("it went once");
                 children = [
                   Center(
                     child: Container(
@@ -95,8 +90,7 @@ class _ViewSavedCardsState extends State<ViewSavedCards> {
                   children: children,
                 ),
               );
-            }
-        ),
+            }),
       ),
     );
   }
@@ -130,4 +124,3 @@ class _ViewSavedCardsState extends State<ViewSavedCards> {
 //     ),
 //   );
 // }
-

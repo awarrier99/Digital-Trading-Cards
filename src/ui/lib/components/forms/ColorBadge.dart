@@ -9,17 +9,17 @@ class BadgeColors {
 class ColorBadge extends StatelessWidget {
   final String text;
   final String badgeType;
+  final bool fontSize;
 
   final Map<String, BadgeColors> _colors = {
     "skills": BadgeColors(Color(0xff56D4D4), Colors.blue),
     "interests": BadgeColors(Color(0xff8098EF), Color(0xffE080F0))
   };
 
-  ColorBadge(this.text, this.badgeType);
+  ColorBadge(this.text, this.badgeType, {this.fontSize});
 
   @override
   Widget build(BuildContext context) {
-    print(badgeType.runtimeType);
     return Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -43,7 +43,7 @@ class ColorBadge extends StatelessWidget {
                 style: TextStyle(
                     color: Colors.white,
                     fontFamily: 'Montserrat',
-                    fontSize: 16),
+                    fontSize: fontSize ? fontSize : 16),
               ),
             ),
           ],

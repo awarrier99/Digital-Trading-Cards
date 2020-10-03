@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:provider/provider.dart';
 
 import 'dart:convert';
 import 'package:ui/models/User.dart';
@@ -276,6 +277,7 @@ class CardInfoModel {
       final body = json.decode(res.body);
       return body['success'];
     } catch (err) {
+      // TODO: Improve Error handling
       print('An error occurred while trying to create a card:');
       print(err);
       return false;
@@ -297,6 +299,7 @@ class CardInfoModel {
       final body = json.decode(res.body);
       return body['success'];
     } catch (err) {
+      // TODO: Improve Error handling
       print('An error occurred while trying to update a card:');
       print(err);
       return false;

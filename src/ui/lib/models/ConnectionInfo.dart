@@ -69,6 +69,7 @@ class ConnectionInfoModel {
       final body = json.decode(res.body);
       return body['success'] as bool;
     } catch (err) {
+      // TODO: Improve Error handling
       print('An error occurred while trying to create a connection:');
       print(err);
       return false;
@@ -80,7 +81,6 @@ class ConnectionInfoModel {
 Future<ConnectionInfo> fetchConnectionInfo(int id) async {
   final response = await get("http://10.0.2.2:8888/api/connections/$id");
   if (response.statusCode == 200) {
-    print(json.decode(response.body));
     return ConnectionInfo.fromJson(json.decode(response.body));
   } else {
     throw Exception('Failed to load connection info');

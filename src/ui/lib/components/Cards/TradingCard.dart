@@ -25,7 +25,6 @@ class _TradingCardState extends State<TradingCard> {
   @override
   void initState() {
     super.initState();
-    print(widget.data.toJson());
   }
 
   @override

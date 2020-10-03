@@ -64,7 +64,6 @@ class CreateCard2State extends State<CreateCard2> {
                         if (isEditing && id != null)
                           globalModel.cardInfoModel.deleteLists['work']
                               .add(workInputsModel[idx]);
-                        print(globalModel.cardInfoModel.deleteLists['work']);
                       }),
                   SizedBox(height: 20),
                   DynamicForm(
@@ -78,8 +77,6 @@ class CreateCard2State extends State<CreateCard2> {
                         if (isEditing && id != null)
                           globalModel.cardInfoModel.deleteLists['volunteering']
                               .add(volunteeringInputsModel[idx]);
-                        print(globalModel
-                            .cardInfoModel.deleteLists['volunteering']);
                       }),
                   SizedBox(
                       width: SizeConfig.screenWidth,
@@ -94,7 +91,6 @@ class CreateCard2State extends State<CreateCard2> {
                             cardInfoModel.updateWork(workInputsModel);
                             cardInfoModel
                                 .updateVolunteering(volunteeringInputsModel);
-                            print(cardInfoModel.currentUserCardInfo.toJson());
                             nextStep(context);
                           }
                         },

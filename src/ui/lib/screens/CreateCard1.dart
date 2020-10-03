@@ -63,8 +63,6 @@ class CreateCard1State extends State<CreateCard1> {
                             if (isEditing && id != null)
                               globalModel.cardInfoModel.deleteLists['education']
                                   .add(educationInputsModel[idx]);
-                            print(globalModel
-                                .cardInfoModel.deleteLists['education']);
                           }),
                       SizedBox(
                           width: SizeConfig.screenWidth,
@@ -81,8 +79,6 @@ class CreateCard1State extends State<CreateCard1> {
                                       globalModel.cardInfoModel;
                                   cardInfoModel
                                       .updateEducation(educationInputsModel);
-                                  print(cardInfoModel.currentUserCardInfo
-                                      .toJson());
                                   nextStep(context);
                                 }
                               }))

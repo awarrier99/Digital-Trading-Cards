@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:provider/provider.dart';
@@ -11,6 +12,7 @@ import 'package:ui/screens/Home.dart';
 
 import '../models/User.dart';
 import '../palette.dart';
+import 'package:flushbar/flushbar.dart';
 
 class WelcomeScreen extends StatefulWidget {
   final String title;
@@ -25,6 +27,7 @@ class WelcomeScreen extends StatefulWidget {
 }
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   FocusNode passwordNode = FocusNode();
   final User model = new User();
 
@@ -37,20 +40,28 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   }
 
   void login(BuildContext context) {
-    final globalModel =
-    context.read<GlobalModel>();
+    final globalModel = context.read<GlobalModel>();
     final userModel = globalModel.userModel;
-    final cardInfoModel =
-        globalModel.cardInfoModel;
+    final cardInfoModel = globalModel.cardInfoModel;
     userModel.updateUser(model);
     userModel.login().then((success) {
       if (success) {
         final user = userModel.currentUser;
         cardInfoModel.updateUser(user);
         loginContext(context);
+      } else {
+        throw (Error());
       }
     }).catchError((error) {
-      print('Caught $error');
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        title: "Incorrect email or password",
+        message: "Please double-check and try again!",
+        duration: Duration(seconds: 5),
+        margin: EdgeInsets.all(8),
+        borderRadius: 8,
+        backgroundColor: Color(0xffDF360E),
+      )..show(context);
     });
   }
 
@@ -59,6 +70,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     SizeConfig().init(context);
 
     return Scaffold(
+        key: _scaffoldKey,
         body: SingleChildScrollView(
             child: Container(
                 padding: EdgeInsets.fromLTRB(25, 0, 25, 0),
