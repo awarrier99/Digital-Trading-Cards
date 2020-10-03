@@ -35,5 +35,10 @@ Controller createRoutes() {
       .link(() => VerbController(Resource.user))
       .link(() => SaveCardController());
 
+  router
+      .route('/connections[/:id]')
+      .link(Authorizer.bearer)
+      .link(() => VerbController(Resource.connection))
+      .link(() => SaveCardController());
   return router;
 }

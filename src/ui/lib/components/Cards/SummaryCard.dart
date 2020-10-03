@@ -60,6 +60,7 @@ class _SummaryCardState extends State<SummaryCard> {
                   color: Colors.grey[700],
                 ),
               ),
+              Text(" "),
               Text(
                 widget.data.user.lastName,
                 style: TextStyle(
@@ -125,12 +126,7 @@ class _SummaryCardState extends State<SummaryCard> {
                     children: [
                       BadgeGroupSmall(
                           widget.data.skills.map((e) => e.skill.title).toList(),
-                          "skill"),
-                      // for (var skill in (widget.data.skills.toList()))
-                      //   Container(
-                      //     padding: EdgeInsets.fromLTRB(0, 0, 5, 0),
-                      //     child: ColorBadge(skill.title, "skill"),
-                      //   ),
+                          "skills"),
                     ],
                   ),
                 )
@@ -149,11 +145,6 @@ class _SummaryCardState extends State<SummaryCard> {
                               .map((e) => e.interest.title)
                               .toList(),
                           "interests"),
-                      // for (var interest in (widget.data.interests).toList())
-                      //   Container(
-                      //     padding: EdgeInsets.fromLTRB(0, 0, 5, 0),
-                      //     child: ColorBadge(interest.title, "interest"),
-                      //   ),
                     ],
                   ),
                 )

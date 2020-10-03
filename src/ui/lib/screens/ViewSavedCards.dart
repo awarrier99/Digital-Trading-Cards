@@ -13,17 +13,17 @@ class ViewSavedCards extends StatefulWidget {
 }
 
 class _ViewSavedCardsState extends State<ViewSavedCards> {
-  int userId = 55;
-  Future<CardInfo> userCardInfo;
+  Future<ConnectionInfo> userConnectionInfo;
 
   @override
   void initState() {
     super.initState();
     final globalModel = context.read<GlobalModel>();
-    final cardInfoModel = globalModel.cardInfoModel;
+    final connectionInfoModel = globalModel.connectionInfoModel;
     final userModel = globalModel.userModel;
-    userCardInfo =
-        cardInfoModel.fetchCardInfo(userModel.currentUser.id, userModel.token);
+    userConnectionInfo = connectionInfoModel.fetchConnectionInfo(
+        userModel.currentUser.id, userModel.token,
+        isCurrentUser: false);
   }
 
   final _createAccountFormKey = GlobalKey<FormState>();
@@ -38,49 +38,38 @@ class _ViewSavedCardsState extends State<ViewSavedCards> {
         ),
       ),
       body: Container(
-        child: FutureBuilder<CardInfo>(
-            future: userCardInfo,
-            builder: (context, AsyncSnapshot<CardInfo> snapshot) {
+        child: FutureBuilder<ConnectionInfo>(
+            future: userConnectionInfo,
+            builder: (context, AsyncSnapshot<ConnectionInfo> snapshot) {
               List<Widget> children;
               if (snapshot.hasData) {
+                // children = [SummaryCard(snapshot.data, currentUser: true)];
+                print(snapshot.data);
                 children = [
-                  SummaryCard(snapshot.data, currentUser: true)
+                  ListView.separated(
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    separatorBuilder: (BuildContext context, int index) =>
+                        const Divider(),
+                    itemCount: snapshot.data.connectedUsers.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Container(
+                          padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                          child:
+                              SummaryCard(snapshot.data.connectedUsers[index]));
+                    },
+                    padding: EdgeInsets.only(top: 10, bottom: 10),
+                  ),
                 ];
-                // print(snapshot.data);
-                // children = [
-                // ListView.separated(
-                //   separatorBuilder: (BuildContext context,
-                //       int index) => const Divider(),
-                //   itemCount: snapshot.data.connectedUsers.length,
-                //   itemBuilder: (BuildContext context, int index) {
-                //     return Container(
-                //         padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                //         child: SummaryCard(
-                //             snapshot.data.connectedUsers[index].id
-                //           // snapshot.data.connectedUsers[index].toJson['fullname'],
-                //           // snapshot.data.connectedUsers[index]['school'],
-                //           // snapshot.data.connectedUsers[index]['degreeType'],
-                //           // snapshot.data.connectedUsers[index]['major'],
-                //           // snapshot.data.connectedUsers[index]['skills'],
-                //           // snapshot.data.connectedUsers[index]['interests'],
-                //           // false),
-                //         )
-                //     );
-                //   },
-                //   padding: EdgeInsets.only(top: 10, bottom: 10),
-                // ),
-                // ];
               } else if (snapshot.hasError) {
-                print("it went bad");
                 children = [
                   Center(
-                  child: Container(
-                    child: Text("${snapshot.error}"),
+                    child: Container(
+                      child: Text("${snapshot.error}"),
+                    ),
                   ),
-                ),
                 ];
               } else {
-                print("it went once");
                 children = [
                   Center(
                     child: Container(
@@ -89,14 +78,11 @@ class _ViewSavedCardsState extends State<ViewSavedCards> {
                   ),
                 ];
               }
-              return Container(
-                padding: EdgeInsets.fromLTRB(10, 20, 10, 0),
-                child: Column(
-                  children: children,
-                ),
+              return Flex(
+                direction: Axis.vertical,
+                children: children,
               );
-            }
-        ),
+            }),
       ),
     );
   }
@@ -130,4 +116,3 @@ class _ViewSavedCardsState extends State<ViewSavedCards> {
 //     ),
 //   );
 // }
-

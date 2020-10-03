@@ -35,7 +35,6 @@ class _HomeState extends State<Home> {
           List<Widget> children;
           if (snapshot.hasData) {
             CardInfo cardData = snapshot.data;
-            print(snapshot.data.toJson());
             bool hasCard = (cardData.education.isNotEmpty ||
                 cardData.work.isNotEmpty ||
                 cardData.volunteering.isNotEmpty);
