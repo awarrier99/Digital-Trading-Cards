@@ -9,14 +9,14 @@ class BadgeColors {
 class ColorBadge extends StatelessWidget {
   final String text;
   final String badgeType;
-  final bool fontSize;
+  final double fontSize;
 
   final Map<String, BadgeColors> _colors = {
     "skills": BadgeColors(Color(0xff56D4D4), Colors.blue),
     "interests": BadgeColors(Color(0xff8098EF), Color(0xffE080F0))
   };
 
-  ColorBadge(this.text, this.badgeType, {this.fontSize});
+  ColorBadge(this.text, this.badgeType, {this.fontSize = 16});
 
   @override
   Widget build(BuildContext context) {
@@ -37,15 +37,15 @@ class ColorBadge extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Padding(
-              padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
-              child: Text(
-                text,
-                style: TextStyle(
+                padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
+                child: Text(
+                  text,
+                  style: TextStyle(
                     color: Colors.white,
                     fontFamily: 'Montserrat',
-                    fontSize: fontSize ? fontSize : 16),
-              ),
-            ),
+                    fontSize: fontSize,
+                  ),
+                )),
           ],
         ));
   }
