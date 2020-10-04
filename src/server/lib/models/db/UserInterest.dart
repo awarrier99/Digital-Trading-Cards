@@ -100,7 +100,7 @@ class UserInterest extends Serializable {
     } catch (err, stackTrace) {
       logError(err,
           stackTrace: stackTrace,
-          message: 'An error occurred while trying to get user skills:');
+          message: 'An error occurred while trying to get user interests:');
       return [];
     }
   }
