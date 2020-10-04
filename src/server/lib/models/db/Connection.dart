@@ -68,14 +68,14 @@ class Connection extends Serializable {
 
       final resultsList1 = results1
           .map((e) async =>
-          User.get(e['otherUserId'])).toList();
+          User.get(e['otherUserId'] as int)).toList();
 
       final resultsList2 = results2
           .map((e) async =>
-          User.get(e['otherUserId'])).toList();
+          User.get(e['otherUserId'] as int)).toList();
 
-      return (Future.wait(List.from(resultsList1)
-        ..addAll(resultsList2)));
+      return Future.wait(List.from(resultsList1)
+        ..addAll(resultsList2));
     } catch (err, stackTrace) {
       logError(err,
           stackTrace: stackTrace,
@@ -104,19 +104,19 @@ class Connection extends Serializable {
       final resultsList1 = results1
           .map((e) async =>
           Connection.create(
-            user1: await User.get(e['user1_id']),
-            user2: await User.get(e['user2_id']),
+            user1: await User.get(e['user1_id'] as int),
+            user2: await User.get(e['user2_id'] as int),
           )).toList();
 
       final resultsList2 = results2
           .map((e) async =>
           Connection.create(
-            user1: await User.get(e['user1_id']),
-            user2: await User.get(e['user2_id']),
+            user1: await User.get(e['user1_id'] as int),
+            user2: await User.get(e['user2_id'] as int),
           )).toList();
 
-      return (Future.wait(List.from(resultsList1)
-        ..addAll(resultsList2)));
+      return Future.wait(List.from(resultsList1)
+        ..addAll(resultsList2));
     } catch (err, stackTrace) {
       logError(err,
           stackTrace: stackTrace,

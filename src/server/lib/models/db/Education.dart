@@ -67,6 +67,7 @@ class Education extends Serializable {
 
   @override
   void readFromMap(Map<String, dynamic> object) {
+    id = object['id'] as int;
     if (user == null) {
       final userMap = object['user'] as Map<String, dynamic>;
       if (stringToUserType(userMap['type'] as String) == UserType.student) {
@@ -90,14 +91,10 @@ class Education extends Serializable {
         : DateTime.parse(endDateStr);
   }
 
-  Future<void> save() async {
+  Future<void> save({bool allowUpdate = true}) async {
     try {
-      const sql = '''
-        INSERT INTO education
-        (user, institution, degree, field, current, start_date, end_date)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
-      ''';
-      await ServerChannel.db.query(sql, [
+      String sql;
+      final values = [
         user.id,
         institution.name,
         degreeToString(degree),
@@ -105,12 +102,57 @@ class Education extends Serializable {
         current,
         startDate.toUtc(),
         endDate?.toUtc()
-      ]);
+      ];
+      if (id == null) {
+        sql = '''
+          INSERT INTO education
+          (user, institution, degree, field, current, start_date, end_date)
+          VALUES (?, ?, ?, ?, ?, ?, ?)
+        ''';
+      } else if (allowUpdate) {
+        sql = '''
+          UPDATE education
+          SET institution = ?,
+            degree = ?,
+            field = ?,
+            current = ?,
+            start_date = ?,
+            end_date = ?
+          WHERE id = ?
+        ''';
+        values.removeAt(0);
+        values.add(id);
+      } else {
+        return;
+      }
+
+      await ServerChannel.db.query(sql, values);
     } catch (err, stackTrace) {
       logError(err,
           stackTrace: stackTrace,
           message:
               'An error occurred while trying to save user education info:');
+    }
+  }
+
+  Future<void> delete() async {
+    try {
+      if (id == null) {
+        print('Unsaved user education info cannot be deleted');
+        return;
+      }
+
+      const sql = '''
+        DELETE FROM education
+        WHERE id = ?
+      ''';
+
+      await ServerChannel.db.query(sql, [id]);
+    } catch (err, stackTrace) {
+      logError(err,
+          stackTrace: stackTrace,
+          message:
+              'An error occurred while trying to delete user education info:');
     }
   }
 

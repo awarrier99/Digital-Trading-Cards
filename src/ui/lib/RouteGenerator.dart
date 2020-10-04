@@ -21,7 +21,10 @@ class RouteGenerator {
       case '/home':
         return MaterialPageRoute(builder: (_) => Home());
       case '/createCard1':
-        return MaterialPageRoute(builder: (_) => CreateCard1());
+        return MaterialPageRoute(
+            builder: (context) => CreateCard1(
+                  context: context,
+                ));
       case '/savedCards':
         return MaterialPageRoute(builder: (_) => ViewSavedCards());
       default:

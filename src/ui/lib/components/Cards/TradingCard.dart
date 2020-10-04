@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ui/components/BadgeGroup.dart';
 import 'package:ui/models/CardInfo.dart';
+import 'package:ui/models/Global.dart';
 import 'package:ui/palette.dart';
 import 'package:flutter/material.dart';
 import 'package:ui/models/CardInfo.dart';
@@ -22,6 +23,11 @@ class TradingCard extends StatefulWidget {
 
 class _TradingCardState extends State<TradingCard> {
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.all(20),
@@ -34,11 +40,11 @@ class _TradingCardState extends State<TradingCard> {
           borderRadius: BorderRadius.all(Radius.circular(20.0)),
           boxShadow: [
             BoxShadow(
-              color: new Color(0xffD1D9E6),
-              spreadRadius: 10,
-              blurRadius: 30,
-              offset: Offset(10, 10),
-            )
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: Offset(0, 10),
+            ),
           ]),
       child: SingleChildScrollView(
           child: Column(
@@ -47,7 +53,11 @@ class _TradingCardState extends State<TradingCard> {
           Row(mainAxisAlignment: MainAxisAlignment.end, children: [
             FlatButton(
               textColor: Colors.grey,
-              onPressed: () => Navigator.of(context).pushNamed('/createCard1'),
+              onPressed: () {
+                final globalModel = context.read<GlobalModel>();
+                globalModel.cardInfoModel.isEditing = true;
+                Navigator.of(context).pushNamed('/createCard1');
+              },
               child: widget.currentUser
                   ? Column(
                       children: [
@@ -60,14 +70,14 @@ class _TradingCardState extends State<TradingCard> {
                         ),
                       ],
                     )
-                  : null,
+                  : SizedBox.shrink(),
             )
           ]),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                widget.data.user.firstName + " " + widget.data.user.lastName,
+                '${widget.data.user.firstName} ${widget.data.user.lastName}',
                 style: TextStyle(
                     fontWeight: FontWeight.bold, fontSize: 24, height: .5),
               ),
@@ -81,92 +91,118 @@ class _TradingCardState extends State<TradingCard> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 //Education
-                Container(
-                  padding: EdgeInsets.only(bottom: 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(widget.data.education[0]?.institution.longName,
-                          style: TextStyle(
-                              fontWeight: FontWeight.w600, fontSize: 16)),
-                      Text(widget.data.education[0]?.degree +
-                          " " +
-                          widget.data.education[0]?.field.name),
-                    ],
-                  ),
-                ),
-
+                widget.data.education.isNotEmpty
+                    ? (Container(
+                        padding: EdgeInsets.only(bottom: 20),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: widget.data.education.map((e) {
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                      e.institution.longName ??
+                                          e.institution.name,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 16)),
+                                  Text('${e.degree} ${e.field.name}')
+                                ],
+                              );
+                            }).toList()),
+                      ))
+                    : SizedBox.shrink(),
                 // Work
-                Container(
-                  padding: EdgeInsets.only(bottom: 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Industry Experience",
-                          style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 16,
-                              color: Palette.darkGreen)),
-                      Text(widget.data.work[0].jobTitle,
-                          style: TextStyle(
-                              fontWeight: FontWeight.w600, fontSize: 16)),
-                      Text(widget.data.work[0].company.name,
-                          style: TextStyle(fontSize: 16)),
-                    ],
-                  ),
-                ),
-
+                widget.data.work.isNotEmpty
+                    ? (Container(
+                        padding: EdgeInsets.only(bottom: 20),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: widget.data.work.map((e) {
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text("Industry Experience",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 16,
+                                          color: Palette.darkGreen)),
+                                  Text(e.jobTitle,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 16)),
+                                  Text(e.company.name,
+                                      style: TextStyle(fontSize: 16)),
+                                ],
+                              );
+                            }).toList()),
+                      ))
+                    : SizedBox.shrink(),
                 // Volunteer
-                Container(
-                  padding: EdgeInsets.only(bottom: 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Volunteering",
-                          style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 16,
-                              color: Palette.darkGreen)),
-                      Text(widget.data.volunteering[0].title,
-                          style: TextStyle(
-                              fontWeight: FontWeight.w600, fontSize: 16)),
-                      Text(widget.data.volunteering[0].company.name,
-                          style: TextStyle(fontSize: 16)),
-                    ],
-                  ),
-                ),
+                widget.data.volunteering.isNotEmpty
+                    ? (Container(
+                        padding: EdgeInsets.only(bottom: 20),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: widget.data.volunteering.map((e) {
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text("Volunteering",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 16,
+                                          color: Palette.darkGreen)),
+                                  Text(e.title,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 16)),
+                                  Text(e.company.name,
+                                      style: TextStyle(fontSize: 16)),
+                                ],
+                              );
+                            }).toList()),
+                      ))
+                    : SizedBox.shrink(),
+                // Skills
+                widget.data.skills.isNotEmpty
+                    ? Container(
+                        padding: EdgeInsets.only(bottom: 20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("Skills",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600, fontSize: 16)),
+                            BadgeGroup(
+                                widget.data.skills
+                                    .map((e) => e.skill.title)
+                                    .toList(),
+                                "skills"),
+                          ],
+                        ),
+                      )
+                    : SizedBox.shrink(),
 
-                // Skills, TODO: get from api
-                Container(
-                  padding: EdgeInsets.only(bottom: 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Skills",
-                          style: TextStyle(
-                              fontWeight: FontWeight.w600, fontSize: 16)),
-                      BadgeGroup([
-                        "Web Development",
-                        "Data Science",
-                        "UX Design",
-                      ], "skills"),
-                    ],
-                  ),
-                ),
-
-                // Interests, TODO: get from api
-                Container(
-                  padding: EdgeInsets.only(bottom: 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Interests",
-                          style: TextStyle(
-                              fontWeight: FontWeight.w600, fontSize: 16)),
-                      BadgeGroup(["Travel", "Education"], "interests"),
-                    ],
-                  ),
-                ),
+                // Interests
+                widget.data.interests.isNotEmpty
+                    ? Container(
+                        padding: EdgeInsets.only(bottom: 20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("Interests",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600, fontSize: 16)),
+                            BadgeGroup(
+                                widget.data.interests
+                                    .map((e) => e.interest.title)
+                                    .toList(),
+                                "interests"),
+                          ],
+                        ),
+                      )
+                    : SizedBox.shrink(),
               ],
             ),
           ),

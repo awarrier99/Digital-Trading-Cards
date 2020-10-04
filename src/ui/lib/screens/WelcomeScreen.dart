@@ -1,14 +1,18 @@
 import 'dart:convert';
+import 'dart:math';
 
+import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 import 'package:ui/SizeConfig.dart';
 import 'package:ui/models/CardInfo.dart';
+import 'package:ui/models/Global.dart';
 import 'package:ui/screens/Home.dart';
 
 import '../models/User.dart';
 import '../palette.dart';
+import 'package:flushbar/flushbar.dart';
 
 class WelcomeScreen extends StatefulWidget {
   final String title;
@@ -23,8 +27,8 @@ class WelcomeScreen extends StatefulWidget {
 }
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   FocusNode passwordNode = FocusNode();
-  FocusNode usernameNode = FocusNode();
   final User model = new User();
 
   Future createAccount(context) async {
@@ -35,11 +39,38 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     Navigator.of(context).pushNamed('/main');
   }
 
+  void login(BuildContext context) {
+    final globalModel = context.read<GlobalModel>();
+    final userModel = globalModel.userModel;
+    final cardInfoModel = globalModel.cardInfoModel;
+    userModel.updateUser(model);
+    userModel.login().then((success) {
+      if (success) {
+        final user = userModel.currentUser;
+        cardInfoModel.updateUser(user);
+        loginContext(context);
+      } else {
+        throw (Error());
+      }
+    }).catchError((error) {
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        title: "Incorrect email or password",
+        message: "Please double-check and try again!",
+        duration: Duration(seconds: 5),
+        margin: EdgeInsets.all(8),
+        borderRadius: 8,
+        backgroundColor: Color(0xffDF360E),
+      )..show(context);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
 
     return Scaffold(
+        key: _scaffoldKey,
         body: SingleChildScrollView(
             child: Container(
                 padding: EdgeInsets.fromLTRB(25, 0, 25, 0),
@@ -66,7 +97,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                               },
                               onFieldSubmitted: (term) {
                                 FocusScope.of(context)
-                                    .requestFocus(usernameNode);
+                                    .requestFocus(passwordNode);
                               },
                               decoration: InputDecoration(
                                   labelText: 'EMAIL',
@@ -77,13 +108,13 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                             ),
                             SizedBox(height: 20),
                             TextFormField(
+                              focusNode: passwordNode,
                               obscureText: true,
                               onChanged: (value) {
                                 model.password = value;
                               },
                               onFieldSubmitted: (term) {
-                                FocusScope.of(context)
-                                    .requestFocus(passwordNode);
+                                login(context);
                               },
                               decoration: InputDecoration(
                                   labelText: 'PASSWORD',
@@ -101,21 +132,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                   color: Palette.primaryGreen,
                                   elevation: 7,
                                   child: GestureDetector(
-                                    onTap: () {
-                                      final userModel =
-                                          context.read<UserModel>();
-                                      final cardInfoModel =
-                                          context.read<CardInfoModel>();
-                                      userModel.updateUser(model);
-                                      userModel.login().then((user) {
-                                        if (user != null) {
-                                          cardInfoModel.updateUser(user);
-                                          loginContext(context);
-                                        }
-                                      }).catchError((error) {
-                                        print('Caught $error');
-                                      });
-                                    },
+                                    onTap: () => login(context),
                                     child: Center(
                                       child: Text(
                                         'LOGIN',

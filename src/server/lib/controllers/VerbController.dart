@@ -25,7 +25,7 @@ class VerbController extends Controller {
   final Resource resource;
 
   Future<RequestOrResponse> _commonPost(
-      Request request, int id, checker) async {
+      Request request, int id, Function checker) async {
     if (id == null) {
       return request;
     }
@@ -38,7 +38,7 @@ class VerbController extends Controller {
   }
 
   Future<RequestOrResponse> _commonPutOrPatchOrDelete(
-      Request request, int id, checker) async {
+      Request request, int id, Function checker) async {
     if (id == null) {
       return notAllowed();
     }
@@ -74,7 +74,7 @@ class VerbController extends Controller {
         return request;
       }
 
-      return _commonPutOrPatchOrDelete(request, id, User);
+      return _commonPutOrPatchOrDelete(request, id, User.get);
     } else if (resource == Resource.user) {
       if (verb == Verb.post) {
         if (id == null) {

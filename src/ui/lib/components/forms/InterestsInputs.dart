@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../models/CardInfo.dart';
 
 class InterestsInputs extends StatelessWidget {
-  final Interest model;
+  final UserInterest model;
 
   InterestsInputs({@required this.model});
 
@@ -13,21 +13,21 @@ class InterestsInputs extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         TextFormField(
-          autofocus: true,
-          textInputAction: TextInputAction.done,
-          decoration:
-              InputDecoration(hintText: 'Name', border: OutlineInputBorder()),
-          textCapitalization: TextCapitalization.sentences,
-          validator: (value) {
-            if (value.isEmpty) {
-              return 'Required';
-            }
-            return null;
-          },
-          onChanged: (value) {
-            model.title = value;
-          }
-        ),
+            autofocus: true,
+            textInputAction: TextInputAction.done,
+            decoration:
+                InputDecoration(hintText: 'Name', border: OutlineInputBorder()),
+            textCapitalization: TextCapitalization.sentences,
+            initialValue: model.interest?.title,
+            validator: (value) {
+              if (value.isEmpty) {
+                return 'Required';
+              }
+              return null;
+            },
+            onChanged: (value) {
+              model.interest.title = value;
+            }),
       ],
     );
   }

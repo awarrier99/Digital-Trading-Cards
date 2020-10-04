@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ui/RouteGenerator.dart';
 import 'package:ui/models/CardInfo.dart';
+import 'package:ui/models/Global.dart';
 import 'package:ui/models/User.dart';
 import 'package:ui/models/ConnectionInfo.dart';
 
@@ -14,15 +15,8 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        Provider<CardInfoModel>(
-          create: (context) => CardInfoModel(),
-        ),
-        Provider<UserModel>(create: (context) => UserModel()),
-        Provider<ConnectionInfoModel>(
-            create: (context) => ConnectionInfoModel())
-      ],
+    return Provider<GlobalModel>(
+      create: (context) => GlobalModel(),
       child: MaterialApp(
         title: 'Wisteria',
         theme: ThemeData(

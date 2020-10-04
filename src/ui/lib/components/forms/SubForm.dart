@@ -9,12 +9,11 @@ class SubForm extends StatefulWidget {
   final Function callback;
   final subModel;
 
-  SubForm({
-    @required this.subTitle,
-    @required this.index,
-    @required this.callback,
-    this.subModel
-  });
+  SubForm(
+      {@required this.subTitle,
+      @required this.index,
+      @required this.callback,
+      this.subModel});
 
   @override
   _SubFormState createState() => _SubFormState();
@@ -38,7 +37,7 @@ class _SubFormState extends State<SubForm> {
               IconButton(
                 icon: Icon(Icons.delete_outline),
                 onPressed: () {
-                  widget.callback();
+                  widget.callback(widget.index - 1);
                 },
               ),
             ]),

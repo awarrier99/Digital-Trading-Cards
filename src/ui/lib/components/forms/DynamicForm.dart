@@ -13,26 +13,35 @@ class DynamicForm extends StatefulWidget {
   final Function inputBuilder;
   final List dynamicModelList;
   final Function dynamicModelBuilder;
+  final Function onDelete;
 
-  DynamicForm({
-    @required this.title,
-    @required this.inputBuilder,
-    this.dynamicModelList,
-    this.dynamicModelBuilder
-  });
+  DynamicForm(
+      {@required this.title,
+      @required this.inputBuilder,
+      this.dynamicModelList,
+      this.dynamicModelBuilder,
+      this.onDelete});
 
   @override
   _DynamicFormState createState() => _DynamicFormState();
 }
 
 class _DynamicFormState extends State<DynamicForm> {
-  int index = 0;
+  int index;
   final _formKey = GlobalKey<FormState>();
 
-  callback() {
+  @override
+  void initState() {
+    super.initState();
+    index = widget.dynamicModelList.length;
+  }
+
+  callback(int idx) {
     setState(() {
+      if (widget.onDelete != null) widget.onDelete(idx);
+      if (widget.dynamicModelList != null)
+        widget.dynamicModelList.removeAt(idx);
       index--;
-      if (widget.dynamicModelList != null) widget.dynamicModelList.removeLast();
     });
   }
 
@@ -57,7 +66,9 @@ class _DynamicFormState extends State<DynamicForm> {
                       subTitle: widget.title,
                       index: (i + 1),
                       callback: callback,
-                      subModel: widget.dynamicModelList == null ? null : widget.dynamicModelList[i],
+                      subModel: widget.dynamicModelList == null
+                          ? null
+                          : widget.dynamicModelList[i],
                     ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -71,7 +82,8 @@ class _DynamicFormState extends State<DynamicForm> {
                             }
                           });
                           if (widget.dynamicModelList != null)
-                            widget.dynamicModelList.add(widget.dynamicModelBuilder());
+                            widget.dynamicModelList
+                                .add(widget.dynamicModelBuilder());
                         },
                         child: Row(
                           children: [
