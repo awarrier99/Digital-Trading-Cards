@@ -34,14 +34,16 @@ class Institution {
 }
 
 class Field {
+  String abbreviation;
   String name;
 
   Map<String, dynamic> toJson() {
-    return {'name': name};
+    return {'abbreviation': abbreviation, 'name': name};
   }
 
   void fromJson(Map<String, dynamic> json) {
     json = json ?? {};
+    abbreviation = json['abbreviation'];
     name = json['name'];
   }
 }
@@ -319,13 +321,10 @@ class CardInfoModel {
 
   Future<CardInfo> fetchCardInfo(int id, String token,
       {isCurrentUser: false}) async {
-    final response = await get(
-      'http://10.0.2.2:8888/api/cards/$id',
-      headers: {
-        'Accept': 'application/json',
-        'Authorization': 'Bearer $token',
-      },
-    );
+    final response = await get('http://10.0.2.2:8888/api/cards/$id', headers: {
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token',
+    });
 
     final body = json.decode(response.body);
     if (response.statusCode == 200) {

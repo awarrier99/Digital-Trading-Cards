@@ -96,7 +96,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                               onChanged: (value) {
                                 model.username = value;
                               },
-                              onFieldSubmitted: (term) {
+                              onEditingComplete: () {
                                 FocusScope.of(context)
                                     .requestFocus(passwordNode);
                               },
@@ -114,7 +114,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                               onChanged: (value) {
                                 model.password = value;
                               },
-                              onFieldSubmitted: (term) {
+                              onEditingComplete: () {
                                 login(context);
                               },
                               decoration: InputDecoration(

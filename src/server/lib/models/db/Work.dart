@@ -99,7 +99,8 @@ class Work extends Serializable {
         return;
       }
 
-      await ServerChannel.db.query(sql, values);
+      final results = await ServerChannel.db.query(sql, values);
+      id ??= results.insertId;
     } catch (err, stackTrace) {
       logError(err,
           stackTrace: stackTrace,

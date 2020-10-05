@@ -6,8 +6,8 @@ import '../SizeConfig.dart';
 import '../palette.dart';
 
 class Profile extends StatelessWidget {
-  Future logout(context, GlobalModel globalModel) async {
-    globalModel.navigatorKey.currentState.pushNamed('/');
+  Future logout(BuildContext context) async {
+    Navigator.of(context, rootNavigator: true).pushNamed('/');
   }
 
   @override
@@ -35,7 +35,7 @@ class Profile extends StatelessWidget {
                     onPressed: () {
                       final globalModel = context.read<GlobalModel>();
                       globalModel.logout();
-                      logout(context, globalModel);
+                      logout(context);
                     }))
           ],
         ),

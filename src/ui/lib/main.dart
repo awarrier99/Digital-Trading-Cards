@@ -10,12 +10,10 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  final navigatorKey = GlobalKey<NavigatorState>();
-
   @override
   Widget build(BuildContext context) {
     return Provider<GlobalModel>(
-      create: (context) => GlobalModel(navigatorKey),
+      create: (context) => GlobalModel(),
       child: MaterialApp(
         title: 'Wisteria',
         theme: ThemeData(
@@ -24,9 +22,8 @@ class MyApp extends StatelessWidget {
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         initialRoute: '/',
-        onGenerateRoute: RouteGenerator.generateRoute,
-        navigatorKey: navigatorKey,
-      ),
+        onGenerateRoute: RouteGenerator.generateRoute
+      )
     );
   }
 }

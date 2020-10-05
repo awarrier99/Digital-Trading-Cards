@@ -1,18 +1,55 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:ui/SizeConfig.dart';
+import 'package:ui/components/AutoComplete.dart';
 import 'package:ui/components/TextInput.dart';
+import 'package:ui/models/Global.dart';
 
+import '../CreateCompanyDialog.dart';
 import '../MonthYearPicker.dart';
 import '../../models/CardInfo.dart';
 
-class VolunteeringInputs extends StatelessWidget {
+class VolunteeringInputs extends StatefulWidget {
   final Volunteering model;
+
+  VolunteeringInputs({@required this.model});
+
+  @override
+  VolunteeringInputsState createState() => VolunteeringInputsState();
+}
+
+class VolunteeringInputsState extends State<VolunteeringInputs> {
   final FocusNode companyNode = FocusNode();
   final FocusNode descriptionNode = FocusNode();
   final FocusNode startDateNode = FocusNode();
   final FocusNode endDateNode = FocusNode();
 
-  VolunteeringInputs({@required this.model});
+  Future<List<dynamic>> getCompanySuggestions(String pattern) async {
+    try {
+      final globalModel = context.read<GlobalModel>();
+      return globalModel.getSuggestions(
+          '/api/companies', pattern, 'companies', () => Company());
+    } catch (err) {
+      print('An error occurred while trying to get suggested companies:');
+      print(err);
+      return [];
+    }
+  }
+
+  void createCompany(String value) {
+    showDialog(context: context, builder: (_) => CreateCompanyDialog(value));
+  }
+
+  Widget companyItemBuilder(BuildContext context, dynamic suggestion) {
+    return ListTile(
+        leading: Icon(Icons.list), title: Text((suggestion as Company).name));
+  }
+
+  void onCompanySuggestionSelected(
+      dynamic selection, TextEditingController controller) {
+    controller.text = (selection as Company).name;
+    widget.model.company = selection as Company;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +63,7 @@ class VolunteeringInputs extends StatelessWidget {
             cursorColor: Color(0xFF92DAAF),
             label: 'Title*',
             textCapitalization: TextCapitalization.words,
-            initialValue: model.title,
+            initialValue: widget.model.title,
             validator: (value) {
               if (value.isEmpty) {
                 return 'Required';
@@ -37,15 +74,15 @@ class VolunteeringInputs extends StatelessWidget {
               FocusScope.of(context).requestFocus(companyNode);
             },
             onChanged: (value) {
-              model.title = value;
+              widget.model.title = value;
             }),
         SizedBox(height: SizeConfig.safeBlockVertical * 2),
-        TextInput(
+        AutoComplete(
             focusNode: companyNode,
             cursorColor: Color(0xFF92DAAF),
             label: 'Company*',
             textCapitalization: TextCapitalization.words,
-            initialValue: model.company?.name,
+            initialValue: widget.model.company?.name,
             validator: (value) {
               if (value.isEmpty) {
                 return 'Required';
@@ -55,8 +92,11 @@ class VolunteeringInputs extends StatelessWidget {
             onEditingComplete: () {
               FocusScope.of(context).requestFocus(descriptionNode);
             },
-            onChanged: (value) {
-              model.company = Company()..name = value;
+            getSuggestions: getCompanySuggestions,
+            itemBuilder: companyItemBuilder,
+            onSuggestionSelected: onCompanySuggestionSelected,
+            onNoItemsFound: (value) {
+              createCompany(value);
             }),
         SizedBox(height: SizeConfig.safeBlockVertical * 2),
         TextInput(
@@ -66,9 +106,9 @@ class VolunteeringInputs extends StatelessWidget {
                 labelText: 'Description', border: OutlineInputBorder()),
             textCapitalization: TextCapitalization.sentences,
             maxLines: null,
-            initialValue: model.description,
+            initialValue: widget.model.description,
             onChanged: (value) {
-              model.description = value;
+              widget.model.description = value;
             },
             onEditingComplete: () {
               FocusScope.of(context).requestFocus(startDateNode);
@@ -84,9 +124,9 @@ class VolunteeringInputs extends StatelessWidget {
             firstDate: DateTime(DateTime.now().year - 100),
             lastDate: DateTime(DateTime.now().year + 1, 12, 31),
             isRequired: false,
-            initialDate: model.startDate,
+            initialDate: widget.model.startDate,
             onChanged: (value) {
-              model.startDate = value;
+              widget.model.startDate = value;
             },
             onEditingComplete: () {
               FocusScope.of(context).requestFocus(endDateNode);
@@ -100,9 +140,9 @@ class VolunteeringInputs extends StatelessWidget {
             firstDate: DateTime(DateTime.now().year - 100),
             lastDate: DateTime(DateTime.now().year, DateTime.now().month),
             isRequired: false,
-            initialDate: model.endDate,
+            initialDate: widget.model.endDate,
             onChanged: (value) {
-              model.endDate = value;
+              widget.model.endDate = value;
             })
       ],
     );

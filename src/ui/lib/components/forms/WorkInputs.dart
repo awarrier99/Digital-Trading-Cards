@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:ui/SizeConfig.dart';
+import 'package:ui/components/AutoComplete.dart';
+import 'package:ui/components/CreateCompanyDialog.dart';
 import 'package:ui/components/TextInput.dart';
+import 'package:ui/models/Global.dart';
 
 import '../MonthYearPicker.dart';
 import '../../models/CardInfo.dart';
@@ -40,6 +44,33 @@ class WorkInputsState extends State<WorkInputs> {
     }
   }
 
+  Future<List<dynamic>> getCompanySuggestions(String pattern) async {
+    try {
+      final globalModel = context.read<GlobalModel>();
+      return globalModel.getSuggestions(
+          '/api/companies', pattern, 'companies', () => Company());
+    } catch (err) {
+      print('An error occurred while trying to get suggested companies:');
+      print(err);
+      return [];
+    }
+  }
+
+  void createCompany(String value) {
+    showDialog(context: context, builder: (_) => CreateCompanyDialog(value));
+  }
+
+  Widget companyItemBuilder(BuildContext context, dynamic suggestion) {
+    return ListTile(
+        leading: Icon(Icons.list), title: Text((suggestion as Company).name));
+  }
+
+  void onCompanySuggestionSelected(
+      dynamic selection, TextEditingController controller) {
+    controller.text = (selection as Company).name;
+    widget.model.company = selection as Company;
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -68,7 +99,7 @@ class WorkInputsState extends State<WorkInputs> {
               widget.model.jobTitle = value;
             }),
         SizedBox(height: SizeConfig.safeBlockVertical * 2),
-        TextInput(
+        AutoComplete(
             focusNode: companyNode,
             cursorColor: Color(0xFF92DAAF),
             keyboardType: TextInputType.text,
@@ -85,8 +116,11 @@ class WorkInputsState extends State<WorkInputs> {
             onEditingComplete: () {
               FocusScope.of(context).requestFocus(descriptionNode);
             },
-            onChanged: (value) {
-              widget.model.company = Company()..name = value;
+            getSuggestions: getCompanySuggestions,
+            itemBuilder: companyItemBuilder,
+            onSuggestionSelected: onCompanySuggestionSelected,
+            onNoItemsFound: (value) {
+              createCompany(value);
             }),
         SizedBox(height: SizeConfig.safeBlockVertical * 2),
         TextInput(
