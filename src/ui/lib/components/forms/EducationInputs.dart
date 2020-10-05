@@ -113,6 +113,7 @@ class EducationInputsState extends State<EducationInputs> {
       children: [
         AutoComplete(
             autofocus: true,
+            itemName: 'Institution',
             decoration: InputDecoration(
                 labelText: 'Institution*', border: OutlineInputBorder()),
             initialValue: widget.model.institution?.name,
@@ -134,6 +135,7 @@ class EducationInputsState extends State<EducationInputs> {
         SizedBox(height: SizeConfig.safeBlockVertical * 2),
         AutoComplete(
             focusNode: majorNode,
+            itemName: 'Field',
             decoration: InputDecoration(
                 labelText: 'Field of Study*', border: OutlineInputBorder()),
             initialValue: widget.model.field?.name,

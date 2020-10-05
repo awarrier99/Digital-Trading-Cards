@@ -17,6 +17,7 @@ class AutoComplete extends StatelessWidget {
   final Function onChanged;
   final Function onEditingComplete;
 
+  final String itemName;
   final Icon suggestionIcon;
   final Function getSuggestions;
   final Function itemBuilder;
@@ -40,6 +41,7 @@ class AutoComplete extends StatelessWidget {
       this.validator,
       this.onChanged,
       this.onEditingComplete,
+      this.itemName,
       this.suggestionIcon,
       @required this.getSuggestions,
       @required this.itemBuilder,
@@ -74,7 +76,6 @@ class AutoComplete extends StatelessWidget {
   }
 
   Widget _noItemsFoundBuilder(BuildContext context) {
-    final itemName = (decoration.labelText ?? label).replaceAll('*', '');
     final lowerItemName = itemName.toLowerCase();
     if (onNoItemsFound == null) {
       return ListTile(

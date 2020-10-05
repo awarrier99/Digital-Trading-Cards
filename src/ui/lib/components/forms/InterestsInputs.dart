@@ -51,6 +51,7 @@ class InterestsInputsState extends State<InterestsInputs> {
       children: [
         AutoComplete(
             autofocus: true,
+            itemName: 'Interest',
             decoration: InputDecoration(
                 hintText: 'Title*', border: OutlineInputBorder()),
             textCapitalization: TextCapitalization.sentences,

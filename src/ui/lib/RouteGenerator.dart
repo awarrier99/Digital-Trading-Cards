@@ -17,6 +17,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => WelcomeScreen());
       case '/main':
         return MaterialPageRoute(builder: (_) => NavigationBar());
+      case '/createAccount':
+        return MaterialPageRoute(builder: (_) => CreateAccount());
       default:
         // If there is no such named route in the switch statement
         return _errorRoute();
@@ -25,21 +27,19 @@ class RouteGenerator {
 
   static Route<dynamic> generateNavigationBarRoute(RouteSettings settings) {
     switch (settings.name) {
-      case '/createAccount':
-        return MaterialPageRoute(builder: (_) => CreateAccount());
       case '/home':
         return MaterialPageRoute(builder: (_) => Home());
       case '/createCard1':
         return MaterialPageRoute(
             builder: (context) => CreateCard1(
-              context: context,
-            ));
+                  context: context,
+                ));
       case '/savedCards':
         return MaterialPageRoute(builder: (_) => ViewSavedCards());
       case '/profile':
         return MaterialPageRoute(builder: (_) => Profile());
       default:
-      // If there is no such named route in the switch statement
+        // If there is no such named route in the switch statement
         return _errorRoute();
     }
   }

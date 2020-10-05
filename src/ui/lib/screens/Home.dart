@@ -21,9 +21,13 @@ class _HomeState extends State<Home> {
     final globalModel = context.read<GlobalModel>();
     final cardInfoModel = globalModel.cardInfoModel;
     final userModel = globalModel.userModel;
-    userCardInfo = cardInfoModel.fetchCardInfo(
-        userModel.currentUser.id, userModel.token,
-        isCurrentUser: true);
+    if (userModel.currentUser.id != null) {
+      userCardInfo = cardInfoModel.fetchCardInfo(
+          userModel.currentUser.id, userModel.token,
+          isCurrentUser: true);
+    } else {
+      userCardInfo = Future.value(CardInfo());
+    }
   }
 
   @override
@@ -36,9 +40,13 @@ class _HomeState extends State<Home> {
           List<Widget> children;
           if (snapshot.hasData) {
             CardInfo cardData = snapshot.data;
-            bool hasCard = (cardData.education.isNotEmpty ||
-                cardData.work.isNotEmpty ||
-                cardData.volunteering.isNotEmpty);
+            bool hasCard = cardData != null &&
+                (cardData.education != null ||
+                    cardData.work != null ||
+                    cardData.volunteering != null) &&
+                (cardData.education.isNotEmpty ||
+                    cardData.work.isNotEmpty ||
+                    cardData.volunteering.isNotEmpty);
             children = [
               hasCard
                   ? TradingCard(snapshot.data, currentUser: true)

@@ -117,7 +117,7 @@ class PersonalInfoInputsState extends State<PersonalInfoInputs> {
                   onChanged: (value) {
                     widget.model.country = value;
                   },
-                  onEditingComplete: (term) {
+                  onEditingComplete: () {
                     FocusScope.of(context).requestFocus(stateNode);
                   }),
               SizedBox(height: SizeConfig.safeBlockVertical * 2),
@@ -135,7 +135,7 @@ class PersonalInfoInputsState extends State<PersonalInfoInputs> {
                   onChanged: (value) {
                     widget.model.state = value;
                   },
-                  onEditingComplete: (term) {
+                  onEditingComplete: () {
                     FocusScope.of(context).requestFocus(cityNode);
                   }),
               SizedBox(height: SizeConfig.safeBlockVertical * 2),

@@ -52,8 +52,9 @@ class SkillsInputsState extends State<SkillsInputs> {
       children: [
         AutoComplete(
             autofocus: true,
-            decoration:
-                InputDecoration(hintText: 'Title*', border: OutlineInputBorder()),
+            itemName: 'Skill',
+            decoration: InputDecoration(
+                hintText: 'Title*', border: OutlineInputBorder()),
             textCapitalization: TextCapitalization.sentences,
             initialValue: widget.model.skill?.title,
             validator: (value) {
