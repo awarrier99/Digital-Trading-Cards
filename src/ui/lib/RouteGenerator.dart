@@ -5,6 +5,7 @@ import 'package:ui/screens/CreateAccount.dart';
 import 'package:ui/screens/Home.dart';
 import 'package:ui/screens/CreateCard1.dart';
 import 'package:ui/screens/ViewSavedCards.dart';
+import 'package:ui/screens/PreviewCard.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -27,6 +28,8 @@ class RouteGenerator {
                 ));
       case '/savedCards':
         return MaterialPageRoute(builder: (_) => ViewSavedCards());
+      case '/previewCard':
+        return MaterialPageRoute(builder: (_) => PreviewCard(args));
       default:
         // If there is no such named route in the switch statement
         return _errorRoute();
