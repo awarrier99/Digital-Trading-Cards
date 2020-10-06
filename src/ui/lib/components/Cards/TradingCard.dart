@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:ui/models/CardInfo.dart';
 import 'package:provider/provider.dart';
 import 'package:ui/models/User.dart';
+import 'package:flushbar/flushbar.dart';
 
 // Widget to display a user's Trading Card that will be shown to other users
 // User has the ability to edit the information in this card
@@ -22,6 +23,8 @@ class TradingCard extends StatefulWidget {
 }
 
 class _TradingCardState extends State<TradingCard> {
+  bool isFavorite = false;
+
   @override
   void initState() {
     super.initState();
@@ -50,16 +53,16 @@ class _TradingCardState extends State<TradingCard> {
           child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-            FlatButton(
-              textColor: Colors.grey,
-              onPressed: () {
-                final globalModel = context.read<GlobalModel>();
-                globalModel.cardInfoModel.isEditing = true;
-                Navigator.of(context).pushNamed('/createCard1');
-              },
-              child: widget.currentUser
-                  ? Column(
+          widget.currentUser
+              ? Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                  FlatButton(
+                    textColor: Colors.grey,
+                    onPressed: () {
+                      final globalModel = context.read<GlobalModel>();
+                      globalModel.cardInfoModel.isEditing = true;
+                      Navigator.of(context).pushNamed('/createCard1');
+                    },
+                    child: Column(
                       children: [
                         Icon(
                           Icons.edit,
@@ -69,10 +72,42 @@ class _TradingCardState extends State<TradingCard> {
                           style: TextStyle(fontSize: 12),
                         ),
                       ],
-                    )
-                  : SizedBox.shrink(),
-            )
-          ]),
+                    ),
+                  )
+                ])
+              : Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                  FlatButton(
+                    textColor: Colors.grey,
+                    shape: CircleBorder(),
+                    onPressed: () {
+                      // Enable/disable favorite status so that it saves card
+                      // as a favorite when card is saved
+                      setState(() {
+                        isFavorite = !isFavorite; // toggle
+                      });
+                      Flushbar(
+                        flushbarPosition: FlushbarPosition.TOP,
+                        message: isFavorite
+                            ? "Card marked as a favorite"
+                            : "Card is no longer a favorite",
+                        duration: Duration(seconds: 3),
+                        margin: EdgeInsets.all(8),
+                        borderRadius: 8,
+                        backgroundColor:
+                            isFavorite ? Colors.amber : Colors.grey,
+                      )..show(context);
+                    },
+                    child: Column(
+                      children: [
+                        Icon(
+                          isFavorite ? Icons.star : Icons.star_border,
+                          color: isFavorite ? Colors.amber : Colors.black,
+                          // replace 'false' with isFavorite property
+                        ),
+                      ],
+                    ),
+                  )
+                ]),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
