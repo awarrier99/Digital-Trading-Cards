@@ -42,7 +42,7 @@ class _NavigationBarState extends State<NavigationBar> {
         _navigatorKey.currentState.pushReplacementNamed("/home");
         break;
       case 2:
-        showSearch(context: context, delegate: StudentCardSearch(false));
+        _navigatorKey.currentState.pushReplacementNamed("/addCard");
         break;
     }
     setState(() {

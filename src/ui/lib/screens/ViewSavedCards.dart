@@ -36,6 +36,8 @@ class _ViewSavedCardsState extends State<ViewSavedCards> {
           'Saved Cards',
           style: TextStyle(fontFamily: 'Montserrat'),
         ),
+        centerTitle: true,
+        automaticallyImplyLeading: false,
       ),
       body: Container(
         child: FutureBuilder<CardInfo>(

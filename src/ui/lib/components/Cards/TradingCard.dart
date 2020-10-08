@@ -161,7 +161,7 @@ class _TradingCardState extends State<TradingCard> {
                                       style: TextStyle(
                                           fontWeight: FontWeight.w600,
                                           fontSize: 16,
-                                          color: Palette.darkGreen)),
+                                          color: Palette.primary)),
                                   Text(e.jobTitle,
                                       style: TextStyle(
                                           fontWeight: FontWeight.w600,
@@ -187,7 +187,7 @@ class _TradingCardState extends State<TradingCard> {
                                       style: TextStyle(
                                           fontWeight: FontWeight.w600,
                                           fontSize: 16,
-                                          color: Palette.darkGreen)),
+                                          color: Palette.primary)),
                                   Text(e.title,
                                       style: TextStyle(
                                           fontWeight: FontWeight.w600,

@@ -1,6 +1,3 @@
-import 'dart:convert';
-import 'dart:math';
-
 import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
@@ -83,7 +80,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       child: Text(
                         widget.title,
                         style: TextStyle(
-                            fontSize: 60, fontWeight: FontWeight.bold),
+                            fontSize: 60,
+                            fontWeight: FontWeight.bold,
+                            color: Palette.secondary),
                       ),
                     )),
                     Container(
@@ -128,8 +127,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                 height: 40,
                                 child: Material(
                                   borderRadius: BorderRadius.circular(20),
-                                  shadowColor: Palette.primaryGreen,
-                                  color: Palette.primaryGreen,
+                                  shadowColor: Palette.primary,
+                                  color: Palette.primary,
                                   elevation: 7,
                                   child: GestureDetector(
                                     onTap: () => login(context),
@@ -137,7 +136,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                       child: Text(
                                         'LOGIN',
                                         style: TextStyle(
-                                            color: Colors.black87,
+                                            color: Colors.white,
                                             fontWeight: FontWeight.bold,
                                             fontFamily: 'Montserrat'),
                                       ),
@@ -149,7 +148,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                 height: 40,
                                 child: Material(
                                   borderRadius: BorderRadius.circular(20),
-                                  color: Colors.black87,
+                                  color: Palette.secondary,
                                   elevation: 7,
                                   child: GestureDetector(
                                     onTap: () {
