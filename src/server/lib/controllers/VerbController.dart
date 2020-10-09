@@ -1,6 +1,15 @@
 import '../server.dart';
 
-enum Resource { card, user, connection }
+enum Resource {
+  card,
+  user,
+  connection,
+  institution,
+  field,
+  skill,
+  interest,
+  company
+}
 
 enum Verb { post, get, put, patch, delete }
 
@@ -53,6 +62,7 @@ class VerbController extends Controller {
   @override
   Future<RequestOrResponse> handle(Request request) async {
     final idString = request.path.variables['id'];
+    final pattern = request.path.variables['pattern'];
     final id =
         idString == null || idString.isEmpty ? null : int.parse(idString);
     final verb = stringToVerb(request.method);
@@ -108,6 +118,17 @@ class VerbController extends Controller {
         }
 
         request.attachments.putIfAbsent('connectionUser', () => user);
+        return request;
+      }
+    } else if (resource == Resource.institution ||
+        resource == Resource.field ||
+        resource == Resource.skill ||
+        resource == Resource.interest ||
+        resource == Resource.company) {
+      if (verb == Verb.post) {
+        if (pattern != null) {
+          return notAllowed();
+        }
         return request;
       }
     }

@@ -26,7 +26,6 @@ class Connection {
   }
 
   void fromJson(Map<String, dynamic> json) {
-    username = json['username'];
     user1 = User()..fromJson(json['user1']);
     user2 = User()..fromJson(json['user2']);
   }
@@ -96,25 +95,26 @@ class ConnectionInfoModel {
       final body = json.decode(res.body);
       return body['success'] as bool;
     } catch (err) {
+      // TODO: Improve Error handling
       print('An error occurred while trying to create a connection:');
       print(err);
       return false;
     }
   }
 
-  Future<ConnectionInfo> fetchConnectionInfo(int id, String token,
-      {isCurrentUser: false}) async {
-    final response =
-        await get("http://10.0.2.2:8888/api/connections/$id", headers: {
-      'Accept': 'application/json',
-      'Authorization': 'Bearer $token',
-    });
+  void empty() {
+    _createConnectionInfo.fromJson({});
+    username = null;
+  }
+}
 
-    final body = json.decode(response.body);
-    if (response.statusCode == 200) {
-      return ConnectionInfo()..fromJson(body);
-    } else {
-      throw Exception('Failed to load connection info');
-    }
+// TODO: where should this fetch method go?
+Future<ConnectionInfo> fetchConnectionInfo(int id) async {
+  final response = await get("http://10.0.2.2:8888/api/connections/$id");
+  if (response.statusCode == 200) {
+    print(json.decode(response.body));
+    return ConnectionInfo()..fromJson(json.decode(response.body));
+  } else {
+    throw Exception('Failed to load connection info');
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:provider/provider.dart';
 
 import 'dart:convert';
 import 'package:ui/models/User.dart';
@@ -12,6 +13,7 @@ class Company {
   }
 
   void fromJson(Map<String, dynamic> json) {
+    json = json ?? {};
     name = json['name'];
   }
 }
@@ -25,19 +27,23 @@ class Institution {
   }
 
   void fromJson(Map<String, dynamic> json) {
+    json = json ?? {};
     name = json['name'];
     longName = json['longName'];
   }
 }
 
 class Field {
+  String abbreviation;
   String name;
 
   Map<String, dynamic> toJson() {
-    return {'name': name};
+    return {'abbreviation': abbreviation, 'name': name};
   }
 
   void fromJson(Map<String, dynamic> json) {
+    json = json ?? {};
+    abbreviation = json['abbreviation'];
     name = json['name'];
   }
 }
@@ -72,6 +78,7 @@ class Education {
   }
 
   void fromJson(Map<String, dynamic> json) {
+    json = json ?? {};
     id = json['id'];
     institution = Institution()..fromJson(json['institution']);
     degree = json['degree'];
@@ -106,6 +113,7 @@ class Work {
   }
 
   void fromJson(Map<String, dynamic> json) {
+    json = json ?? {};
     id = json['id'];
     company = Company()..fromJson(json['company']);
     jobTitle = json['jobTitle'];
@@ -139,6 +147,7 @@ class Volunteering {
   }
 
   void fromJson(Map<String, dynamic> json) {
+    json = json ?? {};
     id = json['id'];
     company = Company()..fromJson(json['company']);
     title = json['title'];
@@ -171,6 +180,7 @@ class Interest {
   }
 
   void fromJson(Map<String, dynamic> json) {
+    json = json ?? {};
     title = json['title'];
   }
 }
@@ -184,6 +194,7 @@ class UserSkill {
   }
 
   void fromJson(Map<String, dynamic> json) {
+    json = json ?? {};
     id = json['id'];
     skill = Skill()..fromJson(json['skill']);
   }
@@ -198,6 +209,7 @@ class UserInterest {
   }
 
   void fromJson(Map<String, dynamic> json) {
+    json = json ?? {};
     id = json['id'];
     interest = Interest()..fromJson(json['interest']);
   }
@@ -231,21 +243,23 @@ class CardInfo {
   }
 
   void fromJson(Map<String, dynamic> json) {
+    json = json ?? {};
     user = User()..fromJson(json['user']);
-    education = new List<Education>.from(json['education']
-        .map((element) => Education()..fromJson(element))
-        .toList());
-    work = new List<Work>.from(
-        json['work'].map((element) => Work()..fromJson(element)).toList());
-    volunteering = new List<Volunteering>.from(json['volunteering']
-        .map((element) => Volunteering()..fromJson(element))
-        .toList());
-    skills = new List<UserSkill>.from(json['skills']
-        .map((element) => UserSkill()..fromJson(element))
-        .toList());
-    interests = new List<UserInterest>.from(json['interests']
-        .map((element) => UserInterest()..fromJson(element))
-        .toList());
+    education = (json['education'] as List)
+        ?.map((element) => Education()..fromJson(element))
+        ?.toList();
+    work = (json['work'] as List)
+        ?.map((element) => Work()..fromJson(element))
+        ?.toList();
+    volunteering = (json['volunteering'] as List)
+        ?.map((element) => Volunteering()..fromJson(element))
+        ?.toList();
+    skills = (json['skills'] as List)
+        ?.map((element) => UserSkill()..fromJson(element))
+        ?.toList();
+    interests = (json['interests'] as List)
+        ?.map((element) => UserInterest()..fromJson(element))
+        ?.toList();
   }
 
   bool satisfiesFilters(List<String> interestsFilter) {
@@ -285,6 +299,7 @@ class CardInfoModel {
       final body = json.decode(res.body);
       return body['success'];
     } catch (err) {
+      // TODO: Improve Error handling
       print('An error occurred while trying to create a card:');
       print(err);
       return false;
@@ -306,6 +321,7 @@ class CardInfoModel {
       final body = json.decode(res.body);
       return body['success'];
     } catch (err) {
+      // TODO: Improve Error handling
       print('An error occurred while trying to update a card:');
       print(err);
       return false;
@@ -314,13 +330,10 @@ class CardInfoModel {
 
   Future<CardInfo> fetchCardInfo(int id, String token,
       {isCurrentUser: false}) async {
-    final response = await get(
-      'http://10.0.2.2:8888/api/cards/$id',
-      headers: {
-        'Accept': 'application/json',
-        'Authorization': 'Bearer $token',
-      },
-    );
+    final response = await get('http://10.0.2.2:8888/api/cards/$id', headers: {
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token',
+    });
 
     final body = json.decode(response.body);
     if (response.statusCode == 200) {
@@ -332,6 +345,11 @@ class CardInfoModel {
     } else {
       return null;
     }
+  }
+
+  void empty() {
+    _currentUserCardInfo.fromJson({});
+    isEditing = false;
   }
 
   void updateUser(User user) {

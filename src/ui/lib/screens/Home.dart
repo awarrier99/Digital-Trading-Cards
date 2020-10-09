@@ -1,3 +1,4 @@
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:ui/components/Cards/TradingCard.dart';
 import 'package:ui/models/CardInfo.dart';
@@ -20,9 +21,13 @@ class _HomeState extends State<Home> {
     final globalModel = context.read<GlobalModel>();
     final cardInfoModel = globalModel.cardInfoModel;
     final userModel = globalModel.userModel;
-    userCardInfo = cardInfoModel.fetchCardInfo(
-        userModel.currentUser.id, userModel.token,
-        isCurrentUser: true);
+    if (userModel.currentUser.id != null) {
+      userCardInfo = cardInfoModel.fetchCardInfo(
+          userModel.currentUser.id, userModel.token,
+          isCurrentUser: true);
+    } else {
+      userCardInfo = Future.value(CardInfo());
+    }
   }
 
   @override
@@ -35,9 +40,13 @@ class _HomeState extends State<Home> {
           List<Widget> children;
           if (snapshot.hasData) {
             CardInfo cardData = snapshot.data;
-            bool hasCard = (cardData.education.isNotEmpty ||
-                cardData.work.isNotEmpty ||
-                cardData.volunteering.isNotEmpty);
+            bool hasCard = cardData != null &&
+                (cardData.education != null ||
+                    cardData.work != null ||
+                    cardData.volunteering != null) &&
+                (cardData.education.isNotEmpty ||
+                    cardData.work.isNotEmpty ||
+                    cardData.volunteering.isNotEmpty);
             children = [
               hasCard
                   ? TradingCard(snapshot.data, currentUser: true)
@@ -53,11 +62,14 @@ class _HomeState extends State<Home> {
             ];
           } else if (snapshot.hasError) {
             children = [
-              Center(
-                child: Container(
-                  child: Text("${snapshot.error}"),
-                ),
-              )
+              Flushbar(
+                flushbarPosition: FlushbarPosition.TOP,
+                title: snapshot.error,
+                duration: Duration(seconds: 5),
+                margin: EdgeInsets.all(8),
+                borderRadius: 8,
+                backgroundColor: Color(0xffDF360E),
+              )..show(context)
             ];
           } else {
             children = [

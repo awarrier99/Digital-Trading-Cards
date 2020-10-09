@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ui/components/forms/ColorBadge.dart';
+import 'package:ui/components/BadgeGroup.dart';
 import 'package:ui/models/CardInfo.dart';
-import 'package:ui/components/BadgeGroupSmall.dart';
 
 class SummaryCard extends StatefulWidget {
   CardInfo data;
@@ -124,9 +123,11 @@ class _SummaryCardState extends State<SummaryCard> {
                   child: ListView(
                     scrollDirection: Axis.horizontal,
                     children: [
-                      BadgeGroupSmall(
-                          widget.data.skills.map((e) => e.skill.title).toList(),
-                          "skills"),
+                      BadgeGroup(
+                        widget.data.skills.map((e) => e.skill.title).toList(),
+                        "skills",
+                        fontSize: 13,
+                      ),
                     ],
                   ),
                 )
@@ -140,11 +141,13 @@ class _SummaryCardState extends State<SummaryCard> {
                   child: ListView(
                     scrollDirection: Axis.horizontal,
                     children: [
-                      BadgeGroupSmall(
-                          widget.data.interests
-                              .map((e) => e.interest.title)
-                              .toList(),
-                          "interests"),
+                      BadgeGroup(
+                        widget.data.interests
+                            .map((e) => e.interest.title)
+                            .toList(),
+                        "interests",
+                        fontSize: 13,
+                      ),
                     ],
                   ),
                 )

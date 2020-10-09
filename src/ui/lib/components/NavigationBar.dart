@@ -13,24 +13,20 @@ class _NavigationBarState extends State<NavigationBar> {
 
   Widget _bottomNavigationBar() {
     return BottomNavigationBar(
-      type: BottomNavigationBarType.fixed,
-      items: [
-        BottomNavigationBarItem(
-          icon: Icon(Icons.bookmark),
-          title: Text("Saved Cards"),
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.home),
-          title: Text("Home"),
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.add),
-          title: Text("Add Card"),
-        ),
-      ],
-      onTap: _onTap,
-      currentIndex: _currentIndex,
-    );
+            type: BottomNavigationBarType.fixed,
+            items: [
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.bookmark), title: Text("Saved Cards")),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.home), title: Text("Home")),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.add), title: Text("Add Card")),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.account_circle), title: Text('Profile'))
+            ],
+            onTap: _onTap,
+            currentIndex: _currentIndex,
+          );
   }
 
   _onTap(int tabIndex) {
@@ -44,6 +40,9 @@ class _NavigationBarState extends State<NavigationBar> {
       case 2:
         showSearch(context: context, delegate: StudentCardSearch(false));
         break;
+      case 3:
+        _navigatorKey.currentState.pushReplacementNamed('/profile');
+        break;
     }
     setState(() {
       _currentIndex = tabIndex;
@@ -56,7 +55,7 @@ class _NavigationBarState extends State<NavigationBar> {
       body: Navigator(
           key: _navigatorKey,
           initialRoute: '/home',
-          onGenerateRoute: RouteGenerator.generateRoute),
+          onGenerateRoute: RouteGenerator.generateNavigationBarRoute),
       bottomNavigationBar: _bottomNavigationBar(),
     );
   }

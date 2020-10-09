@@ -108,13 +108,13 @@ class StudentCardSearch extends SearchDelegate<StudentCardItem> {
       studentList = query.isEmpty
           ? loadSudentCardItem()
           : loadSudentCardItem()
-              .where((p) => p.emailAddress.toLowerCase().contains(query))
+              .where((p) => p.emailAddress.toLowerCase().contains(query.toLowerCase()))
               .toList();
     } else if (listIsShown == false) {
       studentList = query.isEmpty
           ? <StudentCardItem>[]
           : loadSudentCardItem()
-              .where((p) => p.emailAddress.toLowerCase().contains(query))
+              .where((p) => p.emailAddress.toLowerCase().contains(query.toLowerCase()))
               .toList();
     }
 
@@ -137,7 +137,6 @@ class StudentCardSearch extends SearchDelegate<StudentCardItem> {
               // list
               return ListTile(
                 onTap: () {
-                  print(listCard.emailAddress);
                   final connectionInfoModel =
                       context.read<ConnectionInfoModel>();
                   connectionInfoModel.username = listCard.emailAddress;

@@ -10,7 +10,7 @@ String generateToken(User user) {
       audience: aud,
       issuer: iss,
       subject: 'wisteria|dtc@${user.id}');
-  final token = jwt.sign(SecretKey(key), expiresIn: const Duration(hours: 1));
+  final token = jwt.sign(SecretKey(key), expiresIn: const Duration(days: 30));
   return token;
 }
 
