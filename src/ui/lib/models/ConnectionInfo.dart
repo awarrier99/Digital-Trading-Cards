@@ -36,14 +36,23 @@ class ConnectionInfo {
   User user = User();
   List<Connection> connections = [];
   List<CardInfo> connectedUsers = [];
+  List<String> interests = [];
+  List<String> skills = [];
 
-  ConnectionInfo({this.user, this.connections, this.connectedUsers});
+  ConnectionInfo(
+      {this.user,
+      this.connections,
+      this.connectedUsers,
+      this.interests,
+      this.skills});
 
   Map<String, dynamic> toJson() {
     return {
       'user': user.toJson(),
       'connections': connections?.map((e) => e.toJson())?.toList(),
       'connectedUsers': connectedUsers?.map((e) => e.toJson())?.toList(),
+      'interests': interests,
+      'skills': skills
     };
   }
 
@@ -58,6 +67,14 @@ class ConnectionInfo {
     connectedUsers = new List<CardInfo>.from(json['connectedUsers']
         .map((element) => CardInfo()..fromJson(element))
         .toList());
+    interests = new List<String>.from(
+        json['interests'].map((element) => element as String).toList());
+    print("interests");
+    print(interests);
+    skills = new List<String>.from(
+        json['skills'].map((element) => element as String).toList());
+    print("skills");
+    print(skills);
   }
 }
 

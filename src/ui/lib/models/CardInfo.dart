@@ -247,6 +247,15 @@ class CardInfo {
         .map((element) => UserInterest()..fromJson(element))
         .toList());
   }
+
+  bool satisfiesFilters(List<String> interestsFilter) {
+    for (String interest in interestsFilter) {
+      if (interests.contains(interest)) {
+        return true;
+      }
+    }
+    return false;
+  }
 }
 
 class CardInfoModel {

@@ -48,20 +48,19 @@ class Connection extends Serializable {
   static Future<List<CardInfo>> getOtherUsers(User user) async {
     try {
       const sql1 = '''
-        SELECT user2_id as otherUserId
+        SELECT recipient as otherUserId
         FROM connections
-        WHERE user1_id = ?
+        WHERE sender = ?
       ''';
 
       const sql2 = '''
-        SELECT user1_id as otherUserId
+        SELECT sender as otherUserId
         FROM connections
-        WHERE user2_id = ?
+        WHERE recipient = ?
       ''';
       final results1 = await ServerChannel.db.query(sql1, [user.id]);
       final results2 = await ServerChannel.db.query(sql2, [user.id]);
 
-      print("$results1");
       final resultsList1 = results1
           .map((e) async => CardInfo.getById(e['otherUserId'] as int))
           .toList();
@@ -80,18 +79,85 @@ class Connection extends Serializable {
     }
   }
 
+// This method gets the user in the unique interests of the users connections
+  // with the user parameter
+  static Future<List<String>> getOtherInterests(User user) async {
+    try {
+      const sql = '''
+        SELECT DISTINCT interest
+        FROM user_interests
+        WHERE user in (
+          SELECT recipient as user
+          FROM connections
+          WHERE sender = ?
+        ) OR user in (
+          SELECT sender as user
+          FROM connections
+          WHERE recipient = ?
+        )
+      ''';
+
+      final results1 = await ServerChannel.db.query(sql, [user.id, user.id]);
+
+      print("$results1");
+      final resultsList1 =
+          results1.map((e) async => e['interest'] as String).toList();
+
+      return Future.wait(List.from(resultsList1));
+    } catch (err, stackTrace) {
+      logError(err,
+          stackTrace: stackTrace,
+          message:
+              'An error occurred while trying to get the unique interests:');
+      return [];
+    }
+  }
+
+// This method gets the user in the unique skills of the users connections
+  // with the user parameter
+  static Future<List<String>> getOtherSkills(User user) async {
+    try {
+      const sql = '''
+        SELECT DISTINCT skill
+        FROM user_skills
+        WHERE user in (
+          SELECT recipient as user
+          FROM connections
+          WHERE sender = ?
+        ) OR user in (
+          SELECT sender as user
+          FROM connections
+          WHERE recipient = ?
+        )
+      ''';
+
+      final results1 = await ServerChannel.db.query(sql, [user.id, user.id]);
+
+      print("$results1");
+      final resultsList1 =
+          results1.map((e) async => e['skill'] as String).toList();
+
+      return Future.wait(List.from(resultsList1));
+    } catch (err, stackTrace) {
+      logError(err,
+          stackTrace: stackTrace,
+          message: 'An error occurred while trying to get the unique skills:');
+      return [];
+    }
+  }
+
   static Future<List<Connection>> getByUser(User user) async {
     try {
       const sql1 = '''
-        SELECT *
+        SELECT sender as user1_id, recipient as user2_id
         FROM connections
-        WHERE user1_id = ?
+        WHERE sender = ?
       ''';
 
       const sql2 = '''
-        SELECT *
+        SELECT recipient as user1_id, sender as user2_id
         FROM connections
-        WHERE user2_id = ?
+        WHERE recipient = ?
       ''';
 
       final results1 = await ServerChannel.db.query(sql1, [user.id]);
