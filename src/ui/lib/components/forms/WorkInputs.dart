@@ -61,8 +61,7 @@ class WorkInputsState extends State<WorkInputs> {
   }
 
   Widget companyItemBuilder(BuildContext context, dynamic suggestion) {
-    return ListTile(
-        leading: Icon(Icons.list), title: Text((suggestion as Company).name));
+    return ListTile(title: Text((suggestion as Company).name));
   }
 
   void onCompanySuggestionSelected(

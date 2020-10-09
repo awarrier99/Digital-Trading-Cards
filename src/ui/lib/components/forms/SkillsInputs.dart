@@ -34,8 +34,7 @@ class SkillsInputsState extends State<SkillsInputs> {
   }
 
   Widget skillItemBuilder(BuildContext context, dynamic suggestion) {
-    return ListTile(
-        leading: Icon(Icons.list), title: Text((suggestion as Skill).title));
+    return ListTile(title: Text((suggestion as Skill).title));
   }
 
   void onSkillSuggestionSelected(
