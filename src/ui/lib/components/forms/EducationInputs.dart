@@ -66,7 +66,7 @@ class EducationInputsState extends State<EducationInputs> {
   }
 
   Widget fieldItemBuilder(BuildContext context, dynamic suggestion) {
-    return ListTile(leading: Icon(Icons.list), title: Text((suggestion as Field).name));
+    return ListTile(title: Text((suggestion as Field).name));
   }
 
   void onFieldSuggestionSelected(
@@ -94,7 +94,6 @@ class EducationInputsState extends State<EducationInputs> {
 
   Widget institutionItemBuilder(BuildContext context, dynamic suggestion) {
     return ListTile(
-        leading: Icon(Icons.list),
         title: Text((suggestion as Institution).name),
         subtitle: Text((suggestion as Institution).longName));
   }

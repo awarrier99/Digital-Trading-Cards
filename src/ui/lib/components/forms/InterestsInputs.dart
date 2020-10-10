@@ -34,8 +34,7 @@ class InterestsInputsState extends State<InterestsInputs> {
   }
 
   Widget interestItemBuilder(BuildContext context, dynamic suggestion) {
-    return ListTile(
-        leading: Icon(Icons.list), title: Text((suggestion as Interest).title));
+    return ListTile(title: Text((suggestion as Interest).title));
   }
 
   void onInterestSuggestionSelected(
