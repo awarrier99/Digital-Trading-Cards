@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flushbar/flushbar.dart';
-import 'package:ui/models/Global.dart';
-import 'package:provider/provider.dart';
 import '../palette.dart';
-import 'package:ui/components/SearchBar.dart';
 
 class AddCard extends StatelessWidget {
   const AddCard();
 
   Future addByEmail(context) async {
-    // NOAH change this to new route / your page
-    Navigator.of(context).pushNamed('/addCard2');
+    Navigator.of(context).pushNamed('/addCardByEmail');
   }
 
   @override
