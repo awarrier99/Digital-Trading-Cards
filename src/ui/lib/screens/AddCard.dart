@@ -10,7 +10,7 @@ class AddCard extends StatelessWidget {
 
   Future addByEmail(context) async {
     // NOAH change this to new route / your page
-    showSearch(context: context, delegate: StudentCardSearch(false));
+    Navigator.of(context).pushNamed('/addCard2');
   }
 
   @override
