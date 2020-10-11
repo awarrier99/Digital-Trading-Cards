@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flushbar/flushbar.dart';
+import 'package:ui/models/Global.dart';
 import 'package:ui/palette.dart';
 
 class AddCardByEmail extends StatefulWidget {
@@ -9,6 +10,10 @@ class AddCardByEmail extends StatefulWidget {
 
 class _AddCardByEmailState extends State<AddCardByEmail> {
   final emailInputController = TextEditingController();
+
+  Future addByEmailPreview(context) async {
+    // Navigator.of(context).pushNamed('/addCardByEmail');
+  }
 
   @override
   void dispose() {
@@ -26,7 +31,27 @@ class _AddCardByEmailState extends State<AddCardByEmail> {
         borderRadius: 8,
         backgroundColor: Color(0xffDF360E),
       )..show(context);
-    } else {}
+    } else {
+      final globalModel = context.read<GlobalModel>();
+      final userModel = globalModel.userModel;
+
+      // .fromJson() takes a mao as a param
+      if (userModel.fromJson() != null) {
+      } else {
+        // if the username/email does not exist then return this
+        Flushbar(
+          flushbarPosition: FlushbarPosition.TOP,
+          message: "Email does not not exist",
+          duration: Duration(seconds: 3),
+          margin: EdgeInsets.all(8),
+          borderRadius: 8,
+          backgroundColor: Color(0xffDF360E),
+        )..show(context);
+      }
+      // if the text input is not empty, then go through the database
+      // if user does not exist => send a flush bar saying user not found
+      // if a user does exist => send a preview of card associated with email
+    }
   }
 
   @override
@@ -75,7 +100,7 @@ class _AddCardByEmailState extends State<AddCardByEmail> {
                   ),
                 ),
               ),
-              SizedBox(height: 30),
+              SizedBox(height: 20),
               Container(
                 margin: EdgeInsets.fromLTRB(60, 0, 60, 0),
                 height: 40,
