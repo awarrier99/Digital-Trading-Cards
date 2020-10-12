@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ui/RouteGenerator.dart';
-import 'package:ui/models/CardInfo.dart';
 import 'package:ui/models/Global.dart';
-import 'package:ui/models/User.dart';
-import 'package:ui/models/ConnectionInfo.dart';
 
 import 'palette.dart';
 
@@ -20,13 +17,13 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Wisteria',
         theme: ThemeData(
-          primarySwatch: Colors.green,
-          primaryColor: Palette.primaryGreen,
+          primarySwatch: Colors.deepPurple,
+          primaryColor: Palette.primary,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         initialRoute: '/',
-        onGenerateRoute: RouteGenerator.generateRoute,
-      ),
+        onGenerateRoute: RouteGenerator.generateRoute
+      )
     );
   }
 }

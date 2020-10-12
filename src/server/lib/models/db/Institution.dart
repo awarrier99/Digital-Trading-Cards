@@ -21,6 +21,21 @@ class Institution extends Serializable {
     longName = object['longName'] as String;
   }
 
+  Future<void> save() async {
+    try {
+      const sql = '''
+        INSERT INTO institutions
+        (name, long_name)
+        VALUES (?, ?)
+      ''';
+      await ServerChannel.db.query(sql, [name, longName]);
+    } catch (err, stackTrace) {
+      logError(err,
+          stackTrace: stackTrace,
+          message: 'An error occurred while trying to create an institution:');
+    }
+  }
+
   static Future<Institution> get(String name) async {
     try {
       const sql = '''
@@ -35,6 +50,50 @@ class Institution extends Serializable {
           stackTrace: stackTrace,
           message: 'An error occurred while trying to get an institution:');
       return null;
+    }
+  }
+
+  static Future<List<Institution>> getAll() async {
+    try {
+      const sql = '''
+          SELECT * FROM institutions
+        ''';
+      final results = await ServerChannel.db.query(sql);
+      return results
+          .map((e) => Institution.create(
+          name: e['name'] as String, longName: e['long_name'] as String))
+          .toList();
+    } catch (err, stackTrace) {
+      logError(err,
+          stackTrace: stackTrace,
+          message: 'An error occurred while trying to get all institutions:');
+      return [];
+    }
+  }
+
+  static Future<List<Institution>> find(String pattern) async {
+    try {
+      if (pattern.isEmpty) {
+        return getAll();
+      }
+
+      const sql = '''
+        SELECT * FROM institutions
+        WHERE LOWER(name) LIKE ?
+          OR LOWER(long_name) LIKE ?
+      ''';
+      final bindPattern = '%$pattern%'.toLowerCase();
+      final results =
+          await ServerChannel.db.query(sql, [bindPattern, bindPattern]);
+      return results
+          .map((e) => Institution.create(
+              name: e['name'] as String, longName: e['long_name'] as String))
+          .toList();
+    } catch (err, stackTrace) {
+      logError(err,
+          stackTrace: stackTrace,
+          message: 'An error occurred while trying to get an institution:');
+      return [];
     }
   }
 }

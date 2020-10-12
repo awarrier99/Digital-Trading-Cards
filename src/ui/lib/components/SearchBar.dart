@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ui/SizeConfig.dart';
+import 'package:ui/models/Global.dart';
 import 'package:ui/palette.dart';
 import 'package:ui/models/ConnectionInfo.dart';
 import 'package:http/http.dart';
@@ -89,8 +90,11 @@ class StudentCardSearch extends SearchDelegate<StudentCardItem> {
     );
   }
 
-  Future saveCardContext(context) async {
-    Navigator.of(context).pushNamed('/savedCards');
+  Future saveCardContext(context, int userID) async {
+    Navigator.of(context).pushNamed(
+      '/previewCard',
+      arguments: userID,
+    );
   }
 
   // This method displays the list of cards available, and the results of the
@@ -108,13 +112,13 @@ class StudentCardSearch extends SearchDelegate<StudentCardItem> {
       studentList = query.isEmpty
           ? loadSudentCardItem()
           : loadSudentCardItem()
-              .where((p) => p.emailAddress.toLowerCase().contains(query))
+              .where((p) => p.emailAddress.toLowerCase().contains(query.toLowerCase()))
               .toList();
     } else if (listIsShown == false) {
       studentList = query.isEmpty
           ? <StudentCardItem>[]
           : loadSudentCardItem()
-              .where((p) => p.emailAddress.toLowerCase().contains(query))
+              .where((p) => p.emailAddress.toLowerCase().contains(query.toLowerCase()))
               .toList();
     }
 
@@ -137,13 +141,13 @@ class StudentCardSearch extends SearchDelegate<StudentCardItem> {
               // list
               return ListTile(
                 onTap: () {
-                  print(listCard.emailAddress);
-                  final connectionInfoModel =
-                      context.read<ConnectionInfoModel>();
+                  final globalModel = context.read<GlobalModel>();
+                  final connectionInfoModel = globalModel.connectionInfoModel;
                   connectionInfoModel.username = listCard.emailAddress;
-                  final userModel = context.read<UserModel>();
+                  final userModel = globalModel.userModel;
                   connectionInfoModel.createConnection(userModel.token);
-                  saveCardContext(context);
+                  saveCardContext(
+                      context, 0); // change 0 to ID of selected user
                 },
                 title: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

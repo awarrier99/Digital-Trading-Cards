@@ -53,7 +53,6 @@ class CreateAccount extends StatelessWidget {
                             if (success)
                               cardInfoModel.updateUser(userModel.currentUser);
                           });
-                          print(userModel.currentUser.toJson());
                           nextStep(context);
                         }
                       }))

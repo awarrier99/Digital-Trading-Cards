@@ -6,12 +6,15 @@ class ConnectionInfo extends Serializable {
   ConnectionInfo(
       {@required this.user,
       @required this.connections,
-      @required this.connectedUsers}
-      );
+      @required this.connectedUsers,
+      @required this.interests,
+      @required this.skills});
 
   User user;
   List<Connection> connections;
-  List<User> connectedUsers;
+  List<CardInfo> connectedUsers;
+  List<String> interests;
+  List<String> skills;
 
   @override
   Map<String, dynamic> asMap() {
@@ -19,6 +22,8 @@ class ConnectionInfo extends Serializable {
       "user": user.asMap(),
       "connections": connections.map((e) => e.asMap()).toList(),
       "connectedUsers": connectedUsers.map((e) => e.asMap()).toList(),
+      "interests": interests,
+      "skills": skills,
     };
   }
 
@@ -29,21 +34,23 @@ class ConnectionInfo extends Serializable {
     final connectedUsersList = object['connectedUsers'] as List;
 
     connections = connectionList
-        .map((e) => Connection()
-        ..readFromMap(e as Map<String, dynamic>)).toList();
+        .map((e) => Connection()..readFromMap(e as Map<String, dynamic>))
+        .toList();
 
     connectedUsers = connectedUsersList
-        .map((e) => User()
-        ..readFromMap(e as Map<String, dynamic>)).toList();
+        .map((e) => CardInfo()..readFromMap(e as Map<String, dynamic>))
+        .toList();
   }
 
   static Future<void> create(ConnectionInfo connectionInfo) async {
     final List<Future> futures = [];
     await connectionInfo.user.save();
-    futures.add(Future.forEach(connectionInfo.connections,
-            (Connection e) => Connection.create(user1: e.user1, user2: e.user2)..save()));
+    futures.add(Future.forEach(
+        connectionInfo.connections,
+        (Connection e) =>
+            Connection.create(user1: e.user1, user2: e.user2)..save()));
     futures.add(Future.forEach(connectionInfo.connectedUsers,
-            (User e) => User.get(e.id)));
+        (CardInfo e) async => CardInfo.getById(e.user.id)));
     await Future.wait(futures);
   }
 
@@ -51,7 +58,8 @@ class ConnectionInfo extends Serializable {
     return ConnectionInfo(
         user: user,
         connections: await Connection.getByUser(user),
-        connectedUsers: await Connection.getOtherUsers(user)
-    );
+        connectedUsers: await Connection.getOtherUsers(user),
+        interests: await Connection.getOtherInterests(user),
+        skills: await Connection.getOtherSkills(user));
   }
 }

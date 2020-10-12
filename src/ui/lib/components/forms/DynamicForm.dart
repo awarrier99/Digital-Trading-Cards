@@ -33,7 +33,7 @@ class _DynamicFormState extends State<DynamicForm> {
   @override
   void initState() {
     super.initState();
-    index = widget.dynamicModelList.length;
+    index = widget.dynamicModelList?.length ?? 0;
   }
 
   callback(int idx) {

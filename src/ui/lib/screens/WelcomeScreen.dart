@@ -1,16 +1,16 @@
-import 'dart:convert';
-import 'dart:math';
-
+import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 import 'package:ui/SizeConfig.dart';
+import 'package:ui/components/TextInput.dart';
 import 'package:ui/models/CardInfo.dart';
 import 'package:ui/models/Global.dart';
 import 'package:ui/screens/Home.dart';
 
 import '../models/User.dart';
 import '../palette.dart';
+import 'package:flushbar/flushbar.dart';
 
 class WelcomeScreen extends StatefulWidget {
   final String title;
@@ -25,6 +25,7 @@ class WelcomeScreen extends StatefulWidget {
 }
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   FocusNode passwordNode = FocusNode();
   final User model = new User();
 
@@ -37,20 +38,28 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   }
 
   void login(BuildContext context) {
-    final globalModel =
-    context.read<GlobalModel>();
+    final globalModel = context.read<GlobalModel>();
     final userModel = globalModel.userModel;
-    final cardInfoModel =
-        globalModel.cardInfoModel;
+    final cardInfoModel = globalModel.cardInfoModel;
     userModel.updateUser(model);
     userModel.login().then((success) {
       if (success) {
         final user = userModel.currentUser;
         cardInfoModel.updateUser(user);
         loginContext(context);
+      } else {
+        throw (Error());
       }
     }).catchError((error) {
-      print('Caught $error');
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        title: "Incorrect email or password",
+        message: "Please double-check and try again!",
+        duration: Duration(seconds: 5),
+        margin: EdgeInsets.all(8),
+        borderRadius: 8,
+        backgroundColor: Color(0xffDF360E),
+      )..show(context);
     });
   }
 
@@ -59,6 +68,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     SizeConfig().init(context);
 
     return Scaffold(
+        key: _scaffoldKey,
         body: SingleChildScrollView(
             child: Container(
                 padding: EdgeInsets.fromLTRB(25, 0, 25, 0),
@@ -71,19 +81,21 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       child: Text(
                         widget.title,
                         style: TextStyle(
-                            fontSize: 60, fontWeight: FontWeight.bold),
+                            fontSize: 60,
+                            fontWeight: FontWeight.bold,
+                            color: Palette.secondary),
                       ),
                     )),
                     Container(
                         padding: EdgeInsets.only(top: 30, left: 20, right: 20),
                         child: Column(
                           children: <Widget>[
-                            TextFormField(
+                            TextInput(
                               keyboardType: TextInputType.emailAddress,
                               onChanged: (value) {
                                 model.username = value;
                               },
-                              onFieldSubmitted: (term) {
+                              onEditingComplete: () {
                                 FocusScope.of(context)
                                     .requestFocus(passwordNode);
                               },
@@ -95,13 +107,13 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                       color: Colors.grey)),
                             ),
                             SizedBox(height: 20),
-                            TextFormField(
+                            TextInput(
                               focusNode: passwordNode,
                               obscureText: true,
                               onChanged: (value) {
                                 model.password = value;
                               },
-                              onFieldSubmitted: (term) {
+                              onEditingComplete: () {
                                 login(context);
                               },
                               decoration: InputDecoration(
@@ -116,8 +128,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                 height: 40,
                                 child: Material(
                                   borderRadius: BorderRadius.circular(20),
-                                  shadowColor: Palette.primaryGreen,
-                                  color: Palette.primaryGreen,
+                                  shadowColor: Palette.primary,
+                                  color: Palette.primary,
                                   elevation: 7,
                                   child: GestureDetector(
                                     onTap: () => login(context),
@@ -125,7 +137,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                       child: Text(
                                         'LOGIN',
                                         style: TextStyle(
-                                            color: Colors.black87,
+                                            color: Colors.white,
                                             fontWeight: FontWeight.bold,
                                             fontFamily: 'Montserrat'),
                                       ),
@@ -137,7 +149,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                 height: 40,
                                 child: Material(
                                   borderRadius: BorderRadius.circular(20),
-                                  color: Colors.black87,
+                                  color: Palette.secondary,
                                   elevation: 7,
                                   child: GestureDetector(
                                     onTap: () {

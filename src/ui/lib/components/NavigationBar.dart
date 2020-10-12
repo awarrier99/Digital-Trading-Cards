@@ -17,7 +17,7 @@ class _NavigationBarState extends State<NavigationBar> {
       items: [
         BottomNavigationBarItem(
           icon: Icon(Icons.bookmark),
-          title: Text("Saved Cards"),
+          title: Text("Saved"),
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
@@ -27,6 +27,14 @@ class _NavigationBarState extends State<NavigationBar> {
           icon: Icon(Icons.add),
           title: Text("Add Card"),
         ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.calendar_today),
+          title: Text('Events'),
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.account_circle),
+          title: Text('Profile'),
+        )
       ],
       onTap: _onTap,
       currentIndex: _currentIndex,
@@ -42,7 +50,13 @@ class _NavigationBarState extends State<NavigationBar> {
         _navigatorKey.currentState.pushReplacementNamed("/home");
         break;
       case 2:
-        showSearch(context: context, delegate: StudentCardSearch(false));
+        _navigatorKey.currentState.pushReplacementNamed("/addCard");
+        break;
+      case 3:
+        _navigatorKey.currentState.pushReplacementNamed("/viewEvents");
+        break;
+      case 4:
+        _navigatorKey.currentState.pushReplacementNamed('/profile');
         break;
     }
     setState(() {
@@ -56,7 +70,7 @@ class _NavigationBarState extends State<NavigationBar> {
       body: Navigator(
           key: _navigatorKey,
           initialRoute: '/home',
-          onGenerateRoute: RouteGenerator.generateRoute),
+          onGenerateRoute: RouteGenerator.generateNavigationBarRoute),
       bottomNavigationBar: _bottomNavigationBar(),
     );
   }

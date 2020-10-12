@@ -19,7 +19,6 @@ class ColorBadgeSmall extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(badgeType.runtimeType);
     return Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(

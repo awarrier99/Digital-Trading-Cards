@@ -55,7 +55,8 @@ class UserInterest extends Serializable {
         return;
       }
 
-      await ServerChannel.db.query(sql, values);
+      final results = await ServerChannel.db.query(sql, values);
+      id ??= results.insertId;
     } catch (err, stackTrace) {
       logError(err,
           stackTrace: stackTrace,
@@ -100,7 +101,7 @@ class UserInterest extends Serializable {
     } catch (err, stackTrace) {
       logError(err,
           stackTrace: stackTrace,
-          message: 'An error occurred while trying to get user skills:');
+          message: 'An error occurred while trying to get user interests:');
       return [];
     }
   }

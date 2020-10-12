@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:ui/models/Global.dart';
 
 import '../components/Cards/SummaryCard.dart';
@@ -13,121 +14,326 @@ class ViewSavedCards extends StatefulWidget {
 }
 
 class _ViewSavedCardsState extends State<ViewSavedCards> {
-  int userId = 55;
-  Future<CardInfo> userCardInfo;
+  ConnectionInfo userConnectionInfo;
+  List<CardInfo> connectedUsers = [];
+  List<CardInfo> filteredUsers = [];
+  List<String> interestsFilter = [];
+  List<String> skillsFilter = [];
+  List<String> availableInterests = [];
+  List<String> availableSkills = [];
+  String dropDownInterest;
+  String dropDownSkill;
+  bool isSearching = false;
+
+  getConnectionInfo(ConnectionInfoModel connectionInfoModel,
+      UserModel userModel, bool isCurrentUser) async {
+    var userConnectionInfo = await connectionInfoModel.fetchConnectionInfo(
+        userModel.currentUser.id, userModel.token,
+        isCurrentUser: false);
+    return userConnectionInfo;
+  }
 
   @override
   void initState() {
-    super.initState();
     final globalModel = context.read<GlobalModel>();
-    final cardInfoModel = globalModel.cardInfoModel;
+    final connectionInfoModel = globalModel.connectionInfoModel;
     final userModel = globalModel.userModel;
-    userCardInfo =
-        cardInfoModel.fetchCardInfo(userModel.currentUser.id, userModel.token);
+    getConnectionInfo(connectionInfoModel, userModel, false).then((data) {
+      setState(() {
+        userConnectionInfo = data;
+        interestsFilter = data.interests;
+        availableInterests.add("All");
+        availableInterests.addAll(data.interests);
+        availableInterests.sort((a, b) => a.toString().compareTo(b.toString()));
+        dropDownInterest = "All";
+        availableSkills.add("All");
+        availableSkills.addAll(data.skills);
+        availableSkills.sort((a, b) => a.toString().compareTo(b.toString()));
+        dropDownSkill = "All";
+        connectedUsers = filteredUsers = data.connectedUsers;
+        isSearching = false;
+      });
+    });
+    super.initState();
   }
 
-  final _createAccountFormKey = GlobalKey<FormState>();
+  void _filterCards(value) {
+    setState(() {
+      filteredUsers = filteredUsers
+          .where((card) =>
+              card.user.firstName.toLowerCase().contains(value.toLowerCase()) ||
+              card.user.lastName.toLowerCase().contains(value.toLowerCase()))
+          .toList();
+      // filteredUsers = connectedUsers
+      //     .where((card) => List.from(card.interests
+      //             .map((e) => (e.interest.title).toString().toLowerCase())
+      //             .toList())
+      //         .any((e) => e.contains(value.toLowerCase())))
+      //     .toList();
+    });
+  }
+
+  void _filterCardsBySkillAndInterest() {
+    if (dropDownInterest == "All" && dropDownSkill == "All") {
+      setState(() {
+        filteredUsers = connectedUsers;
+      });
+    } else if (dropDownSkill == "All") {
+      setState(() {
+        filteredUsers = connectedUsers
+            .where((card) => List.from(card.interests
+                    .map((e) => (e.interest.title).toString().toLowerCase())
+                    .toList())
+                .any((e) => e == dropDownInterest.toLowerCase()))
+            .toList();
+      });
+    } else if (dropDownInterest == "All") {
+      setState(() {
+        filteredUsers = connectedUsers
+            .where((card) => List.from(card.skills
+                    .map((e) => (e.skill.title).toString().toLowerCase())
+                    .toList())
+                .any((e) => e == dropDownSkill.toLowerCase()))
+            .toList();
+      });
+    } else {
+      setState(() {
+        filteredUsers = connectedUsers
+            .where((card) =>
+                List.from(card.interests
+                        .map((e) => (e.interest.title).toString().toLowerCase())
+                        .toList())
+                    .any((e) => e == dropDownInterest.toLowerCase()) &&
+                List.from(card.skills
+                        .map((e) => (e.skill.title).toString().toLowerCase())
+                        .toList())
+                    .any((e) => e == dropDownSkill.toLowerCase()))
+            .toList();
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Saved Cards',
-          style: TextStyle(fontFamily: 'Montserrat'),
-        ),
-      ),
-      body: Container(
-        child: FutureBuilder<CardInfo>(
-            future: userCardInfo,
-            builder: (context, AsyncSnapshot<CardInfo> snapshot) {
-              List<Widget> children;
-              if (snapshot.hasData) {
-                children = [
-                  SummaryCard(snapshot.data, currentUser: true)
-                ];
-                // print(snapshot.data);
-                // children = [
-                // ListView.separated(
-                //   separatorBuilder: (BuildContext context,
-                //       int index) => const Divider(),
-                //   itemCount: snapshot.data.connectedUsers.length,
-                //   itemBuilder: (BuildContext context, int index) {
-                //     return Container(
-                //         padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                //         child: SummaryCard(
-                //             snapshot.data.connectedUsers[index].id
-                //           // snapshot.data.connectedUsers[index].toJson['fullname'],
-                //           // snapshot.data.connectedUsers[index]['school'],
-                //           // snapshot.data.connectedUsers[index]['degreeType'],
-                //           // snapshot.data.connectedUsers[index]['major'],
-                //           // snapshot.data.connectedUsers[index]['skills'],
-                //           // snapshot.data.connectedUsers[index]['interests'],
-                //           // false),
-                //         )
-                //     );
-                //   },
-                //   padding: EdgeInsets.only(top: 10, bottom: 10),
-                // ),
-                // ];
-              } else if (snapshot.hasError) {
-                print("it went bad");
-                children = [
-                  Center(
-                  child: Container(
-                    child: Text("${snapshot.error}"),
-                  ),
-                ),
-                ];
-              } else {
-                print("it went once");
-                children = [
-                  Center(
-                    child: Container(
-                      child: CircularProgressIndicator(),
+        centerTitle: true,
+        automaticallyImplyLeading: false,
+        title: !isSearching
+            ? Text(
+                'Saved Cards',
+                style: TextStyle(fontFamily: 'Montserrat'),
+              )
+            : TextField(
+                onChanged: (value) {
+                  _filterCards(value);
+                },
+                style: TextStyle(color: Colors.white),
+                decoration: InputDecoration(
+                    icon: Icon(
+                      Icons.search,
+                      color: Colors.white,
                     ),
+                    hintText: "Search Cards",
+                    hintStyle: TextStyle(color: Colors.white)),
+              ),
+        actions: <Widget>[
+          isSearching
+              ? IconButton(
+                  icon: Icon(Icons.cancel),
+                  onPressed: () {
+                    setState(() {
+                      this.isSearching = false;
+                      this.filteredUsers = connectedUsers;
+                    });
+                  },
+                )
+              : IconButton(
+                  icon: Icon(Icons.search),
+                  onPressed: () {
+                    setState(() {
+                      this.isSearching = true;
+                    });
+                  },
+                )
+        ],
+      ),
+      // appBar: AppBar(
+      //   title: Text(
+      //     'Saved Cards',
+      //     style: TextStyle(fontFamily: 'Montserrat'),
+      //   ),
+
+      // ),
+      body: Container(
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                SizedBox(
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 2),
+                          child: Column(
+                            children: <Widget>[
+                              Text(
+                                'Interests',
+                                style: TextStyle(
+                                    fontFamily: 'Montserrat', fontSize: 12),
+                              ),
+                              DropdownButton<String>(
+                                value: dropDownInterest,
+                                onChanged: (String newValue) {
+                                  setState(() {
+                                    dropDownInterest = newValue;
+                                    _filterCardsBySkillAndInterest();
+                                  });
+                                },
+                                items: availableInterests
+                                    .map<DropdownMenuItem<String>>(
+                                        (String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value),
+                                  );
+                                }).toList(),
+                                isExpanded: false,
+                                hint: Text("Interests"),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 2),
+                          child: Column(
+                            children: <Widget>[
+                              Text(
+                                'Skills',
+                                style: TextStyle(
+                                    fontFamily: 'Montserrat', fontSize: 12),
+                              ),
+                              DropdownButton<String>(
+                                value: dropDownSkill,
+                                onChanged: (String newValue) {
+                                  setState(() {
+                                    dropDownSkill = newValue;
+                                    _filterCardsBySkillAndInterest();
+                                  });
+                                },
+                                items: availableSkills
+                                    .map<DropdownMenuItem<String>>(
+                                        (String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value),
+                                  );
+                                }).toList(),
+                                isExpanded: false,
+                                hint: Text("Skills"),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ];
-              }
-              return Container(
-                padding: EdgeInsets.fromLTRB(10, 20, 10, 0),
-                child: Column(
-                  children: children,
                 ),
-              );
-            }
+                filteredUsers.length > 0
+                    ? Expanded(
+                        child: ListView.separated(
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            separatorBuilder:
+                                (BuildContext context, int index) =>
+                                    const Divider(),
+                            itemCount: filteredUsers.length,
+                            padding: EdgeInsets.only(top: 10, bottom: 10),
+                            itemBuilder: (BuildContext context, int index) {
+                              return GestureDetector(
+                                onTap: () {
+                                  // Navigator.of(context).pushNamed(Country.routeName,
+                                  //     arguments: filteredUsers[index]);
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                                  child: SummaryCard(filteredUsers[index]),
+                                ),
+                              );
+
+                              // child: Card(
+                              //   elevation: 10,
+                              //   child: Padding(
+                              //     padding: const EdgeInsets.symmetric(
+                              //         vertical: 10, horizontal: 8),
+                              //     child: Text(
+                              //       filteredCountries[index]['name'],
+                              //       style: TextStyle(fontSize: 18),
+                              //     ),
+                              //   ),
+                              // ),
+                            }),
+                      )
+                    : Center(
+                        child: CircularProgressIndicator(),
+                      ),
+              ],
+            ),
+          ),
         ),
       ),
+      // body: Container(
+      //   child: FutureBuilder<ConnectionInfo>(
+      //       future: userConnectionInfo,
+      //       builder: (context, AsyncSnapshot<ConnectionInfo> snapshot) {
+      //         List<Widget> children;
+      //         if (snapshot.hasData) {
+      //           // children = [SummaryCard(snapshot.data, currentUser: true)];
+      //           print(snapshot.data);
+      //           children = [
+      //             ListView.separated(
+      //               scrollDirection: Axis.vertical,
+      //               shrinkWrap: true,
+      //               separatorBuilder: (BuildContext context, int index) =>
+      //                   const Divider(),
+      //               itemCount: snapshot.data.connectedUsers.length,
+      //               itemBuilder: (BuildContext context, int index) {
+      //                 return Container(
+      //                     padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+      //                     child:
+      //                         SummaryCard(snapshot.data.connectedUsers[index]));
+      //               },
+      //               padding: EdgeInsets.only(top: 10, bottom: 10),
+      //             ),
+      //           ];
+      //         } else if (snapshot.hasError) {
+      //           children = [
+      //             Center(
+      //               child: Container(
+      //                 child: Text("${snapshot.error}"),
+      //               ),
+      //             ),
+      //           ];
+      //         } else {
+      //           children = [
+      //             Center(
+      //               child: Container(
+      //                 child: CircularProgressIndicator(),
+      //               ),
+      //             ),
+      //           ];
+      //         }
+      //         return Flex(
+      //           direction: Axis.vertical,
+      //           children: children,
+      //         );
+      //       }),
+      // ),
     );
   }
 }
-// @override
-// Widget build(BuildContext context) {
-//   return Scaffold(
-//     appBar: AppBar(
-//       title: Text(
-//         'Saved Cards',
-//         style: TextStyle(fontFamily: 'Montserrat'),
-//       ),
-//     ),
-//     body: ListView.separated(
-//       separatorBuilder: (BuildContext context, int index) => const Divider(),
-//       itemCount: savedCardsList.length,
-//       itemBuilder: (BuildContext context, int index) {
-//         return Container(
-//           padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-//           child: new SummaryCard(
-//               savedCardsList[index]['fullname'],
-//               savedCardsList[index]['school'],
-//               savedCardsList[index]['degreeType'],
-//               savedCardsList[index]['major'],
-//               savedCardsList[index]['skills'],
-//               savedCardsList[index]['interests'],
-//               savedCardsList[index]['isFavorite']),
-//         );
-//       },
-//       padding: EdgeInsets.only(top: 10, bottom: 10),
-//     ),
-//   );
-// }
-

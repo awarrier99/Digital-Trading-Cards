@@ -1,3 +1,9 @@
+import 'package:server/controllers/CompanyController.dart';
+import 'package:server/controllers/FieldController.dart';
+import 'package:server/controllers/InstitutionController.dart';
+import 'package:server/controllers/InterestController.dart';
+import 'package:server/controllers/SkillController.dart';
+
 import 'controllers/Authorizer.dart';
 import 'controllers/CardController.dart';
 import 'controllers/LoginController.dart';
@@ -17,6 +23,11 @@ Controller createRoutes() {
           get: AuthMode.bearer,
           post: AuthMode.bearer,
           put: AuthMode.isRequestingUser))
+      .link(() => VerbController(Resource.card))
+      .link(() => CardController());
+
+  router
+      .route('/allCards[/:username]')
       .link(() => VerbController(Resource.card))
       .link(() => CardController());
 
@@ -42,6 +53,36 @@ Controller createRoutes() {
       .link(() => VerbController(Resource.user))
       .link(() => VerbController(Resource.event))
       .link(() => EventController());
+
+  router
+      .route('/institutions[/:pattern]')
+      .link(Authorizer.bearer)
+      .link(() => VerbController(Resource.institution))
+      .link(() => InstitutionController());
+
+  router
+      .route('/fields[/:pattern]')
+      .link(Authorizer.bearer)
+      .link(() => VerbController(Resource.field))
+      .link(() => FieldController());
+
+  router
+      .route('/skills[/:pattern]')
+      .link(Authorizer.bearer)
+      .link(() => VerbController(Resource.skill))
+      .link(() => SkillController());
+
+  router
+      .route('/interests[/:pattern]')
+      .link(Authorizer.bearer)
+      .link(() => VerbController(Resource.interest))
+      .link(() => InterestController());
+
+  router
+      .route('/companies[/:pattern]')
+      .link(Authorizer.bearer)
+      .link(() => VerbController(Resource.company))
+      .link(() => CompanyController());
 
   return router;
 }
