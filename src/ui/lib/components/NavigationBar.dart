@@ -13,20 +13,32 @@ class _NavigationBarState extends State<NavigationBar> {
 
   Widget _bottomNavigationBar() {
     return BottomNavigationBar(
-            type: BottomNavigationBarType.fixed,
-            items: [
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.bookmark), title: Text("Saved Cards")),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.home), title: Text("Home")),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.add), title: Text("Add Card")),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.account_circle), title: Text('Profile'))
-            ],
-            onTap: _onTap,
-            currentIndex: _currentIndex,
-          );
+      type: BottomNavigationBarType.fixed,
+      items: [
+        BottomNavigationBarItem(
+          icon: Icon(Icons.bookmark),
+          title: Text("Saved"),
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.home),
+          title: Text("Home"),
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.add),
+          title: Text("Add Card"),
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.calendar_today),
+          title: Text('Events'),
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.account_circle),
+          title: Text('Profile'),
+        )
+      ],
+      onTap: _onTap,
+      currentIndex: _currentIndex,
+    );
   }
 
   _onTap(int tabIndex) {
@@ -41,6 +53,9 @@ class _NavigationBarState extends State<NavigationBar> {
         _navigatorKey.currentState.pushReplacementNamed("/addCard");
         break;
       case 3:
+        _navigatorKey.currentState.pushReplacementNamed("/viewEvents");
+        break;
+      case 4:
         _navigatorKey.currentState.pushReplacementNamed('/profile');
         break;
     }

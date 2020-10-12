@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ui/components/NavigationBar.dart';
 import 'package:ui/screens/Profile.dart';
+import 'package:ui/screens/ViewEvents.dart';
 import 'package:ui/screens/WelcomeScreen.dart';
 import 'package:ui/screens/CreateAccount.dart';
 import 'package:ui/screens/Home.dart';
@@ -46,6 +47,8 @@ class RouteGenerator {
             builder: (_) => PreviewCard(settings.arguments));
       case '/addCard':
         return MaterialPageRoute(builder: (_) => AddCard());
+      case '/viewEvents':
+        return MaterialPageRoute(builder: (_) => ViewEvents());
       case '/addCardByEmail':
         return MaterialPageRoute(builder: (_) => AddCardByEmail());
       default:

@@ -44,9 +44,11 @@ class _ViewSavedCardsState extends State<ViewSavedCards> {
         interestsFilter = data.interests;
         availableInterests.add("All");
         availableInterests.addAll(data.interests);
+        availableInterests.sort((a, b) => a.toString().compareTo(b.toString()));
         dropDownInterest = "All";
         availableSkills.add("All");
         availableSkills.addAll(data.skills);
+        availableSkills.sort((a, b) => a.toString().compareTo(b.toString()));
         dropDownSkill = "All";
         connectedUsers = filteredUsers = data.connectedUsers;
         isSearching = false;
@@ -115,7 +117,6 @@ class _ViewSavedCardsState extends State<ViewSavedCards> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.pink,
         centerTitle: true,
         automaticallyImplyLeading: false,
         title: !isSearching
