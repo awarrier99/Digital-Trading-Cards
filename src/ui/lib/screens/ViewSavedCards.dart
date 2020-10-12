@@ -116,6 +116,8 @@ class _ViewSavedCardsState extends State<ViewSavedCards> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.pink,
+        centerTitle: true,
+        automaticallyImplyLeading: false,
         title: !isSearching
             ? Text(
                 'Saved Cards',

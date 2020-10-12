@@ -17,8 +17,8 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Wisteria',
         theme: ThemeData(
-          primarySwatch: Colors.green,
-          primaryColor: Palette.primaryGreen,
+          primarySwatch: Colors.deepPurple,
+          primaryColor: Palette.primary,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         initialRoute: '/',

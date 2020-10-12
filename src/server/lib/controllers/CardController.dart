@@ -29,6 +29,19 @@ class CardController extends ResourceController {
     }
   }
 
+  @Operation.get('username')
+  Future<Response> getCardByUsername(
+      @Bind.path('username') String username) async {
+    try {
+      return Response.ok(await CardInfo.getByUsername(username));
+    } catch (err, stackTrace) {
+      logError(err,
+          stackTrace: stackTrace,
+          message: 'An error occurred while trying to get a card:');
+      return Response.serverError(body: {'success': false});
+    }
+  }
+
   @Operation.put('id')
   Future<Response> updateCard(@Bind.body() CardInfoUpdate cardInfoUpdate,
       @Bind.path('id') int userId) async {

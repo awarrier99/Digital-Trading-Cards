@@ -25,6 +25,11 @@ Controller createRoutes() {
       .link(() => CardController());
 
   router
+      .route('/allCards[/:username]')
+      .link(() => VerbController(Resource.card))
+      .link(() => CardController());
+
+  router
       .route('/users[/:id]')
       .link(() => Authorizer.multiple(get: AuthMode.isRequestingUser))
       .link(() => VerbController(Resource.user))
