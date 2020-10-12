@@ -33,7 +33,7 @@ class SaveCardController extends ResourceController {
   @Operation.get('id')
   Future<Response> getConnection({@Bind.path('id') int userId}) async {
     try {
-      final user = request.attachments['connectionUser']
+      final user = request.attachments['user']
           as User; // only support getting the current user
       return Response.ok(await ConnectionInfo.get(user));
     } catch (err, stackTrace) {

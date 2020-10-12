@@ -42,11 +42,11 @@ class _ViewSavedCardsState extends State<ViewSavedCards> {
       setState(() {
         userConnectionInfo = data;
         interestsFilter = data.interests;
-        availableInterests = data.interests;
         availableInterests.add("All");
+        availableInterests.addAll(data.interests);
         dropDownInterest = "All";
-        availableSkills = data.skills;
         availableSkills.add("All");
+        availableSkills.addAll(data.skills);
         dropDownSkill = "All";
         connectedUsers = filteredUsers = data.connectedUsers;
         isSearching = false;
@@ -57,7 +57,7 @@ class _ViewSavedCardsState extends State<ViewSavedCards> {
 
   void _filterCards(value) {
     setState(() {
-      filteredUsers = connectedUsers
+      filteredUsers = filteredUsers
           .where((card) =>
               card.user.firstName.toLowerCase().contains(value.toLowerCase()) ||
               card.user.lastName.toLowerCase().contains(value.toLowerCase()))
@@ -71,23 +71,6 @@ class _ViewSavedCardsState extends State<ViewSavedCards> {
     });
   }
 
-  void _filterCardsByInterest() {
-    if (dropDownInterest == "All") {
-      setState(() {
-        filteredUsers = connectedUsers;
-      });
-    } else {
-      setState(() {
-        filteredUsers = connectedUsers
-            .where((card) => List.from(card.interests
-                    .map((e) => (e.interest.title).toString().toLowerCase())
-                    .toList())
-                .any((e) => e == dropDownInterest))
-            .toList();
-      });
-    }
-  }
-
   void _filterCardsBySkillAndInterest() {
     if (dropDownInterest == "All" && dropDownSkill == "All") {
       setState(() {
@@ -99,7 +82,7 @@ class _ViewSavedCardsState extends State<ViewSavedCards> {
             .where((card) => List.from(card.interests
                     .map((e) => (e.interest.title).toString().toLowerCase())
                     .toList())
-                .any((e) => e == dropDownInterest))
+                .any((e) => e == dropDownInterest.toLowerCase()))
             .toList();
       });
     } else if (dropDownInterest == "All") {
@@ -108,7 +91,7 @@ class _ViewSavedCardsState extends State<ViewSavedCards> {
             .where((card) => List.from(card.skills
                     .map((e) => (e.skill.title).toString().toLowerCase())
                     .toList())
-                .any((e) => e == dropDownSkill))
+                .any((e) => e == dropDownSkill.toLowerCase()))
             .toList();
       });
     } else {
@@ -118,11 +101,11 @@ class _ViewSavedCardsState extends State<ViewSavedCards> {
                 List.from(card.interests
                         .map((e) => (e.interest.title).toString().toLowerCase())
                         .toList())
-                    .any((e) => e == dropDownInterest) ||
+                    .any((e) => e == dropDownInterest.toLowerCase()) &&
                 List.from(card.skills
                         .map((e) => (e.skill.title).toString().toLowerCase())
                         .toList())
-                    .any((e) => e == dropDownSkill))
+                    .any((e) => e == dropDownSkill.toLowerCase()))
             .toList();
       });
     }
@@ -148,7 +131,7 @@ class _ViewSavedCardsState extends State<ViewSavedCards> {
                       Icons.search,
                       color: Colors.white,
                     ),
-                    hintText: "Search Country Here",
+                    hintText: "Search Cards",
                     hintStyle: TextStyle(color: Colors.white)),
               ),
         actions: <Widget>[
@@ -192,46 +175,66 @@ class _ViewSavedCardsState extends State<ViewSavedCards> {
                       Expanded(
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 2),
-                          child: DropdownButton<String>(
-                            value: dropDownInterest,
-                            onChanged: (String newValue) {
-                              setState(() {
-                                dropDownInterest = newValue;
-                                _filterCardsBySkillAndInterest();
-                              });
-                            },
-                            items: availableInterests
-                                .map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList(),
-                            isExpanded: false,
-                            hint: Text("Interests"),
+                          child: Column(
+                            children: <Widget>[
+                              Text(
+                                'Interests',
+                                style: TextStyle(
+                                    fontFamily: 'Montserrat', fontSize: 12),
+                              ),
+                              DropdownButton<String>(
+                                value: dropDownInterest,
+                                onChanged: (String newValue) {
+                                  setState(() {
+                                    dropDownInterest = newValue;
+                                    _filterCardsBySkillAndInterest();
+                                  });
+                                },
+                                items: availableInterests
+                                    .map<DropdownMenuItem<String>>(
+                                        (String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value),
+                                  );
+                                }).toList(),
+                                isExpanded: false,
+                                hint: Text("Interests"),
+                              ),
+                            ],
                           ),
                         ),
                       ),
                       Expanded(
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 2),
-                          child: DropdownButton<String>(
-                            value: dropDownSkill,
-                            onChanged: (String newValue) {
-                              setState(() {
-                                dropDownSkill = newValue;
-                                _filterCardsBySkillAndInterest();
-                              });
-                            },
-                            items: availableSkills
-                                .map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList(),
-                            isExpanded: false,
-                            hint: Text("Skills"),
+                          child: Column(
+                            children: <Widget>[
+                              Text(
+                                'Skills',
+                                style: TextStyle(
+                                    fontFamily: 'Montserrat', fontSize: 12),
+                              ),
+                              DropdownButton<String>(
+                                value: dropDownSkill,
+                                onChanged: (String newValue) {
+                                  setState(() {
+                                    dropDownSkill = newValue;
+                                    _filterCardsBySkillAndInterest();
+                                  });
+                                },
+                                items: availableSkills
+                                    .map<DropdownMenuItem<String>>(
+                                        (String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value),
+                                  );
+                                }).toList(),
+                                isExpanded: false,
+                                hint: Text("Skills"),
+                              ),
+                            ],
                           ),
                         ),
                       ),
@@ -239,37 +242,40 @@ class _ViewSavedCardsState extends State<ViewSavedCards> {
                   ),
                 ),
                 filteredUsers.length > 0
-                    ? ListView.separated(
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        separatorBuilder: (BuildContext context, int index) =>
-                            const Divider(),
-                        itemCount: filteredUsers.length,
-                        padding: EdgeInsets.only(top: 10, bottom: 10),
-                        itemBuilder: (BuildContext context, int index) {
-                          return GestureDetector(
-                            onTap: () {
-                              // Navigator.of(context).pushNamed(Country.routeName,
-                              //     arguments: filteredUsers[index]);
-                            },
-                            child: Container(
-                              padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                              child: SummaryCard(filteredUsers[index]),
-                            ),
-                          );
+                    ? Expanded(
+                        child: ListView.separated(
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            separatorBuilder:
+                                (BuildContext context, int index) =>
+                                    const Divider(),
+                            itemCount: filteredUsers.length,
+                            padding: EdgeInsets.only(top: 10, bottom: 10),
+                            itemBuilder: (BuildContext context, int index) {
+                              return GestureDetector(
+                                onTap: () {
+                                  // Navigator.of(context).pushNamed(Country.routeName,
+                                  //     arguments: filteredUsers[index]);
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                                  child: SummaryCard(filteredUsers[index]),
+                                ),
+                              );
 
-                          // child: Card(
-                          //   elevation: 10,
-                          //   child: Padding(
-                          //     padding: const EdgeInsets.symmetric(
-                          //         vertical: 10, horizontal: 8),
-                          //     child: Text(
-                          //       filteredCountries[index]['name'],
-                          //       style: TextStyle(fontSize: 18),
-                          //     ),
-                          //   ),
-                          // ),
-                        })
+                              // child: Card(
+                              //   elevation: 10,
+                              //   child: Padding(
+                              //     padding: const EdgeInsets.symmetric(
+                              //         vertical: 10, horizontal: 8),
+                              //     child: Text(
+                              //       filteredCountries[index]['name'],
+                              //       style: TextStyle(fontSize: 18),
+                              //     ),
+                              //   ),
+                              // ),
+                            }),
+                      )
                     : Center(
                         child: CircularProgressIndicator(),
                       ),
