@@ -1,3 +1,4 @@
+import 'package:server/controllers/AttendeeController.dart';
 import 'package:server/controllers/CompanyController.dart';
 import 'package:server/controllers/FieldController.dart';
 import 'package:server/controllers/InstitutionController.dart';
@@ -53,6 +54,13 @@ Controller createRoutes() {
       .link(() => VerbController(Resource.user))
       .link(() => VerbController(Resource.event))
       .link(() => EventController());
+  
+  router
+      .route('/events/attendees[/:id]')
+      .link(Authorizer.bearer)
+      .link(() => VerbController(Resource.user))
+      .link(() => VerbController(Resource.event))
+      .link(() => AttendeeController());
 
   router
       .route('/institutions[/:pattern]')
