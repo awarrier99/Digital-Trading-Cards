@@ -39,6 +39,24 @@ class EventInfoModel {
   final EventInfo _eventInfo = EventInfo();
   EventInfo get eventInfo => _eventInfo;
 
+  Future<bool> createEvent() async {
+    try {
+      final res = await post('http://10.0.2.2:8888/api/events',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: json.encode(_eventInfo.toJson()));
+      final body = json.decode(res.body);
+      final success = body['success'];
+      if (!success) return false;
+      _eventInfo.id = body['id'];
+      return true;
+    } catch (err) {
+      return false;
+    }
+  }
+
   Future<EventInfo> fetchEventInfo(int id, String token) async {
     final responce = await get('http://10.0.2.2:8888/api/events/$id', headers: {
       'Accept': 'application/json',
@@ -49,6 +67,22 @@ class EventInfoModel {
     print(body);
     if (responce.statusCode == 200) {
       return EventInfo()..fromJson(body);
+    } else {
+      return null;
+    }
+  }
+
+  Future<List<EventInfo>> fetchUpcomingEvents(int userId, String token) async {
+    final responce =
+        await get('http://10.0.2.2:8888/api/allEvents/$userId', headers: {
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token',
+    });
+    final body = json.decode(responce.body);
+    print(body);
+    if (responce.statusCode == 200) {
+      return new List<EventInfo>.from(
+          body.map((element) => EventInfo()..fromJson(element)).toList());
     } else {
       return null;
     }

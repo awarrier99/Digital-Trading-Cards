@@ -4,6 +4,7 @@ import 'package:server/controllers/FieldController.dart';
 import 'package:server/controllers/InstitutionController.dart';
 import 'package:server/controllers/InterestController.dart';
 import 'package:server/controllers/SkillController.dart';
+import 'package:server/controllers/UpcomingEventsController.dart';
 
 import 'controllers/Authorizer.dart';
 import 'controllers/CardController.dart';
@@ -48,13 +49,15 @@ Controller createRoutes() {
       .link(Authorizer.bearer)
       .link(() => VerbController(Resource.user))
       .link(() => SaveCardController());
+
   router
       .route('/events[/:id]')
       .link(Authorizer.bearer)
-      .link(() => VerbController(Resource.user))
       .link(() => VerbController(Resource.event))
       .link(() => EventController());
-  
+
+  router.route('/allEvents[/:userId]').link(() => UpcomingEventsController());
+
   router
       .route('/events/attendees[/:id]')
       .link(Authorizer.bearer)

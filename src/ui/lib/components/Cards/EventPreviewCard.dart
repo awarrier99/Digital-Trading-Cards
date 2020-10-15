@@ -1,16 +1,15 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:ui/models/EventInfo.dart';
 import 'package:ui/palette.dart';
+import 'package:intl/intl.dart';
 // an event has a name, a host, a start time and an end time
 
 class EventPreviewCard extends StatefulWidget {
   // This will need to be replaced with a model probably
-  String eventName;
-  String hostName;
-  String startDate;
-  String endDate;
+  EventInfo data;
 
-  EventPreviewCard(this.eventName, this.hostName, this.startDate, this.endDate);
+  EventPreviewCard(this.data);
 
   @override
   _EventPreviewState createState() => _EventPreviewState();
@@ -20,6 +19,8 @@ class _EventPreviewState extends State<EventPreviewCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: 200,
+      height: 100,
       padding: EdgeInsets.fromLTRB(25, 10, 25, 10),
       decoration: BoxDecoration(
         color: Palette.secondary,
@@ -45,16 +46,69 @@ class _EventPreviewState extends State<EventPreviewCard> {
         children: [
           Row(
             children: [
-              AutoSizeText(
-                widget.eventName,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 24,
-                  color: Colors.grey[700],
+              FittedBox(
+                fit: BoxFit.fitWidth,
+                child: AutoSizeText(
+                  widget.data.eventName,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24,
+                    color: Colors.grey[700],
+                  ),
+                  maxLines: 2,
                 ),
-                maxLines: 2,
               ),
             ],
+          ),
+          FittedBox(
+            fit: BoxFit.fitWidth,
+            child: Row(
+              children: [
+                Text(
+                  widget.data.owner.firstName,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24,
+                    color: Colors.grey[700],
+                  ),
+                ),
+                Text(" "),
+                Text(
+                  widget.data.owner.lastName,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24,
+                    color: Colors.grey[700],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          FittedBox(
+            fit: BoxFit.fitWidth,
+            child: Row(
+              children: [
+                Text(
+                  DateFormat('MM-dd-yyyy – kk:mm:a')
+                      .format(widget.data.startDate),
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24,
+                    color: Colors.grey[700],
+                  ),
+                ),
+                Text(" "),
+                Text(
+                  DateFormat('MM-dd-yyyy – kk:mm:a')
+                      .format(widget.data.endDate),
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24,
+                    color: Colors.grey[700],
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),

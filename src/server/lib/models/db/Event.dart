@@ -70,7 +70,6 @@ class Event extends Serializable {
     ''';
     final results = await ServerChannel.db.query(sql, [id, owner.id]);
     id = results.insertId;
-
   }
 
   static Future<List<User>> getAttendees(int eventId) async {
@@ -81,33 +80,57 @@ class Event extends Serializable {
         WHERE attendees.event=?
       ''';
       final results = await ServerChannel.db.query(sql, [eventId]);
-      
+
       final resultFutures = results.map((e) async => {
-        if (stringToUserType(e['type'] as String) == UserType.student) {
-        Student.create(
-            firstName: e['first_name'] as String,
-            lastName: e['last_name'] as String,
-            username: e['user_name'] as String,
-            country: e['country'] as String,
-            state: e['state'] as String,
-            city: e['city'] as String,
-            password: e['password'] as String)
-      } else {
-        Recruiter.create(
-            firstName: e['firstName'] as String,
-            lastName: e['lastName'] as String,
-            username: e['lastName'] as String,
-            country: e['county'] as String,
-            state: e['state'] as String,
-            city: e['city'] as String,
-            password: e['password'] as String)
-      }
-      });
+            if (stringToUserType(e['type'] as String) == UserType.student)
+              {
+                Student.create(
+                    firstName: e['first_name'] as String,
+                    lastName: e['last_name'] as String,
+                    username: e['user_name'] as String,
+                    country: e['country'] as String,
+                    state: e['state'] as String,
+                    city: e['city'] as String,
+                    password: e['password'] as String)
+              }
+            else
+              {
+                Recruiter.create(
+                    firstName: e['firstName'] as String,
+                    lastName: e['lastName'] as String,
+                    username: e['lastName'] as String,
+                    country: e['county'] as String,
+                    state: e['state'] as String,
+                    city: e['city'] as String,
+                    password: e['password'] as String)
+              }
+          });
     } catch (err, stackTrace) {
       logError(err,
           stackTrace: stackTrace,
           message: 'An error occurred while trying to get a event:');
       return null;
+    }
+  }
+
+  static Future<List<Event>> getUpcoming(int userId) async {
+    try {
+      print(userId);
+      const sql = '''
+          SELECT event.id as eventId FROM event 
+          JOIN users ON event.owner=users.id 
+        ''';
+      final results = await ServerChannel.db.query(sql);
+      print(results);
+
+      final resultsList =
+          results.map((e) async => Event.get(e['eventId'] as int)).toList();
+      return Future.wait(resultsList);
+    } catch (err, stackTrace) {
+      logError(err,
+          stackTrace: stackTrace,
+          message: 'An error occurred while trying to upcomingEvents:');
+      return [];
     }
   }
 
