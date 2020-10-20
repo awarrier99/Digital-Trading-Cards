@@ -70,7 +70,6 @@ class Event extends Serializable {
     ''';
     final results = await ServerChannel.db.query(sql, [id, owner.id]);
     id = results.insertId;
-
   }
 
   static Future<List<User>> getAttendees(int eventId) async {
@@ -81,7 +80,7 @@ class Event extends Serializable {
         WHERE attendees.event=?
       ''';
       final results = await ServerChannel.db.query(sql, [eventId]);
-      
+      print(results);
       final resultFutures = results.map((e) async => {
         if (stringToUserType(e['type'] as String) == UserType.student) {
         Student.create(
@@ -102,7 +101,8 @@ class Event extends Serializable {
             city: e['city'] as String,
             password: e['password'] as String)
       }
-      });
+      }).toList();
+      return Future.wait(resultFutures);
     } catch (err, stackTrace) {
       logError(err,
           stackTrace: stackTrace,
