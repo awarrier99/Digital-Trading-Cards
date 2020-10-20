@@ -75,38 +75,37 @@ class Event extends Serializable {
   static Future<List<User>> getAttendees(int eventId) async {
     try {
       const sql = '''
-        SELECT * FROM attendees 
-        JOIN users ON attendees.user=users.id
-        WHERE attendees.event=?
+        SELECT *
+        FROM users
+        WHERE users.id IN
+        (SELECT user as attendeeId FROM attendees WHERE event=?);
       ''';
       final results = await ServerChannel.db.query(sql, [eventId]);
-      print(results);
-      final resultFutures = results.map((e) async => {
-        if (stringToUserType(e['type'] as String) == UserType.student) {
-        Student.create(
-            firstName: e['first_name'] as String,
-            lastName: e['last_name'] as String,
-            username: e['user_name'] as String,
-            country: e['country'] as String,
-            state: e['state'] as String,
-            city: e['city'] as String,
-            password: e['password'] as String)
-      } else {
-        Recruiter.create(
-            firstName: e['firstName'] as String,
-            lastName: e['lastName'] as String,
-            username: e['lastName'] as String,
-            country: e['county'] as String,
-            state: e['state'] as String,
-            city: e['city'] as String,
-            password: e['password'] as String)
-      }
-      }).toList();
-      return Future.wait(resultFutures);
+      return results.map((e) {
+            if (stringToUserType(e['type'] as String) == UserType.student){
+                 return Student.create(
+                    firstName: e['first_name'] as String,
+                    lastName: e['last_name'] as String,
+                    username: e['user_name'] as String,
+                    country: e['country'] as String,
+                    state: e['state'] as String,
+                    city: e['city'] as String,
+                    password: e['password'] as String)..id = e['id'] as int;
+            }
+            
+              return Recruiter.create(
+                firstName: e['firstName'] as String,
+                lastName: e['lastName'] as String,
+                username: e['lastName'] as String,
+                country: e['county'] as String,
+                state: e['state'] as String,
+                city: e['city'] as String,
+                password: e['password'] as String)..id = e['id'] as int;
+          }).toList();
     } catch (err, stackTrace) {
       logError(err,
           stackTrace: stackTrace,
-          message: 'An error occurred while trying to get a event:');
+          message: 'An error occurred while trying to get a:');
       return null;
     }
   }
