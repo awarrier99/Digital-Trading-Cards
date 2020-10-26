@@ -9,7 +9,7 @@ import 'controllers/CardController.dart';
 import 'controllers/LoginController.dart';
 import 'controllers/UserController.dart';
 import 'controllers/VerbController.dart';
-import 'controllers/SaveCardController.dart';
+import 'controllers/ConnectionController.dart';
 import 'server.dart';
 
 Controller createRoutes() {
@@ -36,10 +36,11 @@ Controller createRoutes() {
       .link(() => LoginController());
 
   router
-      .route('/cards/saved[/:id]')
-      .link(Authorizer.bearer)
-      .link(() => VerbController(Resource.user))
-      .link(() => SaveCardController());
+      .route('/connections[/:id]')
+      .link(() => Authorizer.multiple(
+          post: AuthMode.bearer, defaultMode: AuthMode.isRequestingUser))
+      .link(() => VerbController(Resource.connection))
+      .link(() => ConnectionController());
 
   router
       .route('/institutions[/:pattern]')

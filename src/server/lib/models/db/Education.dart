@@ -70,11 +70,7 @@ class Education extends Serializable {
     id = object['id'] as int;
     if (user == null) {
       final userMap = object['user'] as Map<String, dynamic>;
-      if (stringToUserType(userMap['type'] as String) == UserType.student) {
-        user = Student()..readFromMap(userMap);
-      } else {
-        user = Recruiter()..readFromMap(userMap);
-      }
+      user = User.fromMap(userMap);
     }
     institution = Institution()
       ..readFromMap(object['institution'] as Map<String, dynamic>);
