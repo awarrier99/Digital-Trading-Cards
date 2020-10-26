@@ -17,8 +17,13 @@ class ViewEvents extends StatefulWidget {
 
 class _ViewEventsState extends State<ViewEvents> {
   bool isSearching = false;
+  bool noResults = true;
   List<EventInfo> allEvents = [];
   List<EventInfo> filteredEvents = [];
+  List<EventInfo> upcoming = [];
+  List<EventInfo> filteredUpcoming = [];
+  List<EventInfo> past = [];
+  List<EventInfo> filteredPast = [];
 
   getUpcomingEvents(EventInfoModel eventInfoModel, UserModel userModel,
       bool isCurrentUser) async {
@@ -39,15 +44,51 @@ class _ViewEventsState extends State<ViewEvents> {
       setState(() {
         allEvents.addAll(data);
         filteredEvents.addAll(data);
+        upcoming.addAll(allEvents
+            .where((element) => element.endDate.isAfter(DateTime.now()))
+            .toList());
+        filteredUpcoming.addAll(upcoming);
+        past.addAll(allEvents
+            .where((element) => element.endDate.isBefore(DateTime.now()))
+            .toList());
+        filteredPast.addAll(past);
         isSearching = false;
       });
     });
     super.initState();
   }
 
-  void _filterEvents(value) {
+  void _filterEvents(value, int tab) {
+    print(tab);
+
+    setState(() {
+      filteredUpcoming = filteredUpcoming
+          .where((element) =>
+              element.owner.firstName
+                  .toLowerCase()
+                  .contains(value.toLowerCase()) ||
+              element.owner.lastName
+                  .toLowerCase()
+                  .contains(value.toLowerCase()) ||
+              element.eventName.toLowerCase().contains(value.toLowerCase()))
+          .toList();
+    });
+
     setState(() {
       filteredEvents = filteredEvents
+          .where((element) =>
+              element.owner.firstName
+                  .toLowerCase()
+                  .contains(value.toLowerCase()) ||
+              element.owner.lastName
+                  .toLowerCase()
+                  .contains(value.toLowerCase()) ||
+              element.eventName.toLowerCase().contains(value.toLowerCase()))
+          .toList();
+    });
+
+    setState(() {
+      filteredPast = filteredPast
           .where((element) =>
               element.owner.firstName
                   .toLowerCase()
@@ -62,93 +103,206 @@ class _ViewEventsState extends State<ViewEvents> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        automaticallyImplyLeading: false,
-        title: !isSearching
-            ? Text(
-                'Events',
-                style: TextStyle(fontFamily: 'Montserrat'),
-              )
-            : TextField(
-                onChanged: (value) {
-                  _filterEvents(value);
-                },
-                style: TextStyle(color: Colors.white),
-                decoration: InputDecoration(
-                    icon: Icon(
-                      Icons.search,
-                      color: Colors.white,
-                    ),
-                    hintText: "Search Events",
-                    hintStyle: TextStyle(color: Colors.white)),
-              ),
-        actions: <Widget>[
-          isSearching
-              ? IconButton(
-                  icon: Icon(Icons.cancel),
-                  onPressed: () {
-                    setState(() {
-                      this.isSearching = false;
-                      this.filteredEvents = allEvents;
-                    });
-                  },
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          automaticallyImplyLeading: false,
+          title: !isSearching
+              ? Text(
+                  'Events',
+                  style: TextStyle(fontFamily: 'Montserrat'),
                 )
-              : IconButton(
-                  icon: Icon(Icons.search),
-                  onPressed: () {
-                    setState(() {
-                      this.isSearching = true;
-                    });
+              : TextField(
+                  onChanged: (value) {
+                    print("searchSelected");
+                    print(DefaultTabController.of(context).index);
+                    _filterEvents(
+                        value, DefaultTabController.of(context).index);
                   },
-                )
-        ],
-      ),
-      // appBar: AppBar(
-      //   title: Text(
-      //     'Saved Cards',
-      //     style: TextStyle(fontFamily: 'Montserrat'),
-      //   ),
-
-      // ),
-      body: Container(
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                filteredEvents.length > 0
-                    ? Expanded(
-                        child: ListView.separated(
-                            scrollDirection: Axis.vertical,
-                            shrinkWrap: true,
-                            separatorBuilder:
-                                (BuildContext context, int index) =>
-                                    const Divider(),
-                            itemCount: filteredEvents.length,
-                            padding: EdgeInsets.only(top: 10, bottom: 10),
-                            itemBuilder: (BuildContext context, int index) {
-                              return GestureDetector(
-                                onTap: () {
-                                  // Navigator.of(context).pushNamed(Country.routeName,
-                                  //     arguments: filteredEvents[index]);
-                                },
-                                child: Container(
-                                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                                  child:
-                                      EventPreviewCard(filteredEvents[index]),
-                                ),
-                              );
-                            }),
-                      )
-                    : Center(
-                        child: CircularProgressIndicator(),
+                  style: TextStyle(color: Colors.white),
+                  decoration: InputDecoration(
+                      icon: Icon(
+                        Icons.search,
+                        color: Colors.white,
                       ),
-              ],
-            ),
+                      hintText: "Search Events",
+                      hintStyle: TextStyle(color: Colors.white)),
+                ),
+          actions: <Widget>[
+            isSearching
+                ? IconButton(
+                    icon: Icon(Icons.cancel),
+                    onPressed: () {
+                      setState(() {
+                        this.isSearching = false;
+                        this.filteredEvents = allEvents;
+                      });
+                    },
+                  )
+                : IconButton(
+                    icon: Icon(Icons.search),
+                    onPressed: () {
+                      setState(() {
+                        this.isSearching = true;
+                      });
+                    },
+                  )
+          ],
+          bottom: TabBar(
+            tabs: <Widget>[
+              Tab(
+                text: "Upcoming",
+                icon: Icon(Icons.account_balance_wallet),
+              ),
+              Tab(
+                text: "All",
+                icon: Icon(Icons.face),
+              ),
+              Tab(
+                text: "Past",
+                icon: Icon(Icons.dashboard),
+              ),
+            ],
           ),
+        ),
+        // appBar: AppBar(
+        //   title: Text(
+        //     'Saved Cards',
+        //     style: TextStyle(fontFamily: 'Montserrat'),
+        //   ),
+
+        // ),
+        body: TabBarView(
+          children: <Widget>[
+            // This container is for the ucoming Events
+            Container(
+              child: SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: <Widget>[
+                      filteredUpcoming.length > 0
+                          ? Expanded(
+                              child: ListView.separated(
+                                  scrollDirection: Axis.vertical,
+                                  shrinkWrap: true,
+                                  separatorBuilder:
+                                      (BuildContext context, int index) =>
+                                          const Divider(),
+                                  itemCount: filteredUpcoming.length,
+                                  padding: EdgeInsets.only(top: 10, bottom: 10),
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return GestureDetector(
+                                      onTap: () {
+                                        // Navigator.of(context).pushNamed(Country.routeName,
+                                        //     arguments: filteredUpcoming[index]);
+                                      },
+                                      child: Container(
+                                        padding:
+                                            EdgeInsets.fromLTRB(10, 5, 10, 5),
+                                        child: EventPreviewCard(
+                                            filteredUpcoming[index]),
+                                      ),
+                                    );
+                                  }),
+                            )
+                          : Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            // This container is for all Events
+            Container(
+              child: SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: <Widget>[
+                      filteredEvents.length > 0
+                          ? Expanded(
+                              child: ListView.separated(
+                                  scrollDirection: Axis.vertical,
+                                  shrinkWrap: true,
+                                  separatorBuilder:
+                                      (BuildContext context, int index) =>
+                                          const Divider(),
+                                  itemCount: filteredEvents.length,
+                                  padding: EdgeInsets.only(top: 10, bottom: 10),
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return GestureDetector(
+                                      onTap: () {
+                                        // Navigator.of(context).pushNamed(Country.routeName,
+                                        //     arguments: filteredEvents[index]);
+                                      },
+                                      child: Container(
+                                        padding:
+                                            EdgeInsets.fromLTRB(10, 5, 10, 5),
+                                        child: EventPreviewCard(
+                                            filteredEvents[index]),
+                                      ),
+                                    );
+                                  }),
+                            )
+                          : Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            // This container is for the Past Events
+            Container(
+              child: SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: <Widget>[
+                      filteredPast.length > 0
+                          ? Expanded(
+                              child: ListView.separated(
+                                  scrollDirection: Axis.vertical,
+                                  shrinkWrap: true,
+                                  separatorBuilder:
+                                      (BuildContext context, int index) =>
+                                          const Divider(),
+                                  itemCount: filteredPast.length,
+                                  padding: EdgeInsets.only(top: 10, bottom: 10),
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return GestureDetector(
+                                      onTap: () {
+                                        // Navigator.of(context).pushNamed(Country.routeName,
+                                        //     arguments: filteredPast[index]);
+                                      },
+                                      child: Container(
+                                        padding:
+                                            EdgeInsets.fromLTRB(10, 5, 10, 5),
+                                        child: EventPreviewCard(
+                                            filteredPast[index]),
+                                      ),
+                                    );
+                                  }),
+                            )
+                          : Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
