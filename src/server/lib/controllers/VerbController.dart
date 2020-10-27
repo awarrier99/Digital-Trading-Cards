@@ -1,3 +1,5 @@
+import 'package:server/models/db/Event.dart';
+
 import '../server.dart';
 
 enum Resource {
@@ -8,7 +10,9 @@ enum Resource {
   field,
   skill,
   interest,
-  company
+  company,
+  event,
+  upcomingEvents
 }
 
 enum Verb { post, get, put, patch, delete }
@@ -119,6 +123,34 @@ class VerbController extends Controller {
 
         request.attachments.putIfAbsent('connectionUser', () => user);
         return request;
+      }
+    } else if (resource == Resource.event) {
+      if (verb == Verb.post) {
+        return _commonPost(request, id, Event.get);
+      } else if (verb == Verb.get) {
+        if (id == null) {
+          return notAllowed();
+        }
+
+        final user = await Event.get(id);
+        if (user == null) {
+          return Response.notFound(body: {'success': false});
+        }
+
+        request.attachments.putIfAbsent('connectionUser', () => user);
+      }
+    } else if (resource == Resource.upcomingEvents) {
+      if (verb == Verb.post) {
+        return _commonPost(request, id, Event.get);
+      } else if (verb == Verb.get) {
+        if (id == null) {
+          return notAllowed();
+        }
+
+        final upcomingEvents = await Event.get(id);
+        if (upcomingEvents == null) {
+          return Response.notFound(body: {'success': false});
+        }
       }
     } else if (resource == Resource.institution ||
         resource == Resource.field ||

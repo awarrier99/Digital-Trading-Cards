@@ -59,6 +59,7 @@ class _SummaryCardState extends State<SummaryCard> {
                   color: Colors.grey[700],
                 ),
               ),
+              Text(" "),
               Text(
                 widget.data.user.lastName,
                 style: TextStyle(

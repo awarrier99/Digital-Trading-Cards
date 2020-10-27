@@ -10,6 +10,7 @@ class Connection {
   User user2;
   String username;
 
+  Connection({this.user1, this.user2, this.username});
   // Map<String, dynamic> toJson() {
   //   return {
   //     'user1': user1.toJson(),
@@ -17,10 +18,15 @@ class Connection {
   //   };
   // }
   Map<String, dynamic> toJson() {
-    return {'username': username};
+    return {
+      'username': username,
+      'user1': user1.toJson(),
+      'user2': user2.toJson()
+    };
   }
 
   void fromJson(Map<String, dynamic> json) {
+    username = json['username'];
     user1 = User()..fromJson(json['user1']);
     user2 = User()..fromJson(json['user2']);
   }
@@ -30,14 +36,18 @@ class ConnectionInfo {
   User user = User();
   List<Connection> connections = [];
   List<CardInfo> connectedUsers = [];
+  List<String> interests = [];
+  List<String> skills = [];
 
-  ConnectionInfo();
+  ConnectionInfo({this.user, this.connections, this.connectedUsers});
 
   Map<String, dynamic> toJson() {
     return {
       'user': user.toJson(),
-      'connections': connections.map((e) => e.toJson()).toList(),
-      'connectedUsers': connectedUsers.map((e) => e.toJson()).toList(),
+      'connections': connections?.map((e) => e.toJson())?.toList(),
+      'connectedUsers': connectedUsers?.map((e) => e.toJson())?.toList(),
+      'interests': interests,
+      'skills': skills,
     };
   }
 
@@ -46,8 +56,16 @@ class ConnectionInfo {
     // for(connection in json['connections']) {
     //   connections.add(Connection..fromJson(connection));
     // }
-    connections = json['connections'];
-    connectedUsers = json['connectedUsers'];
+    connections = new List<Connection>.from(json['connections']
+        .map((element) => Connection()..fromJson(element))
+        .toList());
+    connectedUsers = new List<CardInfo>.from(json['connectedUsers']
+        .map((element) => CardInfo()..fromJson(element))
+        .toList());
+    interests = new List<String>.from(
+        json['interests'].map((element) => element as String).toList());
+    skills = new List<String>.from(
+        json['skills'].map((element) => element as String).toList());
   }
 }
 
@@ -69,26 +87,29 @@ class ConnectionInfoModel {
       final body = json.decode(res.body);
       return body['success'] as bool;
     } catch (err) {
-      // TODO: Improve Error handling
       print('An error occurred while trying to create a connection:');
       print(err);
       return false;
     }
   }
 
+  Future<ConnectionInfo> fetchConnectionInfo(int id, String token,
+      {isCurrentUser: false}) async {
+    final response =
+        await get("http://10.0.2.2:8888/api/cards/saved/$id", headers: {
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token',
+    });
+    final body = json.decode(response.body);
+    if (response.statusCode == 200) {
+      return ConnectionInfo()..fromJson(body);
+    } else {
+      throw Exception('Failed to load connection info');
+    }
+  }
+
   void empty() {
     _createConnectionInfo.fromJson({});
     username = null;
-  }
-}
-
-// TODO: where should this fetch method go?
-Future<ConnectionInfo> fetchConnectionInfo(int id) async {
-  final response = await get("http://10.0.2.2:8888/api/connections/$id");
-  if (response.statusCode == 200) {
-    print(json.decode(response.body));
-    return ConnectionInfo()..fromJson(json.decode(response.body));
-  } else {
-    throw Exception('Failed to load connection info');
   }
 }

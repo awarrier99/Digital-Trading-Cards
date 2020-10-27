@@ -261,6 +261,15 @@ class CardInfo {
         ?.map((element) => UserInterest()..fromJson(element))
         ?.toList();
   }
+
+  bool satisfiesFilters(List<String> interestsFilter) {
+    for (String interest in interestsFilter) {
+      if (interests.contains(interest)) {
+        return true;
+      }
+    }
+    return false;
+  }
 }
 
 class CardInfoModel {
@@ -341,6 +350,28 @@ class CardInfoModel {
   void empty() {
     _currentUserCardInfo.fromJson({});
     isEditing = false;
+  }
+
+  Future<CardInfo> fetchCardInfoByUsername(String username, String token,
+      {isCurrentUser: false}) async {
+    final response = await get(
+      'http://10.0.2.2:8888/api/allCards/$username',
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+    print(response);
+    final body = json.decode(response.body);
+    if (response.statusCode == 200) {
+      if (isCurrentUser) {
+        _currentUserCardInfo.fromJson(body);
+        return currentUserCardInfo;
+      }
+      return CardInfo()..fromJson(body);
+    } else {
+      return null;
+    }
   }
 
   void updateUser(User user) {
