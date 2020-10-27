@@ -13,17 +13,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Provider<GlobalModel>(
-      create: (context) => GlobalModel(),
-      child: MaterialApp(
-        title: 'Wisteria',
-        theme: ThemeData(
-          primarySwatch: Colors.deepPurple,
-          primaryColor: Palette.primary,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-        ),
-        initialRoute: '/',
-        onGenerateRoute: RouteGenerator.generateRoute
-      )
-    );
+        create: (context) => GlobalModel(),
+        child: MaterialApp(
+            title: 'Wisteria',
+            theme: ThemeData(
+              primarySwatch: Colors.deepPurple,
+              primaryColor: Palette.primary,
+              visualDensity: VisualDensity.adaptivePlatformDensity,
+            ),
+            initialRoute: '/',
+            onGenerateRoute: RouteGenerator.generateRoute));
   }
 }
