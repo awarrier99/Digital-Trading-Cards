@@ -24,15 +24,24 @@ class _ViewEventsState extends State<ViewEvents> {
     super.initState();
   }
 
+  Future addEventScreen(context) async {
+    Navigator.of(context).pushNamed('/AddEvents');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
           centerTitle: true,
-          automaticallyImplyLeading: false,
           title: Text(
             'Events',
             style: TextStyle(fontFamily: 'Montserrat'),
+          ),
+          leading: GestureDetector(
+            onTap: () {
+              addEventScreen(context);
+            },
+            child: Icon(Icons.add),
           )),
       body: Container(),
     );
