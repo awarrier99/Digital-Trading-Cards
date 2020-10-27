@@ -165,15 +165,12 @@ class _ViewEventsState extends State<ViewEvents> {
             tabs: <Widget>[
               Tab(
                 text: "Upcoming",
-                icon: Icon(Icons.account_balance_wallet),
               ),
               Tab(
                 text: "All",
-                icon: Icon(Icons.face),
               ),
               Tab(
                 text: "Past",
-                icon: Icon(Icons.dashboard),
               ),
             ],
           ),

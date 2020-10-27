@@ -10,6 +10,7 @@ class EventInfo {
   String eventName;
   DateTime startDate;
   DateTime endDate;
+  // TODO: Add location
 
   EventInfo(
       {this.id, this.owner, this.eventName, this.startDate, this.endDate});
