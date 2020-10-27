@@ -3,6 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:ui/components/Cards/EventPreviewCard.dart';
 import 'package:ui/models/EventInfo.dart';
 import 'package:ui/models/Global.dart';
+import 'package:ui/screens/ViewEvent.dart';
 
 import '../components/Cards/SummaryCard.dart';
 import 'package:ui/models/ConnectionInfo.dart';
@@ -198,8 +199,11 @@ class _ViewEventsState extends State<ViewEvents> {
                                       (BuildContext context, int index) {
                                     return GestureDetector(
                                       onTap: () {
-                                        // Navigator.of(context).pushNamed(Country.routeName,
-                                        //     arguments: filteredUpcoming[index]);
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => ViewEvent(
+                                                    filteredPast[index].id)));
                                       },
                                       child: Container(
                                         padding:
@@ -240,8 +244,11 @@ class _ViewEventsState extends State<ViewEvents> {
                                       (BuildContext context, int index) {
                                     return GestureDetector(
                                       onTap: () {
-                                        // Navigator.of(context).pushNamed(Country.routeName,
-                                        //     arguments: filteredEvents[index]);
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => ViewEvent(
+                                                    filteredPast[index].id)));
                                       },
                                       child: Container(
                                         padding:
@@ -282,8 +289,11 @@ class _ViewEventsState extends State<ViewEvents> {
                                       (BuildContext context, int index) {
                                     return GestureDetector(
                                       onTap: () {
-                                        // Navigator.of(context).pushNamed(Country.routeName,
-                                        //     arguments: filteredPast[index]);
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => ViewEvent(
+                                                    filteredPast[index].id)));
                                       },
                                       child: Container(
                                         padding:
