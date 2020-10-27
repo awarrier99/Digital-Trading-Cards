@@ -102,6 +102,10 @@ class _ViewEventsState extends State<ViewEvents> {
     });
   }
 
+  Future addEventScreen(context) async {
+    Navigator.of(context).pushNamed('/AddEvents');
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -131,6 +135,12 @@ class _ViewEventsState extends State<ViewEvents> {
                       hintText: "Search Events",
                       hintStyle: TextStyle(color: Colors.white)),
                 ),
+          leading: GestureDetector(
+            onTap: () {
+              addEventScreen(context);
+            },
+            child: Icon(Icons.add),
+          ),
           actions: <Widget>[
             isSearching
                 ? IconButton(

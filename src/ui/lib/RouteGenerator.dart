@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ui/components/NavigationBar.dart';
+import 'package:ui/screens/AddEvents.dart';
 import 'package:ui/screens/Profile.dart';
 import 'package:ui/screens/ViewEvents.dart';
 import 'package:ui/screens/WelcomeScreen.dart';
@@ -51,6 +52,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => ViewEvents());
       case '/addCardByEmail':
         return MaterialPageRoute(builder: (_) => AddCardByEmail());
+      case '/AddEvents':
+        return MaterialPageRoute(builder: (_) => AddEvents());
       default:
         // If there is no such named route in the switch statement
         return _errorRoute();
