@@ -157,6 +157,14 @@ class _ViewSavedCardsState extends State<ViewSavedCards> {
                   },
                 )
         ],
+        leading: isSearching
+            ? null
+            : IconButton(
+                icon: Icon(Icons.pending),
+                onPressed: () {
+                  Navigator.of(context).pushNamed('/PendingConnections');
+                },
+              ),
       ),
       // appBar: AppBar(
       //   title: Text(
