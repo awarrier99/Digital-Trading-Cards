@@ -227,6 +227,11 @@ class CardInfo {
       this.skills,
       this.interests});
 
+  // Define that two persons are equal if their SSNs are equal
+  bool operator ==(other) {
+    return (other is CardInfo && other.user == user);
+  }
+
   Map<String, dynamic> toJson() {
     return {
       'user': user.toJson(),

@@ -13,6 +13,7 @@ class AddCardByEmail extends StatefulWidget {
 
 class _AddCardByEmailState extends State<AddCardByEmail> {
   final emailInputController = TextEditingController();
+  bool _isThinking = false;
 
   @override
   void dispose() {
@@ -26,7 +27,13 @@ class _AddCardByEmailState extends State<AddCardByEmail> {
   }
 
   void searchWithEmail() {
+    setState(() {
+      _isThinking = true;
+    });
     if (emailInputController.text.isEmpty) {
+      setState(() {
+        _isThinking = false;
+      });
       Flushbar(
         flushbarPosition: FlushbarPosition.TOP,
         message: 'Email cannot be empty',
@@ -39,20 +46,66 @@ class _AddCardByEmailState extends State<AddCardByEmail> {
       final globalModel = context.read<GlobalModel>();
       final cardInfoModel = globalModel.cardInfoModel;
       final userModel = globalModel.userModel;
+      final connectionInfoModel = globalModel.connectionInfoModel;
+      final userConnectionInfo = connectionInfoModel.fetchConnectionInfo(
+          userModel.currentUser.id, userModel.token,
+          onlyPending: false);
       cardInfoModel
           .fetchCardInfoByUsername(emailInputController.text, userModel.token)
           .then((value) {
         if (value == null) {
+          setState(() {
+            _isThinking = false;
+          });
           Flushbar(
             flushbarPosition: FlushbarPosition.TOP,
-            message: 'User does not exist',
+            message: 'Could not find user with email \'' +
+                emailInputController.text +
+                '\'',
+            duration: Duration(seconds: 3),
+            margin: EdgeInsets.all(8),
+            borderRadius: 8,
+            backgroundColor: Color(0xffDF360E),
+          )..show(context);
+        } else if (value.user.id == userModel.currentUser.id) {
+          setState(() {
+            _isThinking = false;
+          });
+          Flushbar(
+            flushbarPosition: FlushbarPosition.TOP,
+            message: 'Oops. You cannot connect with yourself',
             duration: Duration(seconds: 3),
             margin: EdgeInsets.all(8),
             borderRadius: 8,
             backgroundColor: Color(0xffDF360E),
           )..show(context);
         } else {
-          nextStep(value);
+          userConnectionInfo.then((connectionInfo) {
+            bool alreadyConnected = false;
+            for (var c in connectionInfo.connectionCards) {
+              if (c.user.id == value.user.id) {
+                alreadyConnected = true;
+              }
+            }
+            if (alreadyConnected) {
+              setState(() {
+                _isThinking = false;
+              });
+              Flushbar(
+                flushbarPosition: FlushbarPosition.TOP,
+                message: 'You are already connected with this user',
+                duration: Duration(seconds: 3),
+                margin: EdgeInsets.all(8),
+                borderRadius: 8,
+                backgroundColor: Color(0xffDF360E),
+              )..show(context);
+            } else {
+              setState(() {
+                _isThinking = false;
+              });
+              nextStep(value);
+            }
+          });
         }
       });
     }
@@ -110,22 +163,33 @@ class _AddCardByEmailState extends State<AddCardByEmail> {
                 height: 40,
                 child: Material(
                   borderRadius: BorderRadius.circular(20),
-                  shadowColor: Palette.primary,
-                  color: Palette.primary,
+                  shadowColor:
+                      _isThinking ? Palette.secondary : Palette.primary,
+                  color: _isThinking ? Palette.secondary : Palette.primary,
                   elevation: 7,
                   child: GestureDetector(
                     onTap: () {
-                      // if the input matches someone in the DB
-                      searchWithEmail();
+                      if (!_isThinking) {
+                        // if the input matches someone in the DB
+                        searchWithEmail();
+                      }
                     },
                     child: Center(
-                      child: Text(
-                        'Search',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'Montserrat'),
-                      ),
+                      child: _isThinking
+                          ? SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                            )
+                          : Text(
+                              'Search',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'Montserrat'),
+                            ),
                     ),
                   ),
                 ),
