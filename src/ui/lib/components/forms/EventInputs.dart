@@ -54,7 +54,7 @@ class EventInputsState extends State<EventInputs> {
             ),
           ),
           SizedBox(height: SizeConfig.safeBlockVertical * 2),
-          // _buildEventDescription(),
+          _buildEventDescription(),
           SizedBox(height: SizeConfig.safeBlockVertical * 2),
           Visibility(
             visible: true,
@@ -85,8 +85,6 @@ class EventInputsState extends State<EventInputs> {
           // _buildEventDate(),
           SizedBox(height: SizeConfig.safeBlockVertical * 2),
           // _buildEventTime(),
-          SizedBox(height: SizeConfig.safeBlockVertical * 2),
-          // add a button right under this comment for submission
         ],
       ),
     );
@@ -142,8 +140,13 @@ class EventInputsState extends State<EventInputs> {
 
     return TextInput(
       decoration: InputDecoration(
-          labelText: 'Event Description*', border: OutlineInputBorder()),
+        labelText: 'Event Description*',
+        border: OutlineInputBorder(),
+        alignLabelWithHint: true,
+      ),
       textCapitalization: TextCapitalization.words,
+      keyboardType: TextInputType.multiline,
+      maxLines: 8,
       validator: (value) {
         if (value.isEmpty) {
           return 'Required';
@@ -164,7 +167,8 @@ class EventInputsState extends State<EventInputs> {
     return TextInput(
       decoration: InputDecoration(
           labelText: 'Email Address*', border: OutlineInputBorder()),
-      textCapitalization: TextCapitalization.words,
+      textCapitalization: TextCapitalization.none,
+      keyboardType: TextInputType.emailAddress,
       validator: (value) {
         if (value.isEmpty) {
           return 'Required';
@@ -184,14 +188,9 @@ class EventInputsState extends State<EventInputs> {
   Widget _buildEventContactPhoneNumber() {
     return TextInput(
       decoration: InputDecoration(
-          labelText: 'Email Address*', border: OutlineInputBorder()),
+          labelText: 'Phone Number', border: OutlineInputBorder()),
       textCapitalization: TextCapitalization.words,
-      validator: (value) {
-        if (value.isEmpty) {
-          return 'Required';
-        }
-        return null;
-      },
+      keyboardType: TextInputType.number,
       onChanged: (value) {
         // place this value into create event info model
       },
