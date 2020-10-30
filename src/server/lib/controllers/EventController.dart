@@ -18,7 +18,6 @@ class EventController extends ResourceController {
     }
   }
 
-
   @Operation.get('id')
   Future<Response> getEvent(@Bind.path('id') int eventId) async {
     try {
@@ -27,6 +26,24 @@ class EventController extends ResourceController {
       logError(err,
           stackTrace: stackTrace,
           message: 'An error occurred while trying to get a event:');
+      return Response.serverError(body: {'success': false});
+    }
+  }
+
+  @Operation.put('id')
+  Future<Response> updateEvent(
+      @Bind.body() Event event, @Bind.path('id') int eventId) async {
+    try {
+      final currUser = request.attachments['user'] as User;
+      event.owner = currUser;
+      event.id = eventId;
+      print(event);
+      await event.updateEvent();
+      return Response.ok({'success': true});
+    } catch (err, stackTrace) {
+      logError(err,
+          stackTrace: stackTrace,
+          message: 'An error occurred while trying to update an event:');
       return Response.serverError(body: {'success': false});
     }
   }

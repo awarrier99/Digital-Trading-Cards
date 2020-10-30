@@ -62,6 +62,16 @@ class Event extends Serializable {
     id = results.insertId;
   }
 
+  Future<void> updateEvent() async {
+    const sql = '''
+      UPDATE event
+      SET event_name=?, start_date=?, end_date=?
+      WHERE id=? AND owner=?
+    ''';
+   await ServerChannel.db
+        .query(sql, [eventName, startDate.toUtc(), endDate.toUtc(), id, owner.id]);
+
+  }
   Future<void> addAttendee() async {
     const sql = ''' 
       INSERT INTO attendees 
