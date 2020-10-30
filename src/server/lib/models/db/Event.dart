@@ -130,6 +130,27 @@ class Event extends Serializable {
     }
   }
 
+  static Future<List<Event>> getUpcoming(int userId) async {
+    try {
+      print(userId);
+      const sql = '''
+          SELECT event.id as eventId FROM event 
+          JOIN users ON event.owner=users.id 
+        ''';
+      final results = await ServerChannel.db.query(sql);
+      print(results);
+
+      final resultsList =
+          results.map((e) async => Event.get(e['eventId'] as int)).toList();
+      return Future.wait(resultsList);
+    } catch (err, stackTrace) {
+      logError(err,
+          stackTrace: stackTrace,
+          message: 'An error occurred while trying to upcomingEvents:');
+      return [];
+    }
+  }
+
   static Future<Event> get(int id) async {
     try {
       const sql = '''

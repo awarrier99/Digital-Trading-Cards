@@ -6,76 +6,60 @@ import 'User.dart';
 class Connection extends Serializable {
   Connection();
 
-  Connection.create({@required this.user1, @required this.user2});
+  Connection.create(
+      {@required this.sender, @required this.recipient, this.pending = true});
 
-  User user1;
-  User user2;
+  int id;
+  User sender;
+  User recipient;
+  bool pending;
 
   @override
   Map<String, dynamic> asMap() {
-    print(user1.asMap());
-    return {'user1': user1.asMap(), 'user2': user2.asMap()};
+    return {
+      'id': id,
+      'sender': sender.asMap(),
+      'recipient': recipient.asMap(),
+      'pending': pending
+    };
   }
 
   @override
   void readFromMap(Map<String, dynamic> object) {
-    final user1Map = object['user1'] as Map<String, dynamic>;
-    final user2Map = object['user2'] as Map<String, dynamic>;
-
-    if (stringToUserType(user1Map['type'] as String) == UserType.student) {
-      user1 = Student()..readFromMap(user1Map);
-    } else {
-      user1 = Recruiter()..readFromMap(user1Map);
-    }
-    if (stringToUserType(user2Map['type'] as String) == UserType.student) {
-      user2 = Student()..readFromMap(user2Map);
-    } else {
-      user2 = Recruiter()..readFromMap(user2Map);
-    }
+    id = object['id'] as int;
+    final senderMap = object['sender'] as Map<String, dynamic>;
+    final recipientMap = object['recipient'] as Map<String, dynamic>;
+    sender = User.fromMap(senderMap);
+    recipient = User.fromMap(recipientMap);
+    pending = object['pending'] as bool;
   }
 
   Future<void> save() async {
-    const sql = '''
-      INSERT INTO connections
-      (user1_id, user2_id)
-      VALUES (?, ?)
-    ''';
-    await ServerChannel.db.query(sql, [user1.id, user2.id]);
-  }
-
-  // This method gets the user in the connection that is not the one specified
-  // with the user parameter
-  static Future<List<CardInfo>> getOtherUsers(User user) async {
     try {
-      const sql1 = '''
-        SELECT recipient as otherUserId
-        FROM connections
-        WHERE sender = ?
-      ''';
-
-      const sql2 = '''
-        SELECT sender as otherUserId
-        FROM connections
-        WHERE recipient = ?
-      ''';
-      final results1 = await ServerChannel.db.query(sql1, [user.id]);
-      final results2 = await ServerChannel.db.query(sql2, [user.id]);
-
-      final resultsList1 = results1
-          .map((e) async => CardInfo.getById(e['otherUserId'] as int))
-          .toList();
-
-      final resultsList2 = results2
-          .map((e) async => CardInfo.getById(e['otherUserId'] as int))
-          .toList();
-
-      return Future.wait(List.from(resultsList1)..addAll(resultsList2));
+      String sql;
+      final values = [sender.id, recipient.id, pending];
+      if (id == null) {
+        sql = '''
+          INSERT INTO connections
+          (sender, recipient, pending)
+          VALUES (?, ?, ?)
+        ''';
+      } else {
+        sql = '''
+          UPDATE connections
+          SET pending = ?
+          WHERE id = ?
+        ''';
+        values.clear();
+        values.add(pending);
+        values.add(id);
+      }
+      final results = await ServerChannel.db.query(sql, values);
+      id ??= results.insertId;
     } catch (err, stackTrace) {
       logError(err,
           stackTrace: stackTrace,
-          message:
-              'An error occurred while trying to get the connected users:');
-      return [];
+          message: 'An error occurred while trying to save a connection:');
     }
   }
 
@@ -148,40 +132,24 @@ class Connection extends Serializable {
 
   static Future<List<Connection>> getByUser(User user) async {
     try {
-      const sql1 = '''
-        SELECT sender as user1_id, recipient as user2_id
-        FROM connections
+      const sql = '''
+        SELECT * FROM connections
         WHERE sender = ?
+          OR recipient = ?
       ''';
+      final results = await ServerChannel.db.query(sql, [user.id, user.id]);
 
-      const sql2 = '''
-        SELECT recipient as user1_id, sender as user2_id
-        FROM connections
-        WHERE recipient = ?
-      ''';
-
-      final results1 = await ServerChannel.db.query(sql1, [user.id]);
-      final results2 = await ServerChannel.db.query(sql2, [user.id]);
-
-      final resultsList1 = results1
-          .map((e) async => Connection.create(
-                user1: await User.get(e['user1_id'] as int),
-                user2: await User.get(e['user2_id'] as int),
-              ))
-          .toList();
-
-      final resultsList2 = results2
-          .map((e) async => Connection.create(
-                user1: await User.get(e['user1_id'] as int),
-                user2: await User.get(e['user2_id'] as int),
-              ))
-          .toList();
-
-      return Future.wait(List.from(resultsList1)..addAll(resultsList2));
+      final resultFutures = results.map((e) async => Connection.create(
+          sender: await User.get(e['sender'] as int),
+          recipient: await User.get(e['recipient'] as int),
+          pending: (e['pending'] as int) == 1)
+        ..id = e['id'] as int);
+      return Future.wait(resultFutures);
     } catch (err, stackTrace) {
       logError(err,
           stackTrace: stackTrace,
-          message: 'An error occurred while trying to get user connections:');
+          message:
+              'An error occurred while trying to get user connection info:');
       return [];
     }
   }

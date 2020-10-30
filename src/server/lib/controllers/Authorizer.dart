@@ -30,9 +30,10 @@ class Authorizer {
       AuthMode get,
       AuthMode put,
       AuthMode patch,
-      AuthMode delete}) {
+      AuthMode delete,
+      AuthMode defaultMode = AuthMode.none}) {
     final verbMap = Map.of(verbMapTemplate)
-      ..updateAll((key, value) => AuthMode.none);
+      ..updateAll((key, value) => defaultMode);
     if (post != null) {
       verbMap.update(Verb.post, (value) => post);
     }

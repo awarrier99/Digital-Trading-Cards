@@ -44,11 +44,7 @@ class Work extends Serializable {
     id = object['id'] as int;
     if (user == null) {
       final userMap = object['user'] as Map<String, dynamic>;
-      if (stringToUserType(userMap['type'] as String) == UserType.student) {
-        user = Student()..readFromMap(userMap);
-      } else {
-        user = Recruiter()..readFromMap(userMap);
-      }
+      user = User.fromMap(userMap);
     }
     company = Company()..readFromMap(object['company'] as Map<String, dynamic>);
     jobTitle = object['jobTitle'] as String;

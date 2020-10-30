@@ -43,8 +43,8 @@ class CardController extends ResourceController {
   }
 
   @Operation.put('id')
-  Future<Response> updateCard(@Bind.body() CardInfoUpdate cardInfoUpdate,
-      @Bind.path('id') int userId) async {
+  Future<Response> updateCard(
+      @Bind.body() CardInfoUpdate cardInfoUpdate) async {
     try {
       await CardInfo.update(
           cardInfoUpdate.cardInfo, cardInfoUpdate.deleteLists);

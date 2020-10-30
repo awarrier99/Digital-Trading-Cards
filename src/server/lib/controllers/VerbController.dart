@@ -11,7 +11,8 @@ enum Resource {
   skill,
   interest,
   company,
-  event
+  event,
+  upcomingEvents
 }
 
 enum Verb { post, get, put, patch, delete }
@@ -137,6 +138,19 @@ class VerbController extends Controller {
         }
 
         request.attachments.putIfAbsent('connectionUser', () => user);
+      }
+    } else if (resource == Resource.upcomingEvents) {
+      if (verb == Verb.post) {
+        return _commonPost(request, id, Event.get);
+      } else if (verb == Verb.get) {
+        if (id == null) {
+          return notAllowed();
+        }
+
+        final upcomingEvents = await Event.get(id);
+        if (upcomingEvents == null) {
+          return Response.notFound(body: {'success': false});
+        }
       }
     } else if (resource == Resource.institution ||
         resource == Resource.field ||

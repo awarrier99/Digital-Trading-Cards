@@ -4,15 +4,15 @@ import 'package:server/controllers/FieldController.dart';
 import 'package:server/controllers/InstitutionController.dart';
 import 'package:server/controllers/InterestController.dart';
 import 'package:server/controllers/SkillController.dart';
+import 'package:server/controllers/UpcomingEventsController.dart';
 
 import 'controllers/Authorizer.dart';
 import 'controllers/CardController.dart';
+import 'controllers/ConnectionController.dart';
+import 'controllers/EventController.dart';
 import 'controllers/LoginController.dart';
 import 'controllers/UserController.dart';
 import 'controllers/VerbController.dart';
-import 'controllers/SaveCardController.dart';
-import 'controllers/EventController.dart';
-
 import 'server.dart';
 
 Controller createRoutes() {
@@ -44,17 +44,20 @@ Controller createRoutes() {
       .link(() => LoginController());
 
   router
-      .route('/cards/saved[/:id]')
-      .link(Authorizer.bearer)
-      .link(() => VerbController(Resource.user))
-      .link(() => SaveCardController());
+      .route('/connections[/:id]')
+      .link(() => Authorizer.multiple(
+          post: AuthMode.bearer, defaultMode: AuthMode.isRequestingUser))
+      .link(() => VerbController(Resource.connection))
+      .link(() => ConnectionController());
+
   router
       .route('/events[/:id]')
       .link(Authorizer.bearer)
-      .link(() => VerbController(Resource.user))
       .link(() => VerbController(Resource.event))
       .link(() => EventController());
-  
+
+  router.route('/allEvents[/:userId]').link(() => UpcomingEventsController());
+
   router
       .route('/events/attendees[/:id]')
       .link(Authorizer.bearer)

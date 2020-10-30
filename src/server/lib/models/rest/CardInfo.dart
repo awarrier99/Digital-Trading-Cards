@@ -36,11 +36,7 @@ class CardInfo extends Serializable {
   @override
   void readFromMap(Map<String, dynamic> object) {
     final userMap = object['user'] as Map<String, dynamic>;
-    if (userMap['type'] == userTypeToString(UserType.student)) {
-      user = Student()..readFromMap(userMap);
-    } else {
-      user = Recruiter()..readFromMap(userMap);
-    }
+    user = User.fromMap(userMap);
     final educationList = object['education'] as List;
     education = educationList
         .map((e) => Education()
@@ -129,7 +125,6 @@ class CardInfo extends Serializable {
     await _saveAll(cardInfo, true);
     for (List<dynamic> list in deleteLists.values) {
       for (dynamic e in list) {
-        print(e.id);
         e.delete();
       }
     }

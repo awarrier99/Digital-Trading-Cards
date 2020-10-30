@@ -41,6 +41,13 @@ class User extends Serializable {
       @required this.password,
       @required this.type});
 
+  factory User.fromMap(Map<String, dynamic> map) {
+    if (map['type'] == userTypeToString(UserType.student)) {
+      return Student()..readFromMap(map);
+    }
+    return Recruiter()..readFromMap(map);
+  }
+
   int id;
   String firstName;
   String lastName;
@@ -167,25 +174,6 @@ class User extends Serializable {
     ]);
     id = results.insertId;
   }
-
-  Future<void> saveConnections(int user1_id, int user2_id) async {
-    const sql = '''
-      INSERT INTO connections
-      (user1_id, user2_id)
-      VALUES (?, ?)
-    ''';
-     await ServerChannel.db.query(sql, [user1_id, user2_id]);
-  }
-
-  // Matts saveConnection
-  // Future<void> saveConnection(int user2_id) async {
-  //   const sql = '''
-  //     INSERT INTO connections
-  //     (user1_id, user2_id)
-  //     VALUES (?, ?)
-  //   ''';
-  //   await ServerChannel.db.query(sql, [id, user2_id]);
-  // }
 
   Future<bool> checkAuth(String plaintext) async {
     try {
