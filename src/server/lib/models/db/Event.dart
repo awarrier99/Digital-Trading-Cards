@@ -65,8 +65,14 @@ class Event extends Serializable {
       (owner, event_name, company_organization, event_description, start_date, end_date)
       VALUES (?, ?, ?, ?, ?, ?)
     ''';
-    final results = await ServerChannel.db
-        .query(sql, [owner.id, eventName, company, eventDescription, startDate.toUtc(), endDate.toUtc()]);
+    final results = await ServerChannel.db.query(sql, [
+      owner.id,
+      eventName,
+      company,
+      eventDescription,
+      startDate.toUtc(),
+      endDate.toUtc()
+    ]);
     id = results.insertId;
   }
 
@@ -76,8 +82,15 @@ class Event extends Serializable {
       SET event_name=?,company=?, eventDescription=?, start_date=?, end_date=?
       WHERE id=? AND owner=?
     ''';
-    await ServerChannel.db.query(
-        sql, [eventName, company, eventDescription, startDate.toUtc(), endDate.toUtc(), id, owner.id]);
+    await ServerChannel.db.query(sql, [
+      eventName,
+      company,
+      eventDescription,
+      startDate.toUtc(),
+      endDate.toUtc(),
+      id,
+      owner.id
+    ]);
   }
 
   Future<void> addAttendee() async {
