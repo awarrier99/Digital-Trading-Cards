@@ -8,6 +8,8 @@ class Event extends Serializable {
   Event.create({
     @required this.owner,
     @required this.eventName,
+    @required this.eventDescription,
+    @required this.company,
     @required this.startDate,
     @required this.endDate,
   });
@@ -15,6 +17,8 @@ class Event extends Serializable {
   int id;
   User owner;
   String eventName;
+  String eventDescription;
+  String company;
   DateTime startDate;
   DateTime endDate;
 
@@ -24,6 +28,8 @@ class Event extends Serializable {
       'id': id,
       'owner': owner.asMap(),
       'eventName': eventName,
+      'eventDescription': eventDescription,
+      'company': company,
       'startDate': startDate.toIso8601String(),
       'endDate': endDate?.toIso8601String()
     };
@@ -41,6 +47,8 @@ class Event extends Serializable {
       }
     }
     eventName = object['eventName'] as String;
+    eventDescription = object['eventDescription'] as String;
+    company = object['company'] as String;
     final startDateStr = object['startDate'] as String;
     startDate = startDateStr == null || startDateStr.isEmpty
         ? null
@@ -54,24 +62,24 @@ class Event extends Serializable {
   Future<void> save() async {
     const sql = '''
       INSERT INTO event
-      (owner, event_name, start_date, end_date)
-      VALUES (?, ?, ?, ?)
+      (owner, event_name, company_organization, event_description, start_date, end_date)
+      VALUES (?, ?, ?, ?, ?, ?)
     ''';
     final results = await ServerChannel.db
-        .query(sql, [owner.id, eventName, startDate.toUtc(), endDate.toUtc()]);
+        .query(sql, [owner.id, eventName, company, eventDescription, startDate.toUtc(), endDate.toUtc()]);
     id = results.insertId;
   }
 
   Future<void> updateEvent() async {
     const sql = '''
       UPDATE event
-      SET event_name=?, start_date=?, end_date=?
+      SET event_name=?,company=?, eventDescription=?, start_date=?, end_date=?
       WHERE id=? AND owner=?
     ''';
-   await ServerChannel.db
-        .query(sql, [eventName, startDate.toUtc(), endDate.toUtc(), id, owner.id]);
-
+    await ServerChannel.db.query(
+        sql, [eventName, company, eventDescription, startDate.toUtc(), endDate.toUtc(), id, owner.id]);
   }
+
   Future<void> addAttendee() async {
     const sql = ''' 
       INSERT INTO attendees 
@@ -92,26 +100,28 @@ class Event extends Serializable {
       ''';
       final results = await ServerChannel.db.query(sql, [eventId]);
       return results.map((e) {
-            if (stringToUserType(e['type'] as String) == UserType.student){
-                 return Student.create(
-                    firstName: e['first_name'] as String,
-                    lastName: e['last_name'] as String,
-                    username: e['user_name'] as String,
-                    country: e['country'] as String,
-                    state: e['state'] as String,
-                    city: e['city'] as String,
-                    password: e['password'] as String)..id = e['id'] as int;
-            }
-            
-              return Recruiter.create(
-                firstName: e['firstName'] as String,
-                lastName: e['lastName'] as String,
-                username: e['lastName'] as String,
-                country: e['county'] as String,
-                state: e['state'] as String,
-                city: e['city'] as String,
-                password: e['password'] as String)..id = e['id'] as int;
-          }).toList();
+        if (stringToUserType(e['type'] as String) == UserType.student) {
+          return Student.create(
+              firstName: e['first_name'] as String,
+              lastName: e['last_name'] as String,
+              username: e['user_name'] as String,
+              country: e['country'] as String,
+              state: e['state'] as String,
+              city: e['city'] as String,
+              password: e['password'] as String)
+            ..id = e['id'] as int;
+        }
+
+        return Recruiter.create(
+            firstName: e['firstName'] as String,
+            lastName: e['lastName'] as String,
+            username: e['lastName'] as String,
+            country: e['county'] as String,
+            state: e['state'] as String,
+            city: e['city'] as String,
+            password: e['password'] as String)
+          ..id = e['id'] as int;
+      }).toList();
     } catch (err, stackTrace) {
       logError(err,
           stackTrace: stackTrace,
