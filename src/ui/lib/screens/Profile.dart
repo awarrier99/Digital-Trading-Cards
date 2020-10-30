@@ -28,6 +28,7 @@ class Profile extends StatelessWidget {
               ),
             ),
             SizedBox(
+                width: SizeConfig.screenWidth,
                 child: RaisedButton(
                     child: Text('Logout'),
                     textColor: Colors.white,

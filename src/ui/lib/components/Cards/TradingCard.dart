@@ -54,27 +54,46 @@ class _TradingCardState extends State<TradingCard> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           widget.currentUser
-              ? Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                  FlatButton(
-                    textColor: Colors.grey,
-                    onPressed: () {
-                      final globalModel = context.read<GlobalModel>();
-                      globalModel.cardInfoModel.isEditing = true;
-                      Navigator.of(context).pushNamed('/createCard1');
-                    },
-                    child: Column(
-                      children: [
-                        Icon(
-                          Icons.edit,
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                      FlatButton(
+                        textColor: Colors.grey,
+                        onPressed: () {
+                          Navigator.of(context).pushNamed('/profile');
+                        },
+                        child: Column(
+                          children: [
+                            Icon(
+                              Icons.account_circle,
+                            ),
+                            Text(
+                              "Account",
+                              style: TextStyle(fontSize: 12),
+                            ),
+                          ],
                         ),
-                        Text(
-                          "Edit Card",
-                          style: TextStyle(fontSize: 12),
+                      ),
+                      FlatButton(
+                        textColor: Colors.grey,
+                        onPressed: () {
+                          final globalModel = context.read<GlobalModel>();
+                          globalModel.cardInfoModel.isEditing = true;
+                          Navigator.of(context).pushNamed('/createCard1');
+                        },
+                        child: Column(
+                          children: [
+                            Icon(
+                              Icons.edit,
+                            ),
+                            Text(
+                              "Edit Card",
+                              style: TextStyle(fontSize: 12),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  )
-                ])
+                      ),
+                    ])
               : Row(mainAxisAlignment: MainAxisAlignment.end, children: [
                   FlatButton(
                     textColor: Colors.grey,
@@ -108,6 +127,7 @@ class _TradingCardState extends State<TradingCard> {
                     ),
                   )
                 ]),
+          SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

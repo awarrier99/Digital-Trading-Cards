@@ -36,7 +36,7 @@ class _AddCardByEmailState extends State<AddCardByEmail> {
       });
       Flushbar(
         flushbarPosition: FlushbarPosition.TOP,
-        message: 'Email cannot be empty',
+        message: 'Please enter an email',
         duration: Duration(seconds: 3),
         margin: EdgeInsets.all(8),
         borderRadius: 8,
