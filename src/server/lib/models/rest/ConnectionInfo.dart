@@ -36,12 +36,14 @@ class ConnectionInfo extends Serializable {
         .toList();
   }
 
-  static Future<ConnectionInfo> getByUser(User user, {bool getCards}) async {
-    final connections = await Connection.getByUser(user);
-    List<CardInfo> connectionCards = [];
-    if (getCards) {
-      connectionCards = await Connection.getConnectionCards(user, connections);
+  static Future<ConnectionInfo> getByUser(User user, {bool onlyPending, bool incoming}) async {
+    List<Connection> connections;
+    if (onlyPending) {
+      connections = await Connection.getPending(user, incoming: incoming);
+    } else {
+      connections = await Connection.getByUser(user);
     }
+    final connectionCards = await Connection.getConnectionCards(user, connections);
     return ConnectionInfo.create(
         user: user,
         connections: connections,

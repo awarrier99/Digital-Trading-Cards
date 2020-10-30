@@ -27,10 +27,11 @@ Controller createRoutes() {
       .link(() => VerbController(Resource.card))
       .link(() => CardController());
 
-  router
-      .route('/allCards[/:username]')
-      .link(() => VerbController(Resource.card))
-      .link(() => CardController());
+  // router
+  //     .route('/cards/username/:username')
+  //     .link(Authorizer.bearer)
+  //     .link(() => VerbController(Resource.card))
+  //     .link(() => CardController());
 
   router
       .route('/users[/:id]')
@@ -45,8 +46,7 @@ Controller createRoutes() {
 
   router
       .route('/connections[/:id]')
-      .link(() => Authorizer.multiple(
-          post: AuthMode.bearer, defaultMode: AuthMode.isRequestingUser))
+      .link(Authorizer.bearer)
       .link(() => VerbController(Resource.connection))
       .link(() => ConnectionController());
 

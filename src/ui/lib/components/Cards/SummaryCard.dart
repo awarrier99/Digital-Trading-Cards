@@ -77,43 +77,47 @@ class _SummaryCardState extends State<SummaryCard> {
           ),
 
           // Container for the college
-          Container(
-            padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
-            alignment: Alignment.centerLeft,
-            child: Text(
-              widget.data.education[0].institution.longName,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-                color: Colors.black87,
-              ),
-            ),
-          ),
+          widget.data.education.isNotEmpty
+              ? Container(
+                  padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    widget.data.education[0].institution.longName,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                      color: Colors.black87,
+                    ),
+                  ),
+                )
+              : SizedBox.shrink(),
 
           // Container for the major
-          Container(
-            padding: EdgeInsets.fromLTRB(0, 2.5, 0, 5),
-            alignment: Alignment.centerLeft,
-            child: Row(
-              children: [
-                Text(
-                  widget.data.education[0].degree,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.grey[700],
+          widget.data.education.isNotEmpty
+              ? Container(
+                  padding: EdgeInsets.fromLTRB(0, 2.5, 0, 5),
+                  alignment: Alignment.centerLeft,
+                  child: Row(
+                    children: [
+                      Text(
+                        widget.data.education[0].degree,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.grey[700],
+                        ),
+                      ),
+                      // Text(" "),
+                      // Text(
+                      //   widget.major,
+                      //   style: TextStyle(
+                      //     fontSize: 16,
+                      //     color: Colors.grey[700],
+                      //   ),
+                      // ),
+                    ],
                   ),
-                ),
-                // Text(" "),
-                // Text(
-                //   widget.major,
-                //   style: TextStyle(
-                //     fontSize: 16,
-                //     color: Colors.grey[700],
-                //   ),
-                // ),
-              ],
-            ),
-          ),
+                )
+              : SizedBox.shrink(),
 
           // Container for the users skills
           widget.data.skills.isNotEmpty

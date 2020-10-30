@@ -1,8 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:http/http.dart';
-import 'package:provider/provider.dart';
-
 import 'dart:convert';
+
+import 'package:http/http.dart';
 import 'package:ui/models/User.dart';
 
 class Company {
@@ -85,9 +83,7 @@ class Education {
     field = Field()..fromJson(json['field']);
     current = json['current'];
     startDate = DateTime.parse(json['startDate']);
-    endDate = DateTime.parse(json['endDate']);
-    // startDate = DateTime.parse(json['startDate'].toString());
-    // endDate = DateTime.parse(json['endDate'].toString());
+    endDate = json['endDate'] == null ? null : DateTime.parse(json['endDate']);
   }
 }
 
@@ -347,21 +343,15 @@ class CardInfoModel {
     }
   }
 
-  void empty() {
-    _currentUserCardInfo.fromJson({});
-    isEditing = false;
-  }
-
   Future<CardInfo> fetchCardInfoByUsername(String username, String token,
       {isCurrentUser: false}) async {
     final response = await get(
-      'http://10.0.2.2:8888/api/allCards/$username',
+      'http://10.0.2.2:8888/api/cards/$username',
       headers: {
         'Accept': 'application/json',
         'Authorization': 'Bearer $token',
       },
     );
-    print(response);
     final body = json.decode(response.body);
     if (response.statusCode == 200) {
       if (isCurrentUser) {
@@ -396,5 +386,10 @@ class CardInfoModel {
 
   void updateInterests(List<UserInterest> interests) {
     _currentUserCardInfo.interests = interests;
+  }
+
+  void empty() {
+    _currentUserCardInfo.fromJson({});
+    isEditing = false;
   }
 }
