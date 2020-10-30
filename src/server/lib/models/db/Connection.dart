@@ -153,4 +153,16 @@ class Connection extends Serializable {
       return [];
     }
   }
+
+  static Future<List<CardInfo>> getConnectionCards(
+      User user, List<Connection> connections) async {
+    final futures = connections.map((e) {
+      User u = e.recipient;
+      if (u.id == user.id) {
+        u = e.sender;
+      }
+      return CardInfo.get(u);
+    });
+    return Future.wait(futures);
+  }
 }

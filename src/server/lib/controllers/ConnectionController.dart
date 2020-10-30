@@ -34,11 +34,13 @@ class ConnectionController extends ResourceController {
   }
 
   @Operation.get('id')
-  Future<Response> getConnections() async {
+  Future<Response> getConnectionInfo(
+      {@Bind.query('getCards') bool getCards = false}) async {
     try {
       final user = request.attachments['connectionUser']
           as User; // only support getting the current user
-      return Response.ok(await Connection.getByUser(user));
+      return Response.ok(
+          await ConnectionInfo.getByUser(user, getCards: getCards));
     } catch (err, stackTrace) {
       logError(err,
           stackTrace: stackTrace,
