@@ -87,7 +87,7 @@ class CreateFieldDialogState extends State<CreateFieldDialog> {
                   RaisedButton(
                       child: Text('Add Field'),
                       textColor: Colors.white,
-                      color: Palette.primaryGreen,
+                      color: Palette.primary,
                       onPressed: () {
                         if (_createFieldFormKey.currentState.validate()) {
                           _onAdd();

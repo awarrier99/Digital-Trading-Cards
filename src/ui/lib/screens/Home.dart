@@ -53,7 +53,7 @@ class _HomeState extends State<Home> {
                   : RaisedButton(
                       child: Text('Create Card'),
                       textColor: Colors.white,
-                      color: Palette.primaryGreen,
+                      color: Palette.primary,
                       onPressed: () {
                         final globalModel = context.read<GlobalModel>();
                         globalModel.cardInfoModel.isEditing = false;

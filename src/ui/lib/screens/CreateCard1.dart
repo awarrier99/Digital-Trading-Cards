@@ -69,7 +69,7 @@ class CreateCard1State extends State<CreateCard1> {
                           child: RaisedButton(
                               child: Text('Next'),
                               textColor: Colors.white,
-                              color: Palette.primaryGreen,
+                              color: Palette.primary,
                               onPressed: () {
                                 if (_createCard1FormKey.currentState
                                     .validate()) {
