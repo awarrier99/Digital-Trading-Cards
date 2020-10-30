@@ -11,6 +11,8 @@ import 'package:ui/screens/ViewSavedCards.dart';
 import 'package:ui/screens/PreviewCard.dart';
 import 'package:ui/screens/AddCard.dart';
 import 'package:ui/screens/AddCardByEmail.dart';
+import 'package:ui/screens/AddCardByNFC.dart';
+import 'package:ui/screens/PendingConnections.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -52,8 +54,12 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => ViewEvents());
       case '/addCardByEmail':
         return MaterialPageRoute(builder: (_) => AddCardByEmail());
+      case '/addCardByNFC':
+        return MaterialPageRoute(builder: (_) => AddCardByNFC());
       case '/AddEvents':
         return MaterialPageRoute(builder: (_) => AddEvents());
+      case '/PendingConnections':
+        return MaterialPageRoute(builder: (_) => PendingConnections());
       default:
         // If there is no such named route in the switch statement
         return _errorRoute();
