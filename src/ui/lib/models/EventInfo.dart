@@ -8,6 +8,8 @@ class EventInfo {
   int id;
   User owner;
   String eventName;
+  String eventDescription;
+  String company;
   DateTime startDate;
   DateTime endDate;
   // TODO: Add location
@@ -43,6 +45,24 @@ class EventInfoModel {
   Future<bool> createEvent() async {
     try {
       final res = await post('http://10.0.2.2:8888/api/events',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: json.encode(_eventInfo.toJson()));
+      final body = json.decode(res.body);
+      final success = body['success'];
+      if (!success) return false;
+      _eventInfo.id = body['id'];
+      return true;
+    } catch (err) {
+      return false;
+    }
+  }
+
+  Future<bool> update() async {
+    try {
+      final res = await put('http://10.0.2.2:8888/api/events',
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
