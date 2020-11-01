@@ -45,11 +45,9 @@ class AddEvents extends StatelessWidget {
                           final globalModel = context.read<GlobalModel>();
                           final eventModel = globalModel.eventInfoModel;
                           eventModel.createEvent();
+                          sendToViewEventScreen(context);
                           // include a check in the future for dupes
                         }
-                        sendToViewEventScreen(context);
-                        // Navigator.of(context)
-                        // go to preview page or go back to view events page
                       }),
                 ),
               ],
