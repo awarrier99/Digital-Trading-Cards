@@ -1,10 +1,20 @@
+// import 'dart:html';
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ui/SizeConfig.dart';
 import 'package:ui/components/TextInput.dart';
+import 'package:ui/models/EventInfo.dart';
 import 'package:ui/palette.dart';
+import 'package:intl/intl.dart';
 
 class EventInputs extends StatefulWidget {
+  final GlobalKey key;
+  final EventInfo model;
+
+  EventInputs({@required this.key, @required this.model});
+
   @override
   State<StatefulWidget> createState() {
     return EventInputsState();
@@ -82,7 +92,7 @@ class EventInputsState extends State<EventInputs> {
             ),
           ),
           SizedBox(height: SizeConfig.safeBlockVertical * 2),
-          // _buildEventDate(),
+          _buildEventDate(),
           SizedBox(height: SizeConfig.safeBlockVertical * 2),
           // _buildEventTime(),
         ],
@@ -200,11 +210,51 @@ class EventInputsState extends State<EventInputs> {
     );
   }
 
+  DateTime selectedDate = DateTime.now();
+
+  Future<Null> _selectDate(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+        context: context,
+        initialDate: selectedDate,
+        firstDate: DateTime(2020, 10),
+        lastDate: DateTime(2101));
+
+    if (picked != null && picked != selectedDate)
+      setState(() {
+        selectedDate = picked;
+      });
+  }
+
   // Data Picker widget
   Widget _buildEventDate() {
-    // look for this calendar widget Ashvin talked about
-    return null;
+    String date = DateFormat.yMMMMd().format(selectedDate);
+
+    return Container(
+      child: Row(
+        children: [
+          Text(
+            date,
+            style: TextStyle(
+                fontSize: 20,
+                fontFamily: 'Montserrat',
+                fontWeight: FontWeight.bold),
+          ),
+          SizedBox(
+            width: 40,
+          ),
+          RaisedButton(
+            onPressed: () {
+              _selectDate(context);
+            },
+            child: Text('Select a date'),
+          ),
+        ],
+      ),
+    );
   }
+
+  TimeOfDay selectedTo = TimeOfDay.now();
+  String formatTimeOfDay(TimeOfDay tod) {}
 
   // Time Picker widget
   Widget _buildEventTime() {
