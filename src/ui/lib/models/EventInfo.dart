@@ -10,8 +10,6 @@ class EventInfo {
   String company;
   String eventDescription;
   String eventName;
-  String eventDescription;
-  String company;
   DateTime startDate;
   DateTime endDate;
   // TODO: Add location
