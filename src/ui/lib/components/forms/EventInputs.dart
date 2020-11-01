@@ -181,15 +181,15 @@ class EventInputsState extends State<EventInputs> {
   Widget _buildEventContactEmail() {
     return TextInput(
       decoration: InputDecoration(
-          labelText: 'Email Address*', border: OutlineInputBorder()),
+          labelText: 'Email Address', border: OutlineInputBorder()),
       textCapitalization: TextCapitalization.none,
       keyboardType: TextInputType.emailAddress,
-      validator: (value) {
-        if (value.isEmpty) {
-          return 'Required';
-        }
-        return null;
-      },
+      // validator: (value) {
+      //   if (value.isEmpty) {
+      //     return 'Required';
+      //   }
+      //   return null;
+      // },
       onChanged: (value) {
         // place this value into create event info model
       },
@@ -293,9 +293,32 @@ class EventInputsState extends State<EventInputs> {
     );
   }
 
-  TimeOfDay selectedTo = TimeOfDay.now();
+  TimeOfDay selectedStartTime = TimeOfDay.now();
+  TimeOfDay selectedEndTime = TimeOfDay.now();
+
+  String startTime = '';
+  String endTime = '';
+
+  Future<Null> selectTime(BuildContext context, bool start) async {
+    final TimeOfDay _time =
+        await showTimePicker(context: context, initialTime: selectedStartTime);
+
+    if (start) {
+      if (_time != null && _time != selectedStartTime) {
+        setState(() {
+          selectedStartTime = _time;
+        });
+      }
+    } else if (_time != null && _time != selectedEndTime && !start) {
+      setState(() {
+        selectedEndTime = _time;
+      });
+    }
+  }
+
   String formatTimeOfDay(TimeOfDay tod) {
     final now = DateTime.now();
+    final dt = DateTime(now.year, now.month, now.day, tod.hour, tod.minute);
   }
 
   // Time Picker widget
