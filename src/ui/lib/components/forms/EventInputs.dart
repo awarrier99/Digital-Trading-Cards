@@ -92,7 +92,9 @@ class EventInputsState extends State<EventInputs> {
             ),
           ),
           SizedBox(height: SizeConfig.safeBlockVertical * 2),
-          _buildEventDate(),
+          _buildStartEventDate(),
+          SizedBox(height: SizeConfig.safeBlockVertical * 2),
+          _buildEndEventDate(),
           SizedBox(height: SizeConfig.safeBlockVertical * 2),
           // _buildEventTime(),
         ],
@@ -213,24 +215,32 @@ class EventInputsState extends State<EventInputs> {
     );
   }
 
-  DateTime selectedDate = DateTime.now();
+  DateTime startDate = DateTime.now();
+  DateTime endDate = DateTime.now();
 
-  Future<Null> _selectDate(BuildContext context) async {
+  // need to set edge case where start date is further ahead then end date
+  Future<Null> _selectDate(BuildContext context, bool start) async {
     final DateTime picked = await showDatePicker(
         context: context,
-        initialDate: selectedDate,
+        initialDate: DateTime.now(),
         firstDate: DateTime(2020, 10),
         lastDate: DateTime(2101));
-
-    if (picked != null && picked != selectedDate)
+    if (start) {
+      if (picked != null && picked != startDate) {
+        setState(() {
+          startDate = picked;
+        });
+      }
+    } else if (picked != null && picked != endDate && !start) {
       setState(() {
-        selectedDate = picked;
+        endDate = picked;
       });
+    }
   }
 
   // Data Picker widget
-  Widget _buildEventDate() {
-    String date = DateFormat.yMMMMd().format(selectedDate);
+  Widget _buildStartEventDate() {
+    String date = DateFormat.yMMMMd().format(startDate);
 
     return Container(
       child: Row(
@@ -247,9 +257,36 @@ class EventInputsState extends State<EventInputs> {
           ),
           RaisedButton(
             onPressed: () {
-              _selectDate(context);
+              _selectDate(context, true);
             },
-            child: Text('Select a date'),
+            child: Text('Select a Start date'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildEndEventDate() {
+    String date = DateFormat.yMMMMd().format(endDate);
+
+    return Container(
+      child: Row(
+        children: [
+          Text(
+            date,
+            style: TextStyle(
+                fontSize: 20,
+                fontFamily: 'Montserrat',
+                fontWeight: FontWeight.bold),
+          ),
+          SizedBox(
+            width: 40,
+          ),
+          RaisedButton(
+            onPressed: () {
+              _selectDate(context, false);
+            },
+            child: Text('Select an end date'),
           ),
         ],
       ),
