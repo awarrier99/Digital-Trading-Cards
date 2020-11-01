@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:ui/models/EventInfo.dart';
+import 'package:ui/palette.dart';
 
 class EventCard extends StatelessWidget {
   final EventInfo data;
@@ -12,7 +13,7 @@ class EventCard extends StatelessWidget {
   Widget build(BuildContext) {
     return Container(
       margin: EdgeInsets.all(20),
-      padding: EdgeInsets.only(left: 5, right: 5, bottom: 5, top: 5),
+      padding: EdgeInsets.all(20),
       decoration: BoxDecoration(
         gradient: LinearGradient(
             colors: [Color(0xfff4f4f4), Color(0xfff8f8f8)],
@@ -39,7 +40,9 @@ class EventCard extends StatelessWidget {
                 Text(
                   '${data.eventName}',
                   style: TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 24, height: .5),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 24,
+                      color: Palette.primary),
                 ),
               ],
             ),
@@ -50,28 +53,61 @@ class EventCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Padding(
+                    padding: EdgeInsets.only(bottom: 5),
+                    child: Text(
+                      "Date",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
                   Row(
                     children: [
-                      Text("Start Date: "),
-                      Text(DateFormat('MM-dd-yyyy – kk:mm:a')
-                          .format(data.startDate)),
+                      Text("Start: "),
+                      Text(
+                        DateFormat('MMM dd, yyyy kk:mm a')
+                            .format(data.startDate),
+                      ),
                     ],
                   ),
                   Row(
                     children: [
-                      Text("End Date: "),
-                      Text(DateFormat('MM-dd-yyyy – kk:mm:a')
-                          .format(data.endDate)),
+                      Text("End: "),
+                      Text(
+                        DateFormat('MMM dd, yyyy kk:mm a').format(data.endDate),
+                      ),
                     ],
                   ),
-                  Text("Contact Information"),
-                  Text('${data.owner.firstName} ${data.owner.lastName}'),
-                  Text('${data.owner.company}'),
-                  Text('${data.owner.username}'),
-                  Text("Description & Details"),
+                  Padding(
+                    padding: EdgeInsets.only(bottom: 5, top: 20),
+                    child: Text(
+                      "Contact Information",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
                   Text(
-                      "this needs to be in the database but its not right now"),
-                  Text('${data.owner.website}'),
+                    '${data.owner.firstName} ${data.owner.lastName}',
+                  ),
+                  // Text('${data.owner.company}'),
+                  // Text('${data.owner.username}'),
+                  Padding(
+                    padding: EdgeInsets.only(bottom: 5, top: 20),
+                    child: Text(
+                      "Details",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
+                  //TODO: this needs to be in the database but its not right now
+                  Text("Event details"),
+                  // Text('${data.owner.website}'),
                 ],
               ),
             ),
