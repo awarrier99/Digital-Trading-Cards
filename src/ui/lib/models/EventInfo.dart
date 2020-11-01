@@ -84,7 +84,7 @@ class EventInfoModel {
       final success = body['success'];
       if (!success) return false;
       _eventInfo.id = body['id'];
-      return true;
+      return true;q
     } catch (err) {
       return false;
     }
