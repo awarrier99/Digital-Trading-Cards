@@ -89,14 +89,13 @@ class EventInfoModel {
   }
 
   Future<EventInfo> fetchEventInfo(int id, String token) async {
-    final responce = await get('http://10.0.2.2:8888/api/events/$id', headers: {
+    final response = await get('http://10.0.2.2:8888/api/events/$id', headers: {
       'Accept': 'application/json',
       'Authorization': 'Bearer $token',
     });
 
-    final body = json.decode(responce.body);
-    print(body);
-    if (responce.statusCode == 200) {
+    final body = json.decode(response.body);
+    if (response.statusCode == 200) {
       return EventInfo()..fromJson(body);
     } else {
       return null;
@@ -104,13 +103,13 @@ class EventInfoModel {
   }
 
   Future<List<EventInfo>> fetchUpcomingEvents(int userId, String token) async {
-    final responce =
+    final response =
         await get('http://10.0.2.2:8888/api/allEvents/$userId', headers: {
       'Accept': 'application/json',
       'Authorization': 'Bearer $token',
     });
-    final body = json.decode(responce.body);
-    if (responce.statusCode == 200) {
+    final body = json.decode(response.body);
+    if (response.statusCode == 200) {
       return new List<EventInfo>.from(
           body.map((element) => EventInfo()..fromJson(element)).toList());
     } else {
@@ -119,14 +118,15 @@ class EventInfoModel {
   }
 
   Future<List<User>> fetchAttendees(int eventId, String token) async {
-    final responce = await get(
+    final response = await get(
         'http://10.0.2.2:8888/api/events/attendees/$eventId',
         headers: {
           'Accept': 'application/json',
           'Authorization': 'Bearer $token',
         });
-    final body = json.decode(responce.body);
-    if (responce.statusCode == 200) {
+    final body = json.decode(response.body);
+    print(body);
+    if (response.statusCode == 200) {
       return new List<User>.from(
           body.map((element) => User()..fromJson(element)).toList());
     } else {

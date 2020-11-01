@@ -2,12 +2,14 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:ui/models/EventInfo.dart';
+import 'package:ui/models/User.dart';
 import 'package:ui/palette.dart';
 
 class EventCard extends StatelessWidget {
   final EventInfo data;
+  final List<User> attendees;
 
-  const EventCard(this.data);
+  const EventCard(this.data, this.attendees);
 
   @override
   Widget build(BuildContext) {
@@ -108,6 +110,50 @@ class EventCard extends StatelessWidget {
                   //TODO: this needs to be in the database but its not right now
                   Text("Event details"),
                   // Text('${data.owner.website}'),
+                  Padding(
+                    padding: EdgeInsets.only(bottom: 5, top: 20),
+                    child: Text(
+                      "Attendees",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
+                  Row(
+                    children: attendees.length == 0
+                        ? [Text("None yet - go ahead and RSVP!")]
+                        : [
+                            for (var user in attendees)
+                              Container(
+                                decoration: BoxDecoration(
+                                    color: Palette.primary,
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(50))),
+                                margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                                child: Padding(
+                                    padding: EdgeInsets.all(10),
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          user.firstName[0],
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        Text(
+                                          user.lastName[0],
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ],
+                                    )),
+                              )
+                          ],
+                  )
                 ],
               ),
             ),
