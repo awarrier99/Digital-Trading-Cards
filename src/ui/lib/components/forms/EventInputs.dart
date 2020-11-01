@@ -114,6 +114,7 @@ class EventInputsState extends State<EventInputs> {
       },
       onChanged: (value) {
         // place this value into create event info model
+        widget.model.eventName = value;
       },
       onEditingComplete: () {
         FocusScope.of(context).requestFocus(organizationNode);
@@ -136,6 +137,7 @@ class EventInputsState extends State<EventInputs> {
       },
       onChanged: (value) {
         // place this value into create event info model
+        widget.model.company = value;
       },
       onEditingComplete: () {
         FocusScope.of(context).requestFocus(descriptionNode);
@@ -165,6 +167,7 @@ class EventInputsState extends State<EventInputs> {
       },
       onChanged: (value) {
         // place this value into create event info model
+        widget.model.eventDescription = value;
       },
       onEditingComplete: () {
         FocusScope.of(context).requestFocus(emailNode);
@@ -254,7 +257,9 @@ class EventInputsState extends State<EventInputs> {
   }
 
   TimeOfDay selectedTo = TimeOfDay.now();
-  String formatTimeOfDay(TimeOfDay tod) {}
+  String formatTimeOfDay(TimeOfDay tod) {
+    final now = DateTime.now();
+  }
 
   // Time Picker widget
   Widget _buildEventTime() {
