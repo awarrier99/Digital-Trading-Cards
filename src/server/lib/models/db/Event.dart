@@ -196,6 +196,8 @@ class Event extends Serializable {
       return Event.create(
           owner: user,
           eventName: result['event_name'] as String,
+          eventDescription: result['event_description'] as String,
+          company: result['company_organization'] as String,
           startDate: result['start_date'] as DateTime,
           endDate: result['end_date'] as DateTime)
         ..id = id;
