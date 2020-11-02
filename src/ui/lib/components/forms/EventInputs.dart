@@ -1,10 +1,21 @@
+// import 'dart:html';
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ui/SizeConfig.dart';
 import 'package:ui/components/TextInput.dart';
+import 'package:ui/models/EventInfo.dart';
 import 'package:ui/palette.dart';
+import 'package:intl/intl.dart';
 
 class EventInputs extends StatefulWidget {
+  final GlobalKey key;
+  final EventInfo model;
+  bool isEditing = false;
+
+  EventInputs({@required this.key, @required this.model});
+
   @override
   State<StatefulWidget> createState() {
     return EventInputsState();
@@ -19,6 +30,15 @@ class EventInputsState extends State<EventInputs> {
   FocusNode descriptionNode = FocusNode();
   FocusNode emailNode = FocusNode();
   FocusNode phoneNumberNode = FocusNode();
+  DateTime startDate = DateTime.now();
+  DateTime endDate = DateTime.now();
+
+  @override
+  void initState() {
+    super.initState();
+    widget.model.startDate = startDate;
+    widget.model.endDate = endDate;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +74,7 @@ class EventInputsState extends State<EventInputs> {
             ),
           ),
           SizedBox(height: SizeConfig.safeBlockVertical * 2),
-          // _buildEventDescription(),
+          _buildEventDescription(),
           SizedBox(height: SizeConfig.safeBlockVertical * 2),
           Visibility(
             visible: true,
@@ -82,11 +102,14 @@ class EventInputsState extends State<EventInputs> {
             ),
           ),
           SizedBox(height: SizeConfig.safeBlockVertical * 2),
-          // _buildEventDate(),
+          _buildStartEventDate(),
           SizedBox(height: SizeConfig.safeBlockVertical * 2),
-          // _buildEventTime(),
+          _buildEndEventDate(),
           SizedBox(height: SizeConfig.safeBlockVertical * 2),
-          // add a button right under this comment for submission
+          _buildEventStartTime(),
+          SizedBox(height: SizeConfig.safeBlockVertical * 2),
+          _buildEventEndTime(),
+          SizedBox(height: SizeConfig.safeBlockVertical * 2),
         ],
       ),
     );
@@ -95,6 +118,7 @@ class EventInputsState extends State<EventInputs> {
   // Textfield input for Event Name
   Widget _buildEventName() {
     return TextInput(
+      initialValue: widget.isEditing ? "insert model value here" : "",
       decoration: InputDecoration(
           labelText: 'Name of Event*', border: OutlineInputBorder()),
       textCapitalization: TextCapitalization.words,
@@ -106,6 +130,7 @@ class EventInputsState extends State<EventInputs> {
       },
       onChanged: (value) {
         // place this value into create event info model
+        widget.model.eventName = value;
       },
       onEditingComplete: () {
         FocusScope.of(context).requestFocus(organizationNode);
@@ -116,6 +141,7 @@ class EventInputsState extends State<EventInputs> {
   // Textfield input for Organization Name
   Widget _buildEventOrganization() {
     return TextInput(
+      initialValue: widget.isEditing ? "insert model value here" : "",
       decoration: InputDecoration(
           labelText: 'Company/Organization Name*',
           border: OutlineInputBorder()),
@@ -128,6 +154,7 @@ class EventInputsState extends State<EventInputs> {
       },
       onChanged: (value) {
         // place this value into create event info model
+        widget.model.company = value;
       },
       onEditingComplete: () {
         FocusScope.of(context).requestFocus(descriptionNode);
@@ -141,9 +168,15 @@ class EventInputsState extends State<EventInputs> {
     // I think Ashvin included a maxline property that can deal with this
 
     return TextInput(
+      initialValue: widget.isEditing ? "insert model value here" : "",
       decoration: InputDecoration(
-          labelText: 'Event Description*', border: OutlineInputBorder()),
+        labelText: 'Event Description*',
+        border: OutlineInputBorder(),
+        alignLabelWithHint: true,
+      ),
       textCapitalization: TextCapitalization.words,
+      keyboardType: TextInputType.multiline,
+      maxLines: 8,
       validator: (value) {
         if (value.isEmpty) {
           return 'Required';
@@ -152,6 +185,7 @@ class EventInputsState extends State<EventInputs> {
       },
       onChanged: (value) {
         // place this value into create event info model
+        widget.model.eventDescription = value;
       },
       onEditingComplete: () {
         FocusScope.of(context).requestFocus(emailNode);
@@ -162,15 +196,17 @@ class EventInputsState extends State<EventInputs> {
   // Textfield input for Contact Email
   Widget _buildEventContactEmail() {
     return TextInput(
+      initialValue: widget.isEditing ? "insert model value here" : "",
       decoration: InputDecoration(
-          labelText: 'Email Address*', border: OutlineInputBorder()),
-      textCapitalization: TextCapitalization.words,
-      validator: (value) {
-        if (value.isEmpty) {
-          return 'Required';
-        }
-        return null;
-      },
+          labelText: 'Email Address', border: OutlineInputBorder()),
+      textCapitalization: TextCapitalization.none,
+      keyboardType: TextInputType.emailAddress,
+      // validator: (value) {
+      //   if (value.isEmpty) {
+      //     return 'Required';
+      //   }
+      //   return null;
+      // },
       onChanged: (value) {
         // place this value into create event info model
       },
@@ -183,15 +219,11 @@ class EventInputsState extends State<EventInputs> {
   // Textfield input for Contact Phone #
   Widget _buildEventContactPhoneNumber() {
     return TextInput(
+      initialValue: widget.isEditing ? "insert model value here" : "",
       decoration: InputDecoration(
-          labelText: 'Email Address*', border: OutlineInputBorder()),
+          labelText: 'Phone Number', border: OutlineInputBorder()),
       textCapitalization: TextCapitalization.words,
-      validator: (value) {
-        if (value.isEmpty) {
-          return 'Required';
-        }
-        return null;
-      },
+      keyboardType: TextInputType.number,
       onChanged: (value) {
         // place this value into create event info model
       },
@@ -201,16 +233,170 @@ class EventInputsState extends State<EventInputs> {
     );
   }
 
+  // need to set edge case where start date is further ahead then end date
+  Future<void> _selectDate(bool start) async {
+    final DateTime picked = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(2020, 10),
+        lastDate: DateTime(2101));
+    if (start) {
+      if (picked != null && picked != startDate) {
+        setState(() {
+          startDate = picked;
+          widget.model.startDate = picked;
+        });
+      }
+    } else if (picked != null && picked != endDate && !start) {
+      setState(() {
+        endDate = picked;
+        widget.model.endDate = picked;
+      });
+    }
+  }
+
   // Data Picker widget
-  Widget _buildEventDate() {
-    // look for this calendar widget Ashvin talked about
-    return null;
+  Widget _buildStartEventDate() {
+    String date = DateFormat.yMMMMd().format(startDate);
+
+    return Container(
+      child: Row(
+        children: [
+          Text(
+            date,
+            style: TextStyle(
+                fontSize: 20,
+                fontFamily: 'Montserrat',
+                fontWeight: FontWeight.bold),
+          ),
+          SizedBox(
+            width: 40,
+          ),
+          RaisedButton(
+            onPressed: () {
+              _selectDate(true);
+            },
+            child: Text('Select a Start date'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildEndEventDate() {
+    String date = DateFormat.yMMMMd().format(endDate);
+
+    return Container(
+      child: Row(
+        children: [
+          Text(
+            date,
+            style: TextStyle(
+                fontSize: 20,
+                fontFamily: 'Montserrat',
+                fontWeight: FontWeight.bold),
+          ),
+          SizedBox(
+            width: 40,
+          ),
+          RaisedButton(
+            onPressed: () {
+              _selectDate(false);
+            },
+            child: Text('Select an end date'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  TimeOfDay selectedStartTime = TimeOfDay.now();
+  TimeOfDay selectedEndTime = TimeOfDay.now();
+
+  String startTime;
+  String endTime;
+
+  Future<Null> selectTime(BuildContext context, bool start) async {
+    final TimeOfDay _time =
+        await showTimePicker(context: context, initialTime: selectedStartTime);
+
+    if (start) {
+      if (_time != null && _time != selectedStartTime) {
+        setState(() {
+          selectedStartTime = _time;
+        });
+      }
+    } else if (_time != null && _time != selectedEndTime && !start) {
+      setState(() {
+        selectedEndTime = _time;
+      });
+    }
+  }
+
+  String formatTimeOfDay(TimeOfDay tod) {
+    final now = DateTime.now();
+    final dt = DateTime(now.year, now.month, now.day, tod.hour, tod.minute);
+    final format = DateFormat.jm();
+    return format.format(dt);
+  }
+
+  Widget _buildEventStartTime() {
+    // startTime = formatTimeOfDay(TimeOfDay.now());
+    startTime = formatTimeOfDay(selectedStartTime);
+    return Container(
+      child: Row(
+        children: [
+          Text(
+            startTime,
+            style: TextStyle(
+                fontSize: 20,
+                fontFamily: 'Montserrat',
+                fontWeight: FontWeight.bold),
+          ),
+          SizedBox(width: 40),
+          RaisedButton(
+              onPressed: () {
+                selectTime(context, true);
+                // update data in the model here
+              },
+              child: Text(
+                'Select a start time',
+                style: TextStyle(
+                  fontFamily: 'Montserrat',
+                ),
+              ))
+        ],
+      ),
+    );
   }
 
   // Time Picker widget
-  Widget _buildEventTime() {
-    // figure about how to handle this
-    // Picker or text field
-    return null;
+  Widget _buildEventEndTime() {
+    endTime = formatTimeOfDay(selectedEndTime);
+    return Container(
+      child: Row(
+        children: [
+          Text(
+            endTime,
+            style: TextStyle(
+                fontSize: 20,
+                fontFamily: 'Montserrat',
+                fontWeight: FontWeight.bold),
+          ),
+          SizedBox(width: 40),
+          RaisedButton(
+              onPressed: () {
+                selectTime(context, false);
+                // update data in the model here
+              },
+              child: Text(
+                'Select an end time',
+                style: TextStyle(
+                  fontFamily: 'Montserrat',
+                ),
+              ))
+        ],
+      ),
+    );
   }
 }

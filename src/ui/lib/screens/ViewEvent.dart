@@ -4,9 +4,11 @@ import 'package:ui/components/Cards/EventCard.dart';
 import 'package:provider/provider.dart';
 import 'package:ui/models/EventInfo.dart';
 import 'package:ui/models/Global.dart';
+import 'package:ui/models/User.dart';
 
 class ViewEvent extends StatefulWidget {
   final int eventId;
+
   const ViewEvent(this.eventId);
   @override
   _ViewEventState createState() => _ViewEventState();
@@ -14,6 +16,8 @@ class ViewEvent extends StatefulWidget {
 
 class _ViewEventState extends State<ViewEvent> {
   Future<EventInfo> eventInfo;
+  Future<List<User>> attendees;
+  bool isOwner;
 
   @override
   void initState() {
@@ -23,20 +27,22 @@ class _ViewEventState extends State<ViewEvent> {
     final userModel = globalModel.userModel;
     final eventModel = globalModel.eventInfoModel;
     eventInfo = eventModel.fetchEventInfo(widget.eventId, userModel.token);
+    attendees = eventModel.fetchAttendees(widget.eventId, userModel.token);
+
+    isOwner = (userModel.currentUser.id == eventModel.eventInfo.owner.id);
   }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Center(
-      child: FutureBuilder<EventInfo>(
-        future: eventInfo,
-        builder: (context, snapshot) {
+      child: FutureBuilder<List<dynamic>>(
+        future: Future.wait([eventInfo, attendees]),
+        builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
           List<Widget> children;
           if (snapshot.hasData) {
-            EventInfo cardData = snapshot.data;
             children = [
-              EventCard(snapshot.data),
+              EventCard(snapshot.data[0], snapshot.data[1]),
             ];
           } else if (snapshot.hasError) {
             children = [

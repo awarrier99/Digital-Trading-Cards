@@ -4,7 +4,6 @@ import 'package:ui/components/Cards/TradingCard.dart';
 import 'package:ui/models/CardInfo.dart';
 import 'package:provider/provider.dart';
 import 'package:ui/models/Global.dart';
-import 'package:ui/models/User.dart';
 import '../palette.dart';
 
 class Home extends StatefulWidget {

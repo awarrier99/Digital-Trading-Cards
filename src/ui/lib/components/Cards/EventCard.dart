@@ -2,17 +2,34 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:ui/models/EventInfo.dart';
+import 'package:ui/models/User.dart';
+import 'package:ui/palette.dart';
+import 'package:ui/screens/ViewAttendees.dart';
 
-class EventCard extends StatelessWidget {
+class EventCard extends StatefulWidget {
   final EventInfo data;
+  final List<User> attendees;
 
-  const EventCard(this.data);
+  const EventCard(this.data, this.attendees);
+  @override
+  _EventCardState createState() => _EventCardState();
+}
+
+class _EventCardState extends State<EventCard> {
+  Future goToAttendees(context) async {
+    // Navigator.of(context).pushNamed('/viewAttendees');
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                ViewAttendees(widget.attendees, widget.data)));
+  }
 
   @override
   Widget build(BuildContext) {
     return Container(
       margin: EdgeInsets.all(20),
-      padding: EdgeInsets.only(left: 5, right: 5, bottom: 5, top: 5),
+      padding: EdgeInsets.all(20),
       decoration: BoxDecoration(
         gradient: LinearGradient(
             colors: [Color(0xfff4f4f4), Color(0xfff8f8f8)],
@@ -37,9 +54,11 @@ class EventCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  '${data.eventName}',
+                  '${widget.data.eventName}',
                   style: TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 24, height: .5),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 24,
+                      color: Palette.primary),
                 ),
               ],
             ),
@@ -50,28 +69,118 @@ class EventCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Padding(
+                    padding: EdgeInsets.only(bottom: 5),
+                    child: Text(
+                      "Date",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
                   Row(
                     children: [
-                      Text("Start Date: "),
-                      Text(DateFormat('MM-dd-yyyy – kk:mm:a')
-                          .format(data.startDate)),
+                      Text("Start: "),
+                      Text(
+                        DateFormat('MMM dd, yyyy kk:mm a')
+                            .format(widget.data.startDate),
+                      ),
                     ],
                   ),
                   Row(
                     children: [
-                      Text("End Date: "),
-                      Text(DateFormat('MM-dd-yyyy – kk:mm:a')
-                          .format(data.endDate)),
+                      Text("End: "),
+                      Text(
+                        DateFormat('MMM dd, yyyy kk:mm a')
+                            .format(widget.data.endDate),
+                      ),
                     ],
                   ),
-                  Text("Contact Information"),
-                  Text('${data.owner.firstName} ${data.owner.lastName}'),
-                  Text('${data.owner.company}'),
-                  Text('${data.owner.username}'),
-                  Text("Description & Details"),
+                  Padding(
+                    padding: EdgeInsets.only(bottom: 5, top: 20),
+                    child: Text(
+                      "Contact",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
                   Text(
-                      "this needs to be in the database but its not right now"),
-                  Text('${data.owner.website}'),
+                    '${widget.data.owner.firstName} ${widget.data.owner.lastName}',
+                  ),
+                  Text('${widget.data.company}'),
+                  Text('${widget.data.owner.username}'),
+                  Padding(
+                    padding: EdgeInsets.only(bottom: 5, top: 20),
+                    child: Text(
+                      "Details",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
+                  //TODO: this needs to be in the database but its not right now
+                  Text('${widget.data.eventDescription}'),
+                  Padding(
+                      padding: EdgeInsets.only(bottom: 5, top: 20),
+                      child: Row(
+                        children: [
+                          Text(
+                            "Attendees",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
+                          ),
+                          FlatButton(
+                              onPressed: () {
+                                goToAttendees(context);
+                              },
+                              child: Row(
+                                children: widget.attendees.length == 0
+                                    ? []
+                                    : [
+                                        Text(
+                                          "view all cards",
+                                          style: TextStyle(
+                                              decoration:
+                                                  TextDecoration.underline),
+                                        ),
+                                        Icon(
+                                          Icons.arrow_forward_ios,
+                                          size: 12,
+                                        )
+                                      ],
+                              ))
+                        ],
+                      )),
+                  Row(
+                    children: widget.attendees.length == 0
+                        ? [Text("None yet - go ahead and RSVP!")]
+                        : [
+                            for (var user in widget.attendees)
+                              Container(
+                                decoration: BoxDecoration(
+                                    color: Palette.primary,
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(50))),
+                                margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                                child: Padding(
+                                  padding: EdgeInsets.all(10),
+                                  child: Text(
+                                    '${user.firstName[0]}${user.lastName[0]}',
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                ),
+                              )
+                          ],
+                  )
                 ],
               ),
             ),

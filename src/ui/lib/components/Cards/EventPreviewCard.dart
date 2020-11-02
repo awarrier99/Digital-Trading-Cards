@@ -1,6 +1,10 @@
+// import 'dart:html';
+import 'dart:ui';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:ui/models/EventInfo.dart';
+import 'package:ui/models/User.dart';
 import 'package:ui/palette.dart';
 import 'package:intl/intl.dart';
 // an event has a name, a host, a start time and an end time
@@ -9,7 +13,9 @@ class EventPreviewCard extends StatefulWidget {
   // This will need to be replaced with a model probably
   EventInfo data;
 
-  EventPreviewCard(this.data);
+  EventPreviewCard(
+    this.data,
+  );
 
   @override
   _EventPreviewState createState() => _EventPreviewState();

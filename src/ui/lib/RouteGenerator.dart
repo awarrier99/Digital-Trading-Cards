@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ui/components/NavigationBar.dart';
 import 'package:ui/screens/AddEvents.dart';
 import 'package:ui/screens/Profile.dart';
+import 'package:ui/screens/ViewAttendees.dart';
 import 'package:ui/screens/ViewEvents.dart';
 import 'package:ui/screens/WelcomeScreen.dart';
 import 'package:ui/screens/CreateAccount.dart';
@@ -60,8 +61,10 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => AddEvents());
       case '/PendingConnections':
         return MaterialPageRoute(builder: (_) => PendingConnections());
+      // case '/viewAttendees':
+      // return MaterialPageRoute(builder: (_) => ViewAttendees());
       default:
-        // If there is no such named route in the switch statement
+        // If there is no such named route in the s witch statement
         return _errorRoute();
     }
   }
