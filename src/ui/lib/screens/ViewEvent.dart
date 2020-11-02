@@ -8,6 +8,8 @@ import 'package:ui/models/User.dart';
 
 class ViewEvent extends StatefulWidget {
   final int eventId;
+  // bool isOwner;
+
   const ViewEvent(this.eventId);
   @override
   _ViewEventState createState() => _ViewEventState();
