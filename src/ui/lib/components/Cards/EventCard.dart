@@ -5,7 +5,6 @@ import 'package:ui/models/EventInfo.dart';
 
 class EventCard extends StatelessWidget {
   final EventInfo data;
-
   const EventCard(this.data);
 
   @override
@@ -69,9 +68,8 @@ class EventCard extends StatelessWidget {
                   Text('${data.owner.company}'),
                   Text('${data.owner.username}'),
                   Text("Description & Details"),
-                  Text(
-                      "this needs to be in the database but its not right now"),
-                  Text('${data.owner.website}'),
+                  Text('${data.eventDescription}'),
+                  Text('${data.company}'),
                 ],
               ),
             ),
