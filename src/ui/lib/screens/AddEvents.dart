@@ -41,11 +41,20 @@ class AddEvents extends StatelessWidget {
                       textColor: Colors.white,
                       color: Colors.deepPurple,
                       onPressed: () {
+                        print('hello');
                         if (_eventInputsKey.currentState.validate()) {
+                          print('hello1');
                           final globalModel = context.read<GlobalModel>();
                           final eventModel = globalModel.eventInfoModel;
-                          eventModel.createEvent();
-                          sendToViewEventScreen(context);
+                          final userModel = globalModel.userModel;
+                          _eventsInfoModel.owner = userModel.currentUser;
+                          print(_eventsInfoModel.toJson());
+                          eventModel.eventInfo.fromEvent(_eventsInfoModel);
+                          eventModel.createEvent(userModel.token).then((success) {
+                            if (success) {
+                              sendToViewEventScreen(context);
+                            }
+                          });
                           // include a check in the future for dupes
                         }
                       }),

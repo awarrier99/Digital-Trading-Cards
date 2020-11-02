@@ -30,8 +30,8 @@ class EventInfo {
       'company': company,
       'eventDescription': eventDescription,
       'eventName': eventName,
-      'startDate': startDate.toIso8601String(),
-      'endDate': endDate.toIso8601String()
+      'startDate': startDate?.toIso8601String(),
+      'endDate': endDate?.toIso8601String()
     };
   }
 
@@ -46,24 +46,37 @@ class EventInfo {
         json['startDate'] == null ? null : DateTime.parse(json['startDate']);
     endDate = json['endDate'] == null ? null : DateTime.parse(json['endDate']);
   }
+
+  void fromEvent(EventInfo eventInfo) {
+    id = eventInfo.id;
+    owner = eventInfo.owner;
+    company = eventInfo.company;
+    eventDescription = eventInfo.eventDescription;
+    eventName = eventInfo.eventName;
+    startDate = eventInfo.startDate;
+    endDate = eventInfo.endDate;
+  }
 }
 
 class EventInfoModel {
   final EventInfo _eventInfo = EventInfo();
   EventInfo get eventInfo => _eventInfo;
 
-  Future<bool> createEvent() async {
+  Future<bool> createEvent(String token) async {
     try {
+      print('hello3');
+      print(_eventInfo.toJson());
       final res = await post('http://10.0.2.2:8888/api/events',
           headers: {
             'Accept': 'application/json',
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token'
           },
           body: json.encode(_eventInfo.toJson()));
       final body = json.decode(res.body);
       final success = body['success'];
       if (!success) return false;
-      _eventInfo.id = body['id'];
+      // _eventInfo.id = body['id'];
       return true;
     } catch (err) {
       return false;

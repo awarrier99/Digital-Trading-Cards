@@ -9,7 +9,9 @@ class EventController extends ResourceController {
       final currUser = request.attachments['user'] as User;
       event.owner = currUser;
       await event.save();
-      return Response.ok({"success": true});
+      return Response.created('/event/${event.id}',
+          body: {'success': true});
+      // return Response.ok({"success": true});
     } catch (err, stackTrace) {
       logError(err,
           stackTrace: stackTrace,

@@ -29,6 +29,15 @@ class EventInputsState extends State<EventInputs> {
   FocusNode descriptionNode = FocusNode();
   FocusNode emailNode = FocusNode();
   FocusNode phoneNumberNode = FocusNode();
+  DateTime startDate = DateTime.now();
+  DateTime endDate = DateTime.now();
+
+  @override
+  void initState() {
+    super.initState();
+    widget.model.startDate = startDate;
+    widget.model.endDate = endDate;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -215,11 +224,8 @@ class EventInputsState extends State<EventInputs> {
     );
   }
 
-  DateTime startDate = DateTime.now();
-  DateTime endDate = DateTime.now();
-
   // need to set edge case where start date is further ahead then end date
-  Future<Null> _selectDate(BuildContext context, bool start) async {
+  Future<void> _selectDate(bool start) async {
     final DateTime picked = await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
@@ -229,11 +235,13 @@ class EventInputsState extends State<EventInputs> {
       if (picked != null && picked != startDate) {
         setState(() {
           startDate = picked;
+          widget.model.startDate = picked;
         });
       }
     } else if (picked != null && picked != endDate && !start) {
       setState(() {
         endDate = picked;
+        widget.model.endDate = picked;
       });
     }
   }
@@ -257,7 +265,7 @@ class EventInputsState extends State<EventInputs> {
           ),
           RaisedButton(
             onPressed: () {
-              _selectDate(context, true);
+              _selectDate(true);
             },
             child: Text('Select a Start date'),
           ),
@@ -284,7 +292,7 @@ class EventInputsState extends State<EventInputs> {
           ),
           RaisedButton(
             onPressed: () {
-              _selectDate(context, false);
+              _selectDate(false);
             },
             child: Text('Select an end date'),
           ),
