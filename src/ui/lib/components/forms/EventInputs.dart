@@ -261,6 +261,7 @@ class EventInputsState extends State<EventInputs> {
 
     return Container(
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
             date,
@@ -268,9 +269,6 @@ class EventInputsState extends State<EventInputs> {
                 fontSize: 20,
                 fontFamily: 'Montserrat',
                 fontWeight: FontWeight.bold),
-          ),
-          SizedBox(
-            width: 40,
           ),
           RaisedButton(
             onPressed: () {
@@ -288,6 +286,7 @@ class EventInputsState extends State<EventInputs> {
 
     return Container(
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
             date,
@@ -295,9 +294,6 @@ class EventInputsState extends State<EventInputs> {
                 fontSize: 20,
                 fontFamily: 'Montserrat',
                 fontWeight: FontWeight.bold),
-          ),
-          SizedBox(
-            width: 40,
           ),
           RaisedButton(
             onPressed: () {
@@ -345,6 +341,7 @@ class EventInputsState extends State<EventInputs> {
     startTime = formatTimeOfDay(selectedStartTime);
     return Container(
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
             startTime,
@@ -353,7 +350,6 @@ class EventInputsState extends State<EventInputs> {
                 fontFamily: 'Montserrat',
                 fontWeight: FontWeight.bold),
           ),
-          SizedBox(width: 40),
           RaisedButton(
               onPressed: () {
                 selectTime(context, true);
@@ -375,6 +371,7 @@ class EventInputsState extends State<EventInputs> {
     endTime = formatTimeOfDay(selectedEndTime);
     return Container(
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
             endTime,
@@ -383,7 +380,6 @@ class EventInputsState extends State<EventInputs> {
                 fontFamily: 'Montserrat',
                 fontWeight: FontWeight.bold),
           ),
-          SizedBox(width: 40),
           RaisedButton(
               onPressed: () {
                 selectTime(context, false);
