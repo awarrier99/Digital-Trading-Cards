@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:ui/models/EventInfo.dart';
 import 'package:ui/models/Global.dart';
 import 'package:ui/models/User.dart';
+import 'package:ui/palette.dart';
 
 class ViewEvent extends StatefulWidget {
   final int eventId;
@@ -29,7 +30,7 @@ class _ViewEventState extends State<ViewEvent> {
     eventInfo = eventModel.fetchEventInfo(widget.eventId, userModel.token);
     attendees = eventModel.fetchAttendees(widget.eventId, userModel.token);
 
-    isOwner = (userModel.currentUser.id == eventModel.eventInfo.owner.id);
+    // isOwner = (userModel.currentUser.id == eventModel.eventInfo.owner.id);
   }
 
   @override
@@ -43,6 +44,43 @@ class _ViewEventState extends State<ViewEvent> {
           if (snapshot.hasData) {
             children = [
               EventCard(snapshot.data[0], snapshot.data[1]),
+              Container(
+                  height: 40,
+                  child: Material(
+                    borderRadius: BorderRadius.circular(20),
+                    shadowColor: Palette.secondary,
+                    color: Palette.secondary,
+                    elevation: 7,
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).pushNamed('/viewEvents');
+
+                        // int currUserId = globalModel.userModel.currentUser;
+                        // final globalModel = context.read<GlobalModel>();
+                        // final userModel = globalModel.userModel;
+                        // final eventModel = globalModel.eventInfoModel.eventInfo;
+                        // print(eventModel.eventId);
+                        // widget
+                        //     .registerForEvent(userModel.token)
+                        //     .then((success) {
+                        //   if (success) {
+                        //     print("RSVP successful");
+                        //   }
+                        // });
+                        // print(userModel.currentUser.id);
+                        // final userModel = globalModel.userModel;
+                      },
+                      child: Center(
+                        child: Text(
+                          'RSVP',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Montserrat'),
+                        ),
+                      ),
+                    ),
+                  )),
             ];
           } else if (snapshot.hasError) {
             children = [

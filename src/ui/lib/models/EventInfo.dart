@@ -148,7 +148,7 @@ class EventInfoModel {
     }
   }
 
-  Future<bool> registerForEvent() async {
+  Future<bool> registerForEvent(String token) async {
     try {
       final res = await post('http://10.0.2.2:8888/api/events/attendees',
           headers: {
@@ -156,6 +156,7 @@ class EventInfoModel {
             'Content-Type': 'application/json'
           },
           body: json.encode(_eventInfo.toJson()));
+          
       final body = json.decode(res.body);
       final success = body['success'];
       if (!success) return false;

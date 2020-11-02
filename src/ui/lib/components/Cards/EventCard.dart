@@ -5,6 +5,8 @@ import 'package:ui/models/EventInfo.dart';
 import 'package:ui/models/User.dart';
 import 'package:ui/palette.dart';
 import 'package:ui/screens/ViewAttendees.dart';
+import 'package:ui/models/Global.dart';
+
 
 class EventCard extends StatefulWidget {
   final EventInfo data;
@@ -180,7 +182,34 @@ class _EventCardState extends State<EventCard> {
                                 ),
                               )
                           ],
-                  )
+                  ),
+                  // Container(
+                  //     height: 40,
+                  //     child: Material(
+                  //       borderRadius: BorderRadius.circular(20),
+                  //       shadowColor: Palette.secondary,
+                  //       color: Palette.secondary,
+                  //       elevation: 7,
+                  //       child: GestureDetector(
+                  //         onTap: () {
+                  //           print('hello');
+                  //           print(widget.data.id);
+                  //           final globalModel = context.read<GlobalModel>();
+                  //           final eventModel = globalModel.eventInfoModel;
+                  //           final userModel = globalModel.userModel;
+                           
+                  //         },
+                  //         child: Center(
+                  //           child: Text(
+                  //             'RSVP',
+                  //             style: TextStyle(
+                  //                 color: Colors.white,
+                  //                 fontWeight: FontWeight.bold,
+                  //                 fontFamily: 'Montserrat'),
+                  //           ),
+                  //         ),
+                  //       ),
+                  //     )),
                 ],
               ),
             ),
