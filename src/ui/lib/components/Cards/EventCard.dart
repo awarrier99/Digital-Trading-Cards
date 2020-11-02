@@ -4,12 +4,26 @@ import 'package:intl/intl.dart';
 import 'package:ui/models/EventInfo.dart';
 import 'package:ui/models/User.dart';
 import 'package:ui/palette.dart';
+import 'package:ui/screens/ViewAttendees.dart';
 
-class EventCard extends StatelessWidget {
+class EventCard extends StatefulWidget {
   final EventInfo data;
   final List<User> attendees;
 
   const EventCard(this.data, this.attendees);
+  @override
+  _EventCardState createState() => _EventCardState();
+}
+
+class _EventCardState extends State<EventCard> {
+  Future goToAttendees(context) async {
+    // Navigator.of(context).pushNamed('/viewAttendees');
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                ViewAttendees(widget.attendees, widget.data)));
+  }
 
   @override
   Widget build(BuildContext) {
@@ -40,7 +54,7 @@ class EventCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  '${data.eventName}',
+                  '${widget.data.eventName}',
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 24,
@@ -70,7 +84,7 @@ class EventCard extends StatelessWidget {
                       Text("Start: "),
                       Text(
                         DateFormat('MMM dd, yyyy kk:mm a')
-                            .format(data.startDate),
+                            .format(widget.data.startDate),
                       ),
                     ],
                   ),
@@ -78,14 +92,15 @@ class EventCard extends StatelessWidget {
                     children: [
                       Text("End: "),
                       Text(
-                        DateFormat('MMM dd, yyyy kk:mm a').format(data.endDate),
+                        DateFormat('MMM dd, yyyy kk:mm a')
+                            .format(widget.data.endDate),
                       ),
                     ],
                   ),
                   Padding(
                     padding: EdgeInsets.only(bottom: 5, top: 20),
                     child: Text(
-                      "Contact Information",
+                      "Contact",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 18,
@@ -93,10 +108,10 @@ class EventCard extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    '${data.owner.firstName} ${data.owner.lastName}',
+                    '${widget.data.owner.firstName} ${widget.data.owner.lastName}',
                   ),
-                  // Text('${data.owner.company}'),
-                  // Text('${data.owner.username}'),
+                  Text('${widget.data.owner.company}'),
+                  Text('${widget.data.owner.username}'),
                   Padding(
                     padding: EdgeInsets.only(bottom: 5, top: 20),
                     child: Text(
@@ -108,23 +123,45 @@ class EventCard extends StatelessWidget {
                     ),
                   ),
                   //TODO: this needs to be in the database but its not right now
-                  Text("Event details"),
-                  // Text('${data.owner.website}'),
+                  Text('${widget.data.eventDescription}'),
                   Padding(
-                    padding: EdgeInsets.only(bottom: 5, top: 20),
-                    child: Text(
-                      "Attendees",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      ),
-                    ),
-                  ),
+                      padding: EdgeInsets.only(bottom: 5, top: 20),
+                      child: Row(
+                        children: [
+                          Text(
+                            "Attendees",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
+                          ),
+                          FlatButton(
+                              onPressed: () {
+                                goToAttendees(context);
+                              },
+                              child: Row(
+                                children: widget.attendees.length == 0
+                                    ? []
+                                    : [
+                                        Text(
+                                          "view all cards",
+                                          style: TextStyle(
+                                              decoration:
+                                                  TextDecoration.underline),
+                                        ),
+                                        Icon(
+                                          Icons.arrow_forward_ios,
+                                          size: 12,
+                                        )
+                                      ],
+                              ))
+                        ],
+                      )),
                   Row(
-                    children: attendees.length == 0
+                    children: widget.attendees.length == 0
                         ? [Text("None yet - go ahead and RSVP!")]
                         : [
-                            for (var user in attendees)
+                            for (var user in widget.attendees)
                               Container(
                                 decoration: BoxDecoration(
                                     color: Palette.primary,
@@ -132,25 +169,15 @@ class EventCard extends StatelessWidget {
                                         BorderRadius.all(Radius.circular(50))),
                                 margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
                                 child: Padding(
-                                    padding: EdgeInsets.all(10),
-                                    child: Row(
-                                      children: [
-                                        Text(
-                                          user.firstName[0],
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        Text(
-                                          user.lastName[0],
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ],
-                                    )),
+                                  padding: EdgeInsets.all(10),
+                                  child: Text(
+                                    '${user.firstName[0]}${user.lastName[0]}',
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                ),
                               )
                           ],
                   )

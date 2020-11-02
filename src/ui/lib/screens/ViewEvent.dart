@@ -37,7 +37,6 @@ class _ViewEventState extends State<ViewEvent> {
         builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
           List<Widget> children;
           if (snapshot.hasData) {
-            EventInfo cardData = snapshot.data[0];
             children = [
               EventCard(snapshot.data[0], snapshot.data[1]),
             ];

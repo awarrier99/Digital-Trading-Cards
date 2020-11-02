@@ -125,7 +125,6 @@ class EventInfoModel {
           'Authorization': 'Bearer $token',
         });
     final body = json.decode(response.body);
-    print(body);
     if (response.statusCode == 200) {
       return new List<User>.from(
           body.map((element) => User()..fromJson(element)).toList());
