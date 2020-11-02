@@ -6,6 +6,7 @@ import 'package:ui/models/Global.dart';
 import 'palette.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(MyApp());
 }
 
