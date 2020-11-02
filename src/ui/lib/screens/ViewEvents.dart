@@ -59,9 +59,7 @@ class _ViewEventsState extends State<ViewEvents> {
     super.initState();
   }
 
-  void _filterEvents(value, int tab) {
-    print(tab);
-
+  void _filterEvents(value) {
     setState(() {
       filteredUpcoming = filteredUpcoming
           .where((element) =>
@@ -122,9 +120,7 @@ class _ViewEventsState extends State<ViewEvents> {
               : TextField(
                   onChanged: (value) {
                     print("searchSelected");
-                    print(DefaultTabController.of(context).index);
-                    _filterEvents(
-                        value, DefaultTabController.of(context).index);
+                    _filterEvents(value);
                   },
                   style: TextStyle(color: Colors.white),
                   decoration: InputDecoration(
@@ -148,6 +144,8 @@ class _ViewEventsState extends State<ViewEvents> {
                     onPressed: () {
                       setState(() {
                         this.isSearching = false;
+                        this.filteredPast = past;
+                        this.filteredUpcoming = upcoming;
                         this.filteredEvents = allEvents;
                       });
                     },
@@ -210,7 +208,8 @@ class _ViewEventsState extends State<ViewEvents> {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) => ViewEvent(
-                                                    filteredPast[index].id)));
+                                                    filteredUpcoming[index]
+                                                        .id)));
                                       },
                                       child: Container(
                                         padding:
@@ -255,7 +254,7 @@ class _ViewEventsState extends State<ViewEvents> {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) => ViewEvent(
-                                                    filteredPast[index].id)));
+                                                    filteredEvents[index].id)));
                                       },
                                       child: Container(
                                         padding:
