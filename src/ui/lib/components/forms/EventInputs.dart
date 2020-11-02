@@ -105,7 +105,10 @@ class EventInputsState extends State<EventInputs> {
           SizedBox(height: SizeConfig.safeBlockVertical * 2),
           _buildEndEventDate(),
           SizedBox(height: SizeConfig.safeBlockVertical * 2),
-          // _buildEventTime(),
+          _buildEventStartTime(),
+          SizedBox(height: SizeConfig.safeBlockVertical * 2),
+          _buildEventEndTime(),
+          SizedBox(height: SizeConfig.safeBlockVertical * 2),
         ],
       ),
     );
@@ -304,8 +307,8 @@ class EventInputsState extends State<EventInputs> {
   TimeOfDay selectedStartTime = TimeOfDay.now();
   TimeOfDay selectedEndTime = TimeOfDay.now();
 
-  String startTime = '';
-  String endTime = '';
+  String startTime;
+  String endTime;
 
   Future<Null> selectTime(BuildContext context, bool start) async {
     final TimeOfDay _time =
@@ -327,12 +330,67 @@ class EventInputsState extends State<EventInputs> {
   String formatTimeOfDay(TimeOfDay tod) {
     final now = DateTime.now();
     final dt = DateTime(now.year, now.month, now.day, tod.hour, tod.minute);
+    final format = DateFormat.jm();
+    return format.format(dt);
+  }
+
+  Widget _buildEventStartTime() {
+    // startTime = formatTimeOfDay(TimeOfDay.now());
+    startTime = formatTimeOfDay(selectedStartTime);
+    return Container(
+      child: Row(
+        children: [
+          Text(
+            startTime,
+            style: TextStyle(
+                fontSize: 20,
+                fontFamily: 'Montserrat',
+                fontWeight: FontWeight.bold),
+          ),
+          SizedBox(width: 40),
+          RaisedButton(
+              onPressed: () {
+                selectTime(context, true);
+                // update data in the model here
+              },
+              child: Text(
+                'Select a start time',
+                style: TextStyle(
+                  fontFamily: 'Montserrat',
+                ),
+              ))
+        ],
+      ),
+    );
   }
 
   // Time Picker widget
-  Widget _buildEventTime() {
-    // figure about how to handle this
-    // Picker or text field
-    return null;
+  Widget _buildEventEndTime() {
+    endTime = formatTimeOfDay(selectedEndTime);
+    return Container(
+      child: Row(
+        children: [
+          Text(
+            endTime,
+            style: TextStyle(
+                fontSize: 20,
+                fontFamily: 'Montserrat',
+                fontWeight: FontWeight.bold),
+          ),
+          SizedBox(width: 40),
+          RaisedButton(
+              onPressed: () {
+                selectTime(context, false);
+                // update data in the model here
+              },
+              child: Text(
+                'Select an end time',
+                style: TextStyle(
+                  fontFamily: 'Montserrat',
+                ),
+              ))
+        ],
+      ),
+    );
   }
 }
