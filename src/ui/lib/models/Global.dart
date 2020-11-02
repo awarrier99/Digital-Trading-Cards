@@ -5,6 +5,7 @@ import 'package:http/http.dart';
 import 'package:ui/models/CardInfo.dart';
 import 'package:ui/models/ConnectionInfo.dart';
 import 'package:ui/models/EventInfo.dart';
+import 'package:ui/models/NFCModel.dart';
 import 'package:ui/models/User.dart';
 
 class GlobalModel {
@@ -12,6 +13,7 @@ class GlobalModel {
   final CardInfoModel cardInfoModel = CardInfoModel();
   final ConnectionInfoModel connectionInfoModel = ConnectionInfoModel();
   final EventInfoModel eventInfoModel = EventInfoModel();
+  final NFCModel nfcModel = NFCModel();
 
   Future<List<dynamic>> getSuggestions(String endpoint, String pattern,
       String key, Function classBuilder) async {

@@ -1,8 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:nfc_in_flutter/nfc_in_flutter.dart';
+
 import '../palette.dart';
 
-class AddCard extends StatelessWidget {
-  const AddCard();
+class AddCard extends StatefulWidget {
+  @override
+  AddCardState createState() => AddCardState();
+}
+
+class AddCardState extends State<AddCard> {
+  bool deviceSupportsNFC = false;
+
+  @override
+  void initState() {
+    super.initState();
+    NFC.isNDEFSupported.then((value) {
+      setState(() {
+        deviceSupportsNFC = value;
+      });
+    });
+  }
 
   Future addByEmail(context) async {
     Navigator.of(context).pushNamed('/addCardByEmail');

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flushbar/flushbar.dart';
+import 'package:provider/provider.dart';
+import 'package:ui/models/Global.dart';
 import 'package:ui/palette.dart';
 
 class AddCardByNFC extends StatefulWidget {
@@ -8,6 +9,15 @@ class AddCardByNFC extends StatefulWidget {
 }
 
 class _AddCardByNFCState extends State<AddCardByNFC> {
+  @override
+  void initState() {
+    super.initState();
+    final globalModel = context.read<GlobalModel>();
+    final nfcModel = globalModel.nfcModel;
+    final userModel = globalModel.userModel;
+    nfcModel.addUser(userModel.currentUser.username);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
