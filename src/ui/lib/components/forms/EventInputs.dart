@@ -10,11 +10,11 @@ import 'package:ui/palette.dart';
 import 'package:intl/intl.dart';
 
 class EventInputs extends StatefulWidget {
-  final GlobalKey key;
+  // final GlobalKey key;
   final EventInfo model;
-  bool isEditing = false;
+  final bool isEditing;
 
-  EventInputs({@required this.key, @required this.model});
+  EventInputs({/*@required this.key,*/ @required this.model, this.isEditing});
 
   @override
   State<StatefulWidget> createState() {
@@ -30,8 +30,9 @@ class EventInputsState extends State<EventInputs> {
   FocusNode descriptionNode = FocusNode();
   FocusNode emailNode = FocusNode();
   FocusNode phoneNumberNode = FocusNode();
-  DateTime startDate = DateTime.now();
-  DateTime endDate = DateTime.now();
+  DateTime startDate = DateTime.utc(2020, 8, 1);
+  DateTime endDate = DateTime.utc(2020, 8, 1);
+  // bool isEditing = widget.model.isEditing;
 
   @override
   void initState() {
@@ -118,16 +119,16 @@ class EventInputsState extends State<EventInputs> {
   // Textfield input for Event Name
   Widget _buildEventName() {
     return TextInput(
-      initialValue: widget.isEditing ? "insert model value here" : "",
+      initialValue: widget.isEditing ? "Tommy" + " " + "Shelby" : "",
       decoration: InputDecoration(
           labelText: 'Name of Event*', border: OutlineInputBorder()),
       textCapitalization: TextCapitalization.words,
-      validator: (value) {
-        if (value.isEmpty) {
-          return 'Required';
-        }
-        return null;
-      },
+      // validator: (value) {
+      //   if (value.isEmpty) {
+      //     return 'Required';
+      //   }
+      //   return null;
+      // },
       onChanged: (value) {
         // place this value into create event info model
         widget.model.eventName = value;
@@ -141,17 +142,17 @@ class EventInputsState extends State<EventInputs> {
   // Textfield input for Organization Name
   Widget _buildEventOrganization() {
     return TextInput(
-      initialValue: widget.isEditing ? "insert model value here" : "",
+      initialValue: widget.isEditing ? "" : "",
       decoration: InputDecoration(
           labelText: 'Company/Organization Name*',
           border: OutlineInputBorder()),
       textCapitalization: TextCapitalization.words,
-      validator: (value) {
-        if (value.isEmpty) {
-          return 'Required';
-        }
-        return null;
-      },
+      // validator: (value) {
+      //   if (value.isEmpty) {
+      //     return 'Required';
+      //   }
+      //   return null;
+      // },
       onChanged: (value) {
         // place this value into create event info model
         widget.model.company = value;
@@ -168,7 +169,7 @@ class EventInputsState extends State<EventInputs> {
     // I think Ashvin included a maxline property that can deal with this
 
     return TextInput(
-      initialValue: widget.isEditing ? "insert model value here" : "",
+      initialValue: widget.isEditing ? "" : "",
       decoration: InputDecoration(
         labelText: 'Event Description*',
         border: OutlineInputBorder(),
@@ -177,12 +178,12 @@ class EventInputsState extends State<EventInputs> {
       textCapitalization: TextCapitalization.words,
       keyboardType: TextInputType.multiline,
       maxLines: 8,
-      validator: (value) {
-        if (value.isEmpty) {
-          return 'Required';
-        }
-        return null;
-      },
+      // validator: (value) {
+      //   if (value.isEmpty) {
+      //     return 'Required';
+      //   }
+      //   return null;
+      // },
       onChanged: (value) {
         // place this value into create event info model
         widget.model.eventDescription = value;
@@ -196,7 +197,7 @@ class EventInputsState extends State<EventInputs> {
   // Textfield input for Contact Email
   Widget _buildEventContactEmail() {
     return TextInput(
-      initialValue: widget.isEditing ? "insert model value here" : "",
+      initialValue: widget.isEditing ? "" : "",
       decoration: InputDecoration(
           labelText: 'Email Address', border: OutlineInputBorder()),
       textCapitalization: TextCapitalization.none,
@@ -219,7 +220,7 @@ class EventInputsState extends State<EventInputs> {
   // Textfield input for Contact Phone #
   Widget _buildEventContactPhoneNumber() {
     return TextInput(
-      initialValue: widget.isEditing ? "insert model value here" : "",
+      initialValue: widget.isEditing ? "" : "",
       decoration: InputDecoration(
           labelText: 'Phone Number', border: OutlineInputBorder()),
       textCapitalization: TextCapitalization.words,
@@ -261,6 +262,7 @@ class EventInputsState extends State<EventInputs> {
 
     return Container(
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
             date,
@@ -268,9 +270,6 @@ class EventInputsState extends State<EventInputs> {
                 fontSize: 20,
                 fontFamily: 'Montserrat',
                 fontWeight: FontWeight.bold),
-          ),
-          SizedBox(
-            width: 40,
           ),
           RaisedButton(
             onPressed: () {
@@ -288,6 +287,7 @@ class EventInputsState extends State<EventInputs> {
 
     return Container(
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
             date,
@@ -295,9 +295,6 @@ class EventInputsState extends State<EventInputs> {
                 fontSize: 20,
                 fontFamily: 'Montserrat',
                 fontWeight: FontWeight.bold),
-          ),
-          SizedBox(
-            width: 40,
           ),
           RaisedButton(
             onPressed: () {
@@ -310,8 +307,8 @@ class EventInputsState extends State<EventInputs> {
     );
   }
 
-  TimeOfDay selectedStartTime = TimeOfDay.now();
-  TimeOfDay selectedEndTime = TimeOfDay.now();
+  TimeOfDay selectedStartTime = TimeOfDay(hour: 8, minute: 0);
+  TimeOfDay selectedEndTime = TimeOfDay(hour: 8, minute: 0);
 
   String startTime;
   String endTime;
@@ -345,6 +342,7 @@ class EventInputsState extends State<EventInputs> {
     startTime = formatTimeOfDay(selectedStartTime);
     return Container(
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
             startTime,
@@ -353,7 +351,6 @@ class EventInputsState extends State<EventInputs> {
                 fontFamily: 'Montserrat',
                 fontWeight: FontWeight.bold),
           ),
-          SizedBox(width: 40),
           RaisedButton(
               onPressed: () {
                 selectTime(context, true);
@@ -375,6 +372,7 @@ class EventInputsState extends State<EventInputs> {
     endTime = formatTimeOfDay(selectedEndTime);
     return Container(
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
             endTime,
@@ -383,7 +381,6 @@ class EventInputsState extends State<EventInputs> {
                 fontFamily: 'Montserrat',
                 fontWeight: FontWeight.bold),
           ),
-          SizedBox(width: 40),
           RaisedButton(
               onPressed: () {
                 selectTime(context, false);
