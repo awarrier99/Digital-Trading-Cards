@@ -28,6 +28,7 @@ class AddEvents extends StatelessWidget {
         margin: EdgeInsets.all(20),
         child: SingleChildScrollView(
           child: Form(
+            key: _eventInputsKey,
             child: Column(
               children: [
                 EventInputs(
@@ -50,7 +51,9 @@ class AddEvents extends StatelessWidget {
                           _eventsInfoModel.owner = userModel.currentUser;
                           print(_eventsInfoModel.toJson());
                           eventModel.eventInfo.fromEvent(_eventsInfoModel);
-                          eventModel.createEvent(userModel.token).then((success) {
+                          eventModel
+                              .createEvent(userModel.token)
+                              .then((success) {
                             if (success) {
                               sendToViewEventScreen(context);
                             }
