@@ -12,18 +12,18 @@ class EventInfo {
   String eventName;
   DateTime startDate;
   DateTime endDate;
-  bool isEditing = false;
 
   // TODO: Add location
 
-  EventInfo(
-      {this.id,
-      this.owner,
-      this.eventName,
-      this.company,
-      this.eventDescription,
-      this.startDate,
-      this.endDate});
+  EventInfo({
+    this.id,
+    this.owner,
+    this.eventName,
+    this.company,
+    this.eventDescription,
+    this.startDate,
+    this.endDate,
+  });
 
   Map<String, dynamic> toJson() {
     return {
@@ -63,6 +63,8 @@ class EventInfo {
 class EventInfoModel {
   final EventInfo _eventInfo = EventInfo();
   EventInfo get eventInfo => _eventInfo;
+
+  bool isEditing = false;
 
   Future<bool> createEvent(String token) async {
     try {

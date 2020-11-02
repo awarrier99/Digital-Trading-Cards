@@ -18,6 +18,7 @@ class _ViewEventState extends State<ViewEvent> {
   Future<EventInfo> eventInfo;
   Future<List<User>> attendees;
   bool isOwner;
+  int OwnerID;
 
   @override
   void initState() {
@@ -29,7 +30,8 @@ class _ViewEventState extends State<ViewEvent> {
     eventInfo = eventModel.fetchEventInfo(widget.eventId, userModel.token);
     attendees = eventModel.fetchAttendees(widget.eventId, userModel.token);
 
-    isOwner = (userModel.currentUser.id == eventModel.eventInfo.owner.id);
+    OwnerID = userModel.currentUser.id;
+    isOwner = false;
   }
 
   @override
@@ -41,6 +43,9 @@ class _ViewEventState extends State<ViewEvent> {
         builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
           List<Widget> children;
           if (snapshot.hasData) {
+            if (OwnerID == snapshot.data[0].owner.id) {
+              isOwner = true;
+            }
             children = [
               EventCard(snapshot.data[0], snapshot.data[1]),
             ];
@@ -63,12 +68,25 @@ class _ViewEventState extends State<ViewEvent> {
             ];
           }
           return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: children,
-            ),
-          );
+              child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: children,
+              ),
+              isOwner
+                  ? RaisedButton(
+                      onPressed: () {
+                        final globalModel = context.read<GlobalModel>();
+                        globalModel.eventInfoModel.isEditing = true;
+                        Navigator.of(context).pushNamed('/AddEvents');
+                      },
+                      child: Text('Edit Event'))
+                  : SizedBox(),
+            ],
+          ));
         },
       ),
     ));

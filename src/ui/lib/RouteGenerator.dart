@@ -54,7 +54,8 @@ class RouteGenerator {
       case '/addCardByEmail':
         return MaterialPageRoute(builder: (_) => AddCardByEmail());
       case '/AddEvents':
-        return MaterialPageRoute(builder: (_) => AddEvents());
+        return MaterialPageRoute(
+            builder: (_) => AddEvents()); // argument might be wrong right now
       // case '/viewAttendees':
       // return MaterialPageRoute(builder: (_) => ViewAttendees());
       default:
