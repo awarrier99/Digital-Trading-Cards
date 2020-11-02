@@ -12,6 +12,8 @@ class EventInfo {
   String eventName;
   DateTime startDate;
   DateTime endDate;
+  bool isEditing = false;
+
   // TODO: Add location
 
   EventInfo(

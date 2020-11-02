@@ -117,7 +117,7 @@ class Event extends Serializable {
           return Student.create(
               firstName: e['first_name'] as String,
               lastName: e['last_name'] as String,
-              username: e['user_name'] as String,
+              username: e['username'] as String,
               country: e['country'] as String,
               state: e['state'] as String,
               city: e['city'] as String,
@@ -126,9 +126,9 @@ class Event extends Serializable {
         }
 
         return Recruiter.create(
-            firstName: e['firstName'] as String,
-            lastName: e['lastName'] as String,
-            username: e['lastName'] as String,
+            firstName: e['first_name'] as String,
+            lastName: e['last_name'] as String,
+            username: e['username'] as String,
             country: e['county'] as String,
             state: e['state'] as String,
             city: e['city'] as String,
@@ -177,16 +177,16 @@ class Event extends Serializable {
         user = Student.create(
             firstName: result['first_name'] as String,
             lastName: result['last_name'] as String,
-            username: result['user_name'] as String,
+            username: result['username'] as String,
             country: result['country'] as String,
             state: result['state'] as String,
             city: result['city'] as String,
             password: result['password'] as String);
       } else {
         user = Recruiter.create(
-            firstName: result['firstName'] as String,
-            lastName: result['lastName'] as String,
-            username: result['lastName'] as String,
+            firstName: result['first_name'] as String,
+            lastName: result['last_name'] as String,
+            username: result['username'] as String,
             country: result['county'] as String,
             state: result['state'] as String,
             city: result['city'] as String,
