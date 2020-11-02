@@ -32,7 +32,6 @@ class _ViewEventsState extends State<ViewEvents> {
     //     userModel.currentUser.id, userModel.token);
     var allEvents =
         await eventInfoModel.fetchUpcomingEvents(1, userModel.token);
-    print(allEvents);
     return allEvents;
   }
 
