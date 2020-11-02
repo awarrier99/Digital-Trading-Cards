@@ -9,6 +9,7 @@ class EventCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext) {
+    print(data);
     return Container(
       margin: EdgeInsets.all(20),
       padding: EdgeInsets.only(left: 5, right: 5, bottom: 5, top: 5),
@@ -65,7 +66,6 @@ class EventCard extends StatelessWidget {
                   ),
                   Text("Contact Information"),
                   Text('${data.owner.firstName} ${data.owner.lastName}'),
-                  Text('${data.owner.company}'),
                   Text('${data.owner.username}'),
                   Text("Description & Details"),
                   Text('${data.eventDescription}'),
