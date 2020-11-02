@@ -8,7 +8,6 @@ import 'package:ui/models/User.dart';
 
 class ViewEvent extends StatefulWidget {
   final int eventId;
-  // bool isOwner;
 
   const ViewEvent(this.eventId);
   @override
@@ -18,6 +17,7 @@ class ViewEvent extends StatefulWidget {
 class _ViewEventState extends State<ViewEvent> {
   Future<EventInfo> eventInfo;
   Future<List<User>> attendees;
+  bool isOwner;
 
   @override
   void initState() {
@@ -28,6 +28,8 @@ class _ViewEventState extends State<ViewEvent> {
     final eventModel = globalModel.eventInfoModel;
     eventInfo = eventModel.fetchEventInfo(widget.eventId, userModel.token);
     attendees = eventModel.fetchAttendees(widget.eventId, userModel.token);
+
+    isOwner = (userModel.currentUser.id == eventModel.eventInfo.owner.id);
   }
 
   @override
