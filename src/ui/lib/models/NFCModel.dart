@@ -13,7 +13,6 @@ class NFCModel {
     NDEFMessage message = NDEFMessage.withRecords(
         [NDEFRecord.type('application/json', json.encode(userMap))]);
     await NFC.writeNDEF(message, once: true).first;
-    isolate.kill();
   }
 }
 
@@ -25,7 +24,9 @@ Future<void> listener(SendPort sendPort) async {
 
     NDEFMessage message = await NFC.readNDEF(once: true).first;
     print(message.payload);
-  } catch (err) {
+  } catch (err, stacktrace) {
     print('An error occurred while trying to add a user with NFC');
+    print(err);
+    print(stacktrace);
   }
 }
