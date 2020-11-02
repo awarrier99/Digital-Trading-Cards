@@ -12,6 +12,7 @@ import 'package:intl/intl.dart';
 class EventInputs extends StatefulWidget {
   final GlobalKey key;
   final EventInfo model;
+  bool isEditing = false;
 
   EventInputs({@required this.key, @required this.model});
 
@@ -117,6 +118,7 @@ class EventInputsState extends State<EventInputs> {
   // Textfield input for Event Name
   Widget _buildEventName() {
     return TextInput(
+      initialValue: widget.isEditing ? "insert model value here" : "",
       decoration: InputDecoration(
           labelText: 'Name of Event*', border: OutlineInputBorder()),
       textCapitalization: TextCapitalization.words,
@@ -139,6 +141,7 @@ class EventInputsState extends State<EventInputs> {
   // Textfield input for Organization Name
   Widget _buildEventOrganization() {
     return TextInput(
+      initialValue: widget.isEditing ? "insert model value here" : "",
       decoration: InputDecoration(
           labelText: 'Company/Organization Name*',
           border: OutlineInputBorder()),
@@ -165,6 +168,7 @@ class EventInputsState extends State<EventInputs> {
     // I think Ashvin included a maxline property that can deal with this
 
     return TextInput(
+      initialValue: widget.isEditing ? "insert model value here" : "",
       decoration: InputDecoration(
         labelText: 'Event Description*',
         border: OutlineInputBorder(),
@@ -192,6 +196,7 @@ class EventInputsState extends State<EventInputs> {
   // Textfield input for Contact Email
   Widget _buildEventContactEmail() {
     return TextInput(
+      initialValue: widget.isEditing ? "insert model value here" : "",
       decoration: InputDecoration(
           labelText: 'Email Address', border: OutlineInputBorder()),
       textCapitalization: TextCapitalization.none,
@@ -214,6 +219,7 @@ class EventInputsState extends State<EventInputs> {
   // Textfield input for Contact Phone #
   Widget _buildEventContactPhoneNumber() {
     return TextInput(
+      initialValue: widget.isEditing ? "insert model value here" : "",
       decoration: InputDecoration(
           labelText: 'Phone Number', border: OutlineInputBorder()),
       textCapitalization: TextCapitalization.words,
