@@ -1,8 +1,7 @@
-import 'package:ui/models/CardInfo.dart';
+import 'dart:convert';
 
 import 'package:http/http.dart';
-
-import 'dart:convert';
+import 'package:ui/models/CardInfo.dart';
 
 class User {
   int id;
@@ -64,7 +63,7 @@ class UserModel {
 
   Future<bool> createUser() async {
     try {
-      final res = await post('http://10.0.2.2:8888/api/users',
+      final res = await post('http://34.75.44.166:8888/api/users',
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
@@ -84,7 +83,7 @@ class UserModel {
 
   Future<bool> login() async {
     // TODO: add try/catch, strip whitespace
-    final res = await post('http://10.0.2.2:8888/api/users/login',
+    final res = await post('http://34.75.44.166:8888/api/users/login',
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json'

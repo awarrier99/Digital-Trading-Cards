@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:isolate';
 
+import 'package:flutter/cupertino.dart';
 import 'package:nfc_in_flutter/nfc_in_flutter.dart';
 
 class NFCModel {
@@ -18,6 +19,7 @@ class NFCModel {
 
 Future<void> listener(SendPort sendPort) async {
   try {
+    WidgetsFlutterBinding.ensureInitialized();
     final receivePort = ReceivePort();
     sendPort.send(receivePort.sendPort);
 

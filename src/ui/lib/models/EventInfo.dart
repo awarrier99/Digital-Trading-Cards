@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:meta/meta.dart';
 import 'package:http/http.dart';
 import 'package:ui/models/User.dart';
 
@@ -42,7 +41,7 @@ class EventInfoModel {
 
   Future<bool> createEvent() async {
     try {
-      final res = await post('http://10.0.2.2:8888/api/events',
+      final res = await post('http://34.75.44.166:8888/api/events',
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
@@ -59,7 +58,8 @@ class EventInfoModel {
   }
 
   Future<EventInfo> fetchEventInfo(int id, String token) async {
-    final responce = await get('http://10.0.2.2:8888/api/events/$id', headers: {
+    final responce =
+        await get('http://34.75.44.166:8888/api/events/$id', headers: {
       'Accept': 'application/json',
       'Authorization': 'Bearer $token',
     });
@@ -75,7 +75,7 @@ class EventInfoModel {
 
   Future<List<EventInfo>> fetchUpcomingEvents(int userId, String token) async {
     final responce =
-        await get('http://10.0.2.2:8888/api/allEvents/$userId', headers: {
+        await get('http://34.75.44.166:8888/api/allEvents/$userId', headers: {
       'Accept': 'application/json',
       'Authorization': 'Bearer $token',
     });
