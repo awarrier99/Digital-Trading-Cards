@@ -3,19 +3,19 @@ import 'package:provider/provider.dart';
 import 'package:ui/models/Global.dart';
 import 'package:ui/palette.dart';
 
-class AddCardByNFC extends StatefulWidget {
+class AddCardByBluetooth extends StatefulWidget {
   @override
-  _AddCardByNFCState createState() => _AddCardByNFCState();
+  _AddCardByBluetoothState createState() => _AddCardByBluetoothState();
 }
 
-class _AddCardByNFCState extends State<AddCardByNFC> {
+class _AddCardByBluetoothState extends State<AddCardByBluetooth> {
   @override
   void initState() {
     super.initState();
     final globalModel = context.read<GlobalModel>();
-    final nfcModel = globalModel.nfcModel;
+    final bluetoothModel = globalModel.bluetoothModel;
     final userModel = globalModel.userModel;
-    nfcModel.addUser(userModel.currentUser.username);
+    bluetoothModel.addUser(userModel.currentUser.username);
   }
 
   @override

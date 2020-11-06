@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:ui/components/NavigationBar.dart';
+import 'package:ui/screens/AddCard.dart';
+import 'package:ui/screens/AddCardByBluetooth.dart';
+import 'package:ui/screens/AddCardByEmail.dart';
 import 'package:ui/screens/AddEvents.dart';
+import 'package:ui/screens/CreateAccount.dart';
+import 'package:ui/screens/CreateCard1.dart';
+import 'package:ui/screens/Home.dart';
+import 'package:ui/screens/PendingConnections.dart';
+import 'package:ui/screens/PreviewCard.dart';
 import 'package:ui/screens/Profile.dart';
 import 'package:ui/screens/ViewEvents.dart';
-import 'package:ui/screens/WelcomeScreen.dart';
-import 'package:ui/screens/CreateAccount.dart';
-import 'package:ui/screens/Home.dart';
-import 'package:ui/screens/CreateCard1.dart';
 import 'package:ui/screens/ViewSavedCards.dart';
-import 'package:ui/screens/PreviewCard.dart';
-import 'package:ui/screens/AddCard.dart';
-import 'package:ui/screens/AddCardByEmail.dart';
-import 'package:ui/screens/AddCardByNFC.dart';
-import 'package:ui/screens/PendingConnections.dart';
+import 'package:ui/screens/WelcomeScreen.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -54,8 +54,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => ViewEvents());
       case '/addCardByEmail':
         return MaterialPageRoute(builder: (_) => AddCardByEmail());
-      case '/addCardByNFC':
-        return MaterialPageRoute(builder: (_) => AddCardByNFC());
+      case '/addCardByBluetooth':
+        return MaterialPageRoute(builder: (_) => AddCardByBluetooth());
       case '/AddEvents':
         return MaterialPageRoute(builder: (_) => AddEvents());
       case '/PendingConnections':

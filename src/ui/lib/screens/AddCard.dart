@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:nfc_in_flutter/nfc_in_flutter.dart';
 
 import '../palette.dart';
 
@@ -9,24 +8,17 @@ class AddCard extends StatefulWidget {
 }
 
 class AddCardState extends State<AddCard> {
-  bool deviceSupportsNFC = false;
-
   @override
   void initState() {
     super.initState();
-    NFC.isNDEFSupported.then((value) {
-      setState(() {
-        deviceSupportsNFC = value;
-      });
-    });
   }
 
   Future addByEmail(context) async {
     Navigator.of(context).pushNamed('/addCardByEmail');
   }
 
-  Future addByNFC(context) async {
-    Navigator.of(context).pushNamed('/addCardByNFC');
+  Future addByBluetooth(context) async {
+    Navigator.of(context).pushNamed('/addCardByBluetooth');
   }
 
   @override
@@ -102,10 +94,10 @@ class AddCardState extends State<AddCard> {
                     color: Palette.secondary,
                     elevation: 7,
                     child: GestureDetector(
-                      onTap: () => addByNFC(context),
+                      onTap: () => addByBluetooth(context),
                       child: Center(
                         child: Text(
-                          'Add by NFC tap',
+                          'Add by Bluetooth',
                           style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
