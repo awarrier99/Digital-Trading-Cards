@@ -23,11 +23,11 @@ class _AddEvents extends State<AddEvents> {
   EventInfo _eventsInfoModel = EventInfo();
   // final bool isEditing;
 
-  void deactivate() {
-    super.deactivate();
-    final globalModel = context.read<GlobalModel>();
-    globalModel.eventInfoModel.isEditing = false;
-  }
+  // void deactivate() {
+  //   super.deactivate();
+  //   final globalModel = context.read<GlobalModel>();
+  //   globalModel.eventInfoModel.isEditing = false;
+  // }
 
   void initState() {
     super.initState();
@@ -81,33 +81,59 @@ class _AddEvents extends State<AddEvents> {
                         Editing: false,
                       ),
                 SizedBox(height: SizeConfig.safeBlockVertical * 10),
-                SizedBox(
-                  child: RaisedButton(
-                      child: Text('Create event'),
-                      textColor: Colors.white,
-                      color: Colors.deepPurple,
-                      onPressed: () {
-                        // print('hello');
-                        if (_eventInputsKey.currentState.validate()) {
-                          // print('hello1');
-                          final globalModel = context.read<GlobalModel>();
-                          final eventModel = globalModel.eventInfoModel;
-                          final userModel = globalModel.userModel;
-                          _eventsInfoModel.owner = userModel.currentUser;
-                          print(_eventsInfoModel.toJson());
-                          eventModel.eventInfo.fromEvent(_eventsInfoModel);
-                          eventModel
-                              .createEvent(userModel.token)
-                              .then((success) {
-                            if (success) {
-                              sendToViewEventScreen(context);
-                            }
-                          });
-                          // include a check in the future for dupes
-                        }
-                        globalModel.eventInfoModel.isEditing = false;
-                      }),
-                ),
+                isEditing
+                    ? SizedBox(
+                        child: RaisedButton(
+                            child: Text('Update event'),
+                            textColor: Colors.white,
+                            color: Colors.deepPurple,
+                            onPressed: () {
+                              if (_eventInputsKey.currentState.validate()) {
+                                final globalModel = context.read<GlobalModel>();
+                                final eventModel = globalModel.eventInfoModel;
+                                final userModel = globalModel.userModel;
+                                _eventsInfoModel.owner = userModel.currentUser;
+                                print(_eventsInfoModel.toJson());
+                                eventModel.eventInfo
+                                    .fromEvent(_eventsInfoModel);
+                                eventModel.update().then((success) {
+                                  if (success) {
+                                    sendToViewEventScreen(context);
+                                  }
+                                });
+                                // include a check in the future for dupes
+                              }
+                              globalModel.eventInfoModel.isEditing = false;
+                            }),
+                      )
+                    : SizedBox(
+                        child: RaisedButton(
+                            child: Text('Create event'),
+                            textColor: Colors.white,
+                            color: Colors.deepPurple,
+                            onPressed: () {
+                              // print('hello');
+                              if (_eventInputsKey.currentState.validate()) {
+                                // print('hello1');
+                                final globalModel = context.read<GlobalModel>();
+                                final eventModel = globalModel.eventInfoModel;
+                                final userModel = globalModel.userModel;
+                                _eventsInfoModel.owner = userModel.currentUser;
+                                print(_eventsInfoModel.toJson());
+                                eventModel.eventInfo
+                                    .fromEvent(_eventsInfoModel);
+                                eventModel
+                                    .createEvent(userModel.token)
+                                    .then((success) {
+                                  if (success) {
+                                    sendToViewEventScreen(context);
+                                  }
+                                });
+                                // include a check in the future for dupes
+                              }
+                              globalModel.eventInfoModel.isEditing = false;
+                            }),
+                      ),
               ],
             ),
           ),
