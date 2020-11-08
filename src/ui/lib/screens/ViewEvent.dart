@@ -47,8 +47,6 @@ class _ViewEventState extends State<ViewEvent> {
           if (snapshot.hasData) {
             if (currentUserID == snapshot.data[0].owner.id) {
               isOwner = true;
-              final globalModel = context.read<GlobalModel>();
-              // globalModel.eventInfoModel.isEditing = true;
             }
             children = [
               EventCard(snapshot.data[0], snapshot.data[1]),
@@ -104,6 +102,8 @@ class _ViewEventState extends State<ViewEvent> {
                         elevation: 7,
                         child: GestureDetector(
                           onTap: () {
+                            final globalModel = context.read<GlobalModel>();
+                            globalModel.eventInfoModel.isEditing = true;
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
