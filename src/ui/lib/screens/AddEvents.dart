@@ -96,7 +96,10 @@ class _AddEvents extends State<AddEvents> {
                                 print(_eventsInfoModel.toJson());
                                 eventModel.eventInfo
                                     .fromEvent(_eventsInfoModel);
-                                eventModel.update().then((success) {
+                                eventModel
+                                    .update(
+                                        _eventsInfoModel.id, userModel.token)
+                                    .then((success) {
                                   if (success) {
                                     sendToViewEventScreen(context);
                                   }

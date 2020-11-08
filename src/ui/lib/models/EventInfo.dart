@@ -87,12 +87,13 @@ class EventInfoModel {
     }
   }
 
-  Future<bool> update() async {
+  Future<bool> update(int id, String token) async {
     try {
-      final res = await put('http://10.0.2.2:8888/api/events',
+      final res = await put('http://10.0.2.2:8888/api/events/$id',
           headers: {
             'Accept': 'application/json',
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token',
           },
           body: json.encode(_eventInfo.toJson()));
       final body = json.decode(res.body);
