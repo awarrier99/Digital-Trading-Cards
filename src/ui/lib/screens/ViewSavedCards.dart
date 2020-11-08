@@ -24,6 +24,7 @@ class _ViewSavedCardsState extends State<ViewSavedCards> {
   // String dropDownInterest;
   // String dropDownSkill;
   bool isSearching = false;
+  bool isThinking = true;
 
   getConnectionInfo(ConnectionInfoModel connectionInfoModel,
       UserModel userModel, bool isCurrentUser) async {
@@ -51,6 +52,7 @@ class _ViewSavedCardsState extends State<ViewSavedCards> {
         // dropDownSkill = "All";
         connectionCards = filteredUsers = data.connectionCards;
         isSearching = false;
+        isThinking = false;
       });
     });
     super.initState();
@@ -251,49 +253,54 @@ class _ViewSavedCardsState extends State<ViewSavedCards> {
                 //     ],
                 //   ),
                 // ),
-                filteredUsers.length > 0
-                    ? Expanded(
-                        child: ListView.separated(
-                            scrollDirection: Axis.vertical,
-                            shrinkWrap: true,
-                            separatorBuilder:
-                                (BuildContext context, int index) =>
-                                    const Divider(),
-                            itemCount: filteredUsers.length,
-                            padding: EdgeInsets.only(top: 10, bottom: 10),
-                            itemBuilder: (BuildContext context, int index) {
-                              return GestureDetector(
-                                onTap: () {
-                                  // Navigator.of(context).pushNamed(Country.routeName,
-                                  //     arguments: filteredUsers[index]);
-                                },
-                                child: Container(
-                                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                                  child: SummaryCard(filteredUsers[index]),
-                                ),
-                              );
-
-                              // child: Card(
-                              //   elevation: 10,
-                              //   child: Padding(
-                              //     padding: const EdgeInsets.symmetric(
-                              //         vertical: 10, horizontal: 8),
-                              //     child: Text(
-                              //       filteredCountries[index]['name'],
-                              //       style: TextStyle(fontSize: 18),
-                              //     ),
-                              //   ),
-                              // ),
-                            }),
+                isThinking
+                    ? Center(
+                        child: CircularProgressIndicator(),
                       )
-                    : Center(
-                        child: Text(
-                        'No saved cards',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 24,
-                            height: .5),
-                      )),
+                    : filteredUsers.length > 0
+                        ? Expanded(
+                            child: ListView.separated(
+                                scrollDirection: Axis.vertical,
+                                shrinkWrap: true,
+                                separatorBuilder:
+                                    (BuildContext context, int index) =>
+                                        const Divider(),
+                                itemCount: filteredUsers.length,
+                                padding: EdgeInsets.only(top: 10, bottom: 10),
+                                itemBuilder: (BuildContext context, int index) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      // Navigator.of(context).pushNamed(Country.routeName,
+                                      //     arguments: filteredUsers[index]);
+                                    },
+                                    child: Container(
+                                      padding:
+                                          EdgeInsets.fromLTRB(10, 5, 10, 5),
+                                      child: SummaryCard(filteredUsers[index]),
+                                    ),
+                                  );
+
+                                  // child: Card(
+                                  //   elevation: 10,
+                                  //   child: Padding(
+                                  //     padding: const EdgeInsets.symmetric(
+                                  //         vertical: 10, horizontal: 8),
+                                  //     child: Text(
+                                  //       filteredCountries[index]['name'],
+                                  //       style: TextStyle(fontSize: 18),
+                                  //     ),
+                                  //   ),
+                                  // ),
+                                }),
+                          )
+                        : Center(
+                            child: Text(
+                            'No saved cards',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 24,
+                                height: .5),
+                          )),
               ],
             ),
           ),

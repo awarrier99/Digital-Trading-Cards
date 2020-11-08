@@ -79,12 +79,13 @@ class _PendingConnectionsState extends State<PendingConnections> {
                           )
                         : Center(
                             child: Text(
-                            'No pending incoming connections',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 24,
-                                height: .5),
-                          ));
+                              'No pending incoming connections',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                  height: .5),
+                            ),
+                          );
                   }
                   return Center(
                     child: CircularProgressIndicator(),
