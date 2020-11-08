@@ -30,6 +30,8 @@ class EventInputsState extends State<EventInputs> {
   FocusNode phoneNumberNode = FocusNode();
   DateTime startDate = DateTime.now();
   DateTime endDate = DateTime.now();
+  TimeOfDay selectedStartTime = TimeOfDay.now();
+  TimeOfDay selectedEndTime = TimeOfDay.now();
 
   @override
   void initState() {
@@ -39,6 +41,9 @@ class EventInputsState extends State<EventInputs> {
     if (widget.Editing) {
       startDate = widget.model.startDate;
       endDate = widget.model.endDate;
+      selectedStartTime =
+          TimeOfDay(hour: startDate.hour, minute: startDate.minute);
+      selectedEndTime = TimeOfDay(hour: endDate.hour, minute: endDate.minute);
     } else {
       widget.model.startDate = startDate;
       widget.model.endDate = endDate;
@@ -311,8 +316,8 @@ class EventInputsState extends State<EventInputs> {
     );
   }
 
-  TimeOfDay selectedStartTime = TimeOfDay(hour: 8, minute: 0);
-  TimeOfDay selectedEndTime = TimeOfDay(hour: 8, minute: 0);
+  // selectedStartTime = TimeOfDay.now();
+  // selectedEndTime = TimeOfDay.now();
 
   String startTime;
   String endTime;
@@ -332,6 +337,14 @@ class EventInputsState extends State<EventInputs> {
         selectedEndTime = _time;
       });
     }
+
+    widget.model.startDate = returnDateAndTime(startDate, selectedStartTime);
+    widget.model.endDate = returnDateAndTime(endDate, selectedEndTime);
+
+    print("start");
+    print(widget.model.startDate);
+    print("end");
+    print(widget.model.endDate);
   }
 
   String formatTimeOfDay(TimeOfDay tod) {
@@ -399,5 +412,13 @@ class EventInputsState extends State<EventInputs> {
         ],
       ),
     );
+  }
+
+  // takes in the day and time and returns a date as a string
+  DateTime returnDateAndTime(DateTime date, TimeOfDay time) {
+    date = DateTime(date.year, date.month, date.day, time.hour, time.minute);
+    // final format = DateFormat.yMMMMd().add_jm();
+    // return format.format(date);
+    return date;
   }
 }

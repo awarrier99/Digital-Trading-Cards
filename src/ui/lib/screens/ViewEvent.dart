@@ -63,7 +63,7 @@ class _ViewEventState extends State<ViewEvent> {
                 child: Material(
                   borderRadius: BorderRadius.circular(20),
                   shadowColor: Palette.secondary,
-                  color: Palette.secondary,
+                  color: Palette.primary,
                   elevation: 7,
                   child: GestureDetector(
                     onTap: () {
@@ -104,7 +104,7 @@ class _ViewEventState extends State<ViewEvent> {
                       child: Material(
                         borderRadius: BorderRadius.circular(20),
                         shadowColor: Palette.secondary,
-                        color: Palette.secondary,
+                        color: Palette.primary,
                         elevation: 7,
                         child: GestureDetector(
                           onTap: () {
