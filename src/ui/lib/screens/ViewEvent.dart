@@ -57,7 +57,7 @@ class _ViewEventState extends State<ViewEvent> {
                 }
                 children = [
                   EventCard(snapshot.data[0], snapshot.data[1]),
-                  SizedBox(height: 20),
+                  SizedBox(height: 10),
                   Container(
                     margin: EdgeInsets.fromLTRB(60, 0, 60, 0),
                     height: 40,
@@ -105,7 +105,7 @@ class _ViewEventState extends State<ViewEvent> {
                           child: Material(
                             borderRadius: BorderRadius.circular(20),
                             shadowColor: Palette.secondary,
-                            color: Palette.primary,
+                            color: Palette.secondary,
                             elevation: 7,
                             child: GestureDetector(
                               onTap: () {
