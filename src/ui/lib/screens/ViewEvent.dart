@@ -22,6 +22,12 @@ class _ViewEventState extends State<ViewEvent> {
   bool isOwner;
   int currentUserID;
 
+  void deactivate() {
+    super.deactivate();
+    final globalModel = context.read<GlobalModel>();
+    globalModel.eventInfoModel.isEditing = false;
+  }
+
   @override
   void initState() {
     super.initState();

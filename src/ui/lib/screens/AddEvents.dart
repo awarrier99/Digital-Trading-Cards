@@ -23,6 +23,12 @@ class _AddEvents extends State<AddEvents> {
   EventInfo _eventsInfoModel = EventInfo();
   // final bool isEditing;
 
+  void deactivate() {
+    super.deactivate();
+    final globalModel = context.read<GlobalModel>();
+    globalModel.eventInfoModel.isEditing = false;
+  }
+
   void initState() {
     super.initState();
     final globalModel = context.read<GlobalModel>();
