@@ -44,124 +44,125 @@ class _ViewEventState extends State<ViewEvent> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Center(
-      child: FutureBuilder<List<dynamic>>(
-        future: Future.wait([eventInfo, attendees]),
-        builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
-          List<Widget> children;
-          if (snapshot.hasData) {
-            if (currentUserID == snapshot.data[0].owner.id) {
-              isOwner = true;
-            }
-            children = [
-              EventCard(snapshot.data[0], snapshot.data[1]),
-              SizedBox(height: 20),
-              Container(
-                margin: EdgeInsets.fromLTRB(60, 0, 60, 0),
-                height: 40,
-                child: Material(
-                  borderRadius: BorderRadius.circular(20),
-                  shadowColor: Palette.secondary,
-                  color: Palette.primary,
-                  elevation: 7,
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).pushNamed('/viewEvents');
+    return Scaffold(
+        appBar: AppBar(),
+        body: Center(
+          child: FutureBuilder<List<dynamic>>(
+            future: Future.wait([eventInfo, attendees]),
+            builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
+              List<Widget> children;
+              if (snapshot.hasData) {
+                if (currentUserID == snapshot.data[0].owner.id) {
+                  isOwner = true;
+                }
+                children = [
+                  EventCard(snapshot.data[0], snapshot.data[1]),
+                  SizedBox(height: 20),
+                  Container(
+                    margin: EdgeInsets.fromLTRB(60, 0, 60, 0),
+                    height: 40,
+                    child: Material(
+                      borderRadius: BorderRadius.circular(20),
+                      shadowColor: Palette.secondary,
+                      color: Palette.primary,
+                      elevation: 7,
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).pushNamed('/viewEvents');
 
-                      // int currUserId = globalModel.userModel.currentUser;
-                      // final globalModel = context.read<GlobalModel>();
-                      // final userModel = globalModel.userModel;
-                      // final eventModel = globalModel.eventInfoModel.eventInfo;
-                      // print(eventModel.eventId);
-                      // widget
-                      //     .registerForEvent(userModel.token)
-                      //     .then((success) {
-                      //   if (success) {
-                      //     print("RSVP successful");
-                      //   }
-                      // });
-                      // print(userModel.currentUser.id);
-                      // final userModel = globalModel.userModel;
-                    },
-                    child: Center(
-                      child: Text(
-                        'RSVP',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'Montserrat'),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: 20),
-              isOwner
-                  ? Container(
-                      margin: EdgeInsets.fromLTRB(60, 0, 60, 0),
-                      height: 40,
-                      child: Material(
-                        borderRadius: BorderRadius.circular(20),
-                        shadowColor: Palette.secondary,
-                        color: Palette.primary,
-                        elevation: 7,
-                        child: GestureDetector(
-                          onTap: () {
-                            final globalModel = context.read<GlobalModel>();
-                            globalModel.eventInfoModel.isEditing = true;
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => AddEvents(
-                                        snapshot.data[0].id,
-                                        snapshot.data[0])));
-                          },
-                          child: Center(
-                            child: Text(
-                              'Edit Event',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'Montserrat'),
-                            ),
+                          // int currUserId = globalModel.userModel.currentUser;
+                          // final globalModel = context.read<GlobalModel>();
+                          // final userModel = globalModel.userModel;
+                          // final eventModel = globalModel.eventInfoModel.eventInfo;
+                          // print(eventModel.eventId);
+                          // widget
+                          //     .registerForEvent(userModel.token)
+                          //     .then((success) {
+                          //   if (success) {
+                          //     print("RSVP successful");
+                          //   }
+                          // });
+                          // print(userModel.currentUser.id);
+                          // final userModel = globalModel.userModel;
+                        },
+                        child: Center(
+                          child: Text(
+                            'RSVP',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Montserrat'),
                           ),
                         ),
                       ),
-                    )
-                  : SizedBox(),
-            ];
-          } else if (snapshot.hasError) {
-            children = [
-              Flushbar(
-                flushbarPosition: FlushbarPosition.TOP,
-                title: snapshot.error,
-                duration: Duration(seconds: 5),
-                margin: EdgeInsets.all(8),
-                borderRadius: 8,
-                backgroundColor: Color(0xffDF360E),
-              )..show(context)
-            ];
-          } else {
-            children = [
-              Center(
-                child: CircularProgressIndicator(),
-              )
-            ];
-          }
-          return Center(
-              child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Column(
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  isOwner
+                      ? Container(
+                          margin: EdgeInsets.fromLTRB(60, 0, 60, 0),
+                          height: 40,
+                          child: Material(
+                            borderRadius: BorderRadius.circular(20),
+                            shadowColor: Palette.secondary,
+                            color: Palette.primary,
+                            elevation: 7,
+                            child: GestureDetector(
+                              onTap: () {
+                                final globalModel = context.read<GlobalModel>();
+                                globalModel.eventInfoModel.isEditing = true;
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => AddEvents(
+                                            snapshot.data[0].id,
+                                            snapshot.data[0])));
+                              },
+                              child: Center(
+                                child: Text(
+                                  'Edit Event',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: 'Montserrat'),
+                                ),
+                              ),
+                            ),
+                          ),
+                        )
+                      : SizedBox(),
+                ];
+              } else if (snapshot.hasError) {
+                children = [
+                  Flushbar(
+                    flushbarPosition: FlushbarPosition.TOP,
+                    title: snapshot.error,
+                    duration: Duration(seconds: 5),
+                    margin: EdgeInsets.all(8),
+                    borderRadius: 8,
+                    backgroundColor: Color(0xffDF360E),
+                  )..show(context)
+                ];
+              } else {
+                children = [
+                  Center(
+                    child: CircularProgressIndicator(),
+                  )
+                ];
+              }
+              return Center(
+                  child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: children,
-              ),
-            ],
-          ));
-        },
-      ),
-    ));
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: children,
+                  ),
+                ],
+              ));
+            },
+          ),
+        ));
   }
 }
