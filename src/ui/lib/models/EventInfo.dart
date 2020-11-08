@@ -158,7 +158,7 @@ class EventInfoModel {
             'Content-Type': 'application/json'
           },
           body: json.encode(_eventInfo.toJson()));
-          
+
       final body = json.decode(res.body);
       final success = body['success'];
       if (!success) return false;

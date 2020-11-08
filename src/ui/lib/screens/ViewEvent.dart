@@ -6,6 +6,7 @@ import 'package:ui/models/EventInfo.dart';
 import 'package:ui/models/Global.dart';
 import 'package:ui/models/User.dart';
 import 'package:ui/palette.dart';
+import 'package:ui/screens/AddEvents.dart';
 
 class ViewEvent extends StatefulWidget {
   final int eventId;
@@ -19,7 +20,7 @@ class _ViewEventState extends State<ViewEvent> {
   Future<EventInfo> eventInfo;
   Future<List<User>> attendees;
   bool isOwner;
-  int OwnerID;
+  int currentUserID;
 
   @override
   void initState() {
@@ -31,7 +32,7 @@ class _ViewEventState extends State<ViewEvent> {
     eventInfo = eventModel.fetchEventInfo(widget.eventId, userModel.token);
     attendees = eventModel.fetchAttendees(widget.eventId, userModel.token);
 
-    OwnerID = userModel.currentUser.id;
+    currentUserID = userModel.currentUser.id;
     isOwner = false;
   }
 
@@ -44,8 +45,10 @@ class _ViewEventState extends State<ViewEvent> {
         builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
           List<Widget> children;
           if (snapshot.hasData) {
-            if (OwnerID == snapshot.data[0].owner.id) {
+            if (currentUserID == snapshot.data[0].owner.id) {
               isOwner = true;
+              final globalModel = context.read<GlobalModel>();
+              // globalModel.eventInfoModel.isEditing = true;
             }
             children = [
               EventCard(snapshot.data[0], snapshot.data[1]),
@@ -90,6 +93,37 @@ class _ViewEventState extends State<ViewEvent> {
                 ),
               ),
               SizedBox(height: 20),
+              isOwner
+                  ? Container(
+                      margin: EdgeInsets.fromLTRB(60, 0, 60, 0),
+                      height: 40,
+                      child: Material(
+                        borderRadius: BorderRadius.circular(20),
+                        shadowColor: Palette.secondary,
+                        color: Palette.secondary,
+                        elevation: 7,
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => AddEvents(
+                                        snapshot.data[0].id,
+                                        snapshot.data[0])));
+                          },
+                          child: Center(
+                            child: Text(
+                              'Edit Event',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'Montserrat'),
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                  : SizedBox(),
             ];
           } else if (snapshot.hasError) {
             children = [
@@ -118,15 +152,6 @@ class _ViewEventState extends State<ViewEvent> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: children,
               ),
-              isOwner
-                  ? RaisedButton(
-                      onPressed: () {
-                        final globalModel = context.read<GlobalModel>();
-                        globalModel.eventInfoModel.isEditing = true;
-                        Navigator.of(context).pushNamed('/AddEvents');
-                      },
-                      child: Text('Edit Event'))
-                  : SizedBox(),
             ],
           ));
         },

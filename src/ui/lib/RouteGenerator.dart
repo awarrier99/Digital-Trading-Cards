@@ -58,7 +58,10 @@ class RouteGenerator {
       case '/addCardByNFC':
         return MaterialPageRoute(builder: (_) => AddCardByNFC());
       case '/AddEvents':
-        return MaterialPageRoute(builder: (_) => AddEvents());
+        // default for addevents is -1 for eventid and null for event info
+        // because we are making a new nonexisting event, the parameters are
+        // there to be able to edit the contents of a specific event
+        return MaterialPageRoute(builder: (_) => AddEvents(-1, null));
       case '/PendingConnections':
         return MaterialPageRoute(builder: (_) => PendingConnections());
       // case '/viewAttendees':

@@ -12,9 +12,9 @@ import 'package:intl/intl.dart';
 class EventInputs extends StatefulWidget {
   // final GlobalKey key;
   final EventInfo model;
-  final bool isEditing;
+  final bool Editing;
 
-  EventInputs({/*@required this.key,*/ @required this.model, this.isEditing});
+  EventInputs({/*@required this.key,*/ @required this.model, this.Editing});
 
   @override
   State<StatefulWidget> createState() {
@@ -23,22 +23,26 @@ class EventInputs extends StatefulWidget {
 }
 
 class EventInputsState extends State<EventInputs> {
-  // FocusNodes init for later use to change textfield focus when
-  // the user hits the continue button on the keyboard.
   FocusNode titleNode = FocusNode();
   FocusNode organizationNode = FocusNode();
   FocusNode descriptionNode = FocusNode();
   FocusNode emailNode = FocusNode();
   FocusNode phoneNumberNode = FocusNode();
-  DateTime startDate = DateTime.utc(2020, 8, 1);
-  DateTime endDate = DateTime.utc(2020, 8, 1);
-  // bool isEditing = widget.model.isEditing;
+  DateTime startDate = DateTime.now();
+  DateTime endDate = DateTime.now();
 
   @override
   void initState() {
     super.initState();
-    widget.model.startDate = startDate;
-    widget.model.endDate = endDate;
+
+    // isEditing seems to always be true;
+    if (widget.Editing) {
+      startDate = widget.model.startDate;
+      endDate = widget.model.endDate;
+    } else {
+      widget.model.startDate = startDate;
+      widget.model.endDate = endDate;
+    }
   }
 
   @override
@@ -119,16 +123,16 @@ class EventInputsState extends State<EventInputs> {
   // Textfield input for Event Name
   Widget _buildEventName() {
     return TextInput(
-      initialValue: widget.isEditing ? "Tommy" + " " + "Shelby" : "",
+      initialValue: widget.Editing ? widget.model.eventName : "",
       decoration: InputDecoration(
           labelText: 'Name of Event*', border: OutlineInputBorder()),
       textCapitalization: TextCapitalization.words,
-      // validator: (value) {
-      //   if (value.isEmpty) {
-      //     return 'Required';
-      //   }
-      //   return null;
-      // },
+      validator: (value) {
+        if (value.isEmpty) {
+          return 'Required';
+        }
+        return null;
+      },
       onChanged: (value) {
         // place this value into create event info model
         widget.model.eventName = value;
@@ -142,17 +146,17 @@ class EventInputsState extends State<EventInputs> {
   // Textfield input for Organization Name
   Widget _buildEventOrganization() {
     return TextInput(
-      initialValue: widget.isEditing ? "" : "",
+      initialValue: widget.Editing ? widget.model.company : "",
       decoration: InputDecoration(
           labelText: 'Company/Organization Name*',
           border: OutlineInputBorder()),
       textCapitalization: TextCapitalization.words,
-      // validator: (value) {
-      //   if (value.isEmpty) {
-      //     return 'Required';
-      //   }
-      //   return null;
-      // },
+      validator: (value) {
+        if (value.isEmpty) {
+          return 'Required';
+        }
+        return null;
+      },
       onChanged: (value) {
         // place this value into create event info model
         widget.model.company = value;
@@ -169,7 +173,7 @@ class EventInputsState extends State<EventInputs> {
     // I think Ashvin included a maxline property that can deal with this
 
     return TextInput(
-      initialValue: widget.isEditing ? "" : "",
+      initialValue: widget.Editing ? widget.model.eventDescription : "",
       decoration: InputDecoration(
         labelText: 'Event Description*',
         border: OutlineInputBorder(),
@@ -178,12 +182,12 @@ class EventInputsState extends State<EventInputs> {
       textCapitalization: TextCapitalization.words,
       keyboardType: TextInputType.multiline,
       maxLines: 8,
-      // validator: (value) {
-      //   if (value.isEmpty) {
-      //     return 'Required';
-      //   }
-      //   return null;
-      // },
+      validator: (value) {
+        if (value.isEmpty) {
+          return 'Required';
+        }
+        return null;
+      },
       onChanged: (value) {
         // place this value into create event info model
         widget.model.eventDescription = value;
@@ -197,7 +201,7 @@ class EventInputsState extends State<EventInputs> {
   // Textfield input for Contact Email
   Widget _buildEventContactEmail() {
     return TextInput(
-      initialValue: widget.isEditing ? "" : "",
+      initialValue: widget.Editing ? widget.model.owner.username : "",
       decoration: InputDecoration(
           labelText: 'Email Address', border: OutlineInputBorder()),
       textCapitalization: TextCapitalization.none,
@@ -220,7 +224,7 @@ class EventInputsState extends State<EventInputs> {
   // Textfield input for Contact Phone #
   Widget _buildEventContactPhoneNumber() {
     return TextInput(
-      initialValue: widget.isEditing ? "" : "",
+      initialValue: widget.Editing ? "" : "",
       decoration: InputDecoration(
           labelText: 'Phone Number', border: OutlineInputBorder()),
       textCapitalization: TextCapitalization.words,
