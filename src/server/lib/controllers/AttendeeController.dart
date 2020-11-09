@@ -26,7 +26,7 @@ class AttendeeController extends  ResourceController {
     } catch (err, stackTrace) {
       logError(err,
           stackTrace: stackTrace,
-          message: 'An error occurred while trying to get a event:');
+          message: 'An error occurred while trying to get attendees:');
       return Response.serverError(body: {'success': false});
     }
   }

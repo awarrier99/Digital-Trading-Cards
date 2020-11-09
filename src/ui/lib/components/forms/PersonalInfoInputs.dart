@@ -47,12 +47,14 @@ class PersonalInfoInputsState extends State<PersonalInfoInputs> {
               Visibility(
                 visible: true,
                 child: Text('Personal Information',
-                    style: TextStyle(fontSize: 20, color: Palette.darkGreen)),
+                    style: TextStyle(fontSize: 20, color: Palette.primary)),
               ),
               SizedBox(height: SizeConfig.safeBlockVertical * 2),
               TextInput(
                   decoration: InputDecoration(
-                      labelText: 'First Name*', border: OutlineInputBorder()),
+                    labelText: 'First Name*',
+                    border: OutlineInputBorder(),
+                  ),
                   textCapitalization: TextCapitalization.words,
                   validator: (value) {
                     if (value.isEmpty) {

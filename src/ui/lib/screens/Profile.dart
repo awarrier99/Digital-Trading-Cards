@@ -28,10 +28,11 @@ class Profile extends StatelessWidget {
               ),
             ),
             SizedBox(
+                width: SizeConfig.screenWidth,
                 child: RaisedButton(
                     child: Text('Logout'),
                     textColor: Colors.white,
-                    color: Palette.primaryGreen,
+                    color: Palette.primary,
                     onPressed: () {
                       final globalModel = context.read<GlobalModel>();
                       globalModel.logout();

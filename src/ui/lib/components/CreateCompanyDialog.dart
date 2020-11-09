@@ -42,9 +42,9 @@ class CreateCompanyDialogState extends State<CreateCompanyDialog> {
     return Scaffold(
         appBar: AppBar(
             title: Text(
-              'Add New Company',
-              style: TextStyle(fontFamily: 'Montserrat'),
-            )),
+          'Add New Company',
+          style: TextStyle(fontFamily: 'Montserrat'),
+        )),
         body: Container(
             margin: EdgeInsets.all(20),
             child: Form(
@@ -53,8 +53,7 @@ class CreateCompanyDialogState extends State<CreateCompanyDialog> {
                   TextInput(
                       focusNode: titleNode,
                       decoration: InputDecoration(
-                          labelText: 'Title*',
-                          border: OutlineInputBorder()),
+                          labelText: 'Title*', border: OutlineInputBorder()),
                       initialValue: widget.name,
                       validator: (value) {
                         if (value.isEmpty) {
@@ -69,7 +68,7 @@ class CreateCompanyDialogState extends State<CreateCompanyDialog> {
                   RaisedButton(
                       child: Text('Add Company'),
                       textColor: Colors.white,
-                      color: Palette.primaryGreen,
+                      color: Palette.primary,
                       onPressed: () {
                         if (_createCompanyFormKey.currentState.validate()) {
                           _onAdd();

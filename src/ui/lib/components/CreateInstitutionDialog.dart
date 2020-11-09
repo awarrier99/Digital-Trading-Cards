@@ -80,7 +80,7 @@ class CreateInstitutionDialogState extends State<CreateInstitutionDialog> {
                   RaisedButton(
                       child: Text('Add Institution'),
                       textColor: Colors.white,
-                      color: Palette.primaryGreen,
+                      color: Palette.primary,
                       onPressed: () {
                         if (_createInstitutionFormKey.currentState.validate()) {
                           _onAdd();

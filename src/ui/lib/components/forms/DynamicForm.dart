@@ -58,7 +58,7 @@ class _DynamicFormState extends State<DynamicForm> {
                       widget.title,
                       style: TextStyle(
                           fontSize: SizeConfig.safeBlockHorizontal * 4.2,
-                          color: Palette.darkGreen),
+                          color: Palette.primary),
                     ),
                   ]),
                   for (int i = 0; i < index; i++)

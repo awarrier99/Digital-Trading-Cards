@@ -83,7 +83,7 @@ class CreateCard2State extends State<CreateCard2> {
                       child: RaisedButton(
                         child: Text('Next'),
                         textColor: Colors.white,
-                        color: Palette.primaryGreen,
+                        color: Palette.primary,
                         onPressed: () {
                           if (_createCard2FormKey.currentState.validate()) {
                             final globalModel = context.read<GlobalModel>();

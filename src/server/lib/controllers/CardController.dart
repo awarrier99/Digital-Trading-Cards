@@ -17,7 +17,7 @@ class CardController extends ResourceController {
   }
 
   @Operation.get('id')
-  Future<Response> getCard(@Bind.path('id') int userId) async {
+  Future<Response> getCard() async {
     try {
       final user = request.attachments['cardUser'] as User;
       return Response.ok(await CardInfo.get(user));
@@ -29,18 +29,19 @@ class CardController extends ResourceController {
     }
   }
 
-  @Operation.get('username')
-  Future<Response> getCardByUsername(
-      @Bind.path('username') String username) async {
-    try {
-      return Response.ok(await CardInfo.getByUsername(username));
-    } catch (err, stackTrace) {
-      logError(err,
-          stackTrace: stackTrace,
-          message: 'An error occurred while trying to get a card:');
-      return Response.serverError(body: {'success': false});
-    }
-  }
+  // @Operation.get('username')
+  // Future<Response> getCardByUsername(
+  //     @Bind.path('username') String username) async {
+  //   try {
+  //     final user = request.attachments['cardUser'] as User;
+  //     return Response.ok(await CardInfo.get(user));
+  //   } catch (err, stackTrace) {
+  //     logError(err,
+  //         stackTrace: stackTrace,
+  //         message: 'An error occurred while trying to get a card:');
+  //     return Response.serverError(body: {'success': false});
+  //   }
+  // }
 
   @Operation.put('id')
   Future<Response> updateCard(

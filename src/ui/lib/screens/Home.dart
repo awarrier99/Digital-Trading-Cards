@@ -4,7 +4,6 @@ import 'package:ui/components/Cards/TradingCard.dart';
 import 'package:ui/models/CardInfo.dart';
 import 'package:provider/provider.dart';
 import 'package:ui/models/Global.dart';
-import 'package:ui/models/User.dart';
 import '../palette.dart';
 
 class Home extends StatefulWidget {
@@ -50,15 +49,66 @@ class _HomeState extends State<Home> {
             children = [
               hasCard
                   ? TradingCard(snapshot.data, currentUser: true)
-                  : RaisedButton(
-                      child: Text('Create Card'),
-                      textColor: Colors.white,
-                      color: Palette.primaryGreen,
-                      onPressed: () {
-                        final globalModel = context.read<GlobalModel>();
-                        globalModel.cardInfoModel.isEditing = false;
-                        Navigator.of(context).pushNamed('/createCard1');
-                      }),
+                  : Container(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Image.asset('lib/assets/images/noCard.png'),
+                          SizedBox(height: 20),
+                          Text(
+                            'Make meaningful connections',
+                            style: TextStyle(
+                              color: Palette.secondary,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Montserrat',
+                            ),
+                          ),
+                          SizedBox(height: 15),
+                          Container(
+                            margin: EdgeInsets.fromLTRB(30, 0, 30, 0),
+                            child: Text(
+                              'Create your digital trading card to share your story and grow your network',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Palette.secondary,
+                                fontFamily: 'Montserrat',
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 50),
+                          Container(
+                            margin: EdgeInsets.fromLTRB(60, 0, 60, 0),
+                            height: 40,
+                            child: Material(
+                              borderRadius: BorderRadius.circular(20),
+                              shadowColor: Palette.primary,
+                              color: Palette.primary,
+                              elevation: 7,
+                              child: GestureDetector(
+                                onTap: () {
+                                  final globalModel =
+                                      context.read<GlobalModel>();
+                                  globalModel.cardInfoModel.isEditing = false;
+                                  Navigator.of(context)
+                                      .pushNamed('/createCard1');
+                                },
+                                child: Center(
+                                  child: Text(
+                                    'Get started',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'Montserrat'),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
             ];
           } else if (snapshot.hasError) {
             children = [

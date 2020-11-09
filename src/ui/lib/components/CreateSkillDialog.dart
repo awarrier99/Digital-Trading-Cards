@@ -42,9 +42,9 @@ class CreateSkillDialogState extends State<CreateSkillDialog> {
     return Scaffold(
         appBar: AppBar(
             title: Text(
-              'Add New Skill',
-              style: TextStyle(fontFamily: 'Montserrat'),
-            )),
+          'Add New Skill',
+          style: TextStyle(fontFamily: 'Montserrat'),
+        )),
         body: Container(
             margin: EdgeInsets.all(20),
             child: Form(
@@ -53,8 +53,7 @@ class CreateSkillDialogState extends State<CreateSkillDialog> {
                   TextInput(
                       focusNode: titleNode,
                       decoration: InputDecoration(
-                          labelText: 'Title*',
-                          border: OutlineInputBorder()),
+                          labelText: 'Title*', border: OutlineInputBorder()),
                       initialValue: widget.title,
                       validator: (value) {
                         if (value.isEmpty) {
@@ -69,7 +68,7 @@ class CreateSkillDialogState extends State<CreateSkillDialog> {
                   RaisedButton(
                       child: Text('Add Skill'),
                       textColor: Colors.white,
-                      color: Palette.primaryGreen,
+                      color: Palette.primary,
                       onPressed: () {
                         if (_createSkillFormKey.currentState.validate()) {
                           _onAdd();

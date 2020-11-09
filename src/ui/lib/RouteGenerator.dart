@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ui/components/NavigationBar.dart';
 import 'package:ui/screens/AddEvents.dart';
 import 'package:ui/screens/Profile.dart';
+import 'package:ui/screens/ViewAttendees.dart';
 import 'package:ui/screens/ViewEvents.dart';
 import 'package:ui/screens/WelcomeScreen.dart';
 import 'package:ui/screens/CreateAccount.dart';
@@ -11,6 +12,8 @@ import 'package:ui/screens/ViewSavedCards.dart';
 import 'package:ui/screens/PreviewCard.dart';
 import 'package:ui/screens/AddCard.dart';
 import 'package:ui/screens/AddCardByEmail.dart';
+import 'package:ui/screens/AddCardByNFC.dart';
+import 'package:ui/screens/PendingConnections.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -52,10 +55,19 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => ViewEvents());
       case '/addCardByEmail':
         return MaterialPageRoute(builder: (_) => AddCardByEmail());
+      case '/addCardByNFC':
+        return MaterialPageRoute(builder: (_) => AddCardByNFC());
       case '/AddEvents':
-        return MaterialPageRoute(builder: (_) => AddEvents());
+        // default for addevents is -1 for eventid and null for event info
+        // because we are making a new nonexisting event, the parameters are
+        // there to be able to edit the contents of a specific event
+        return MaterialPageRoute(builder: (_) => AddEvents(-1, null));
+      case '/PendingConnections':
+        return MaterialPageRoute(builder: (_) => PendingConnections());
+      // case '/viewAttendees':
+      // return MaterialPageRoute(builder: (_) => ViewAttendees());
       default:
-        // If there is no such named route in the switch statement
+        // If there is no such named route in the s witch statement
         return _errorRoute();
     }
   }

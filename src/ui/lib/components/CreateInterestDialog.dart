@@ -42,9 +42,9 @@ class CreateInterestDialogState extends State<CreateInterestDialog> {
     return Scaffold(
         appBar: AppBar(
             title: Text(
-              'Add New Interest',
-              style: TextStyle(fontFamily: 'Montserrat'),
-            )),
+          'Add New Interest',
+          style: TextStyle(fontFamily: 'Montserrat'),
+        )),
         body: Container(
             margin: EdgeInsets.all(20),
             child: Form(
@@ -53,8 +53,7 @@ class CreateInterestDialogState extends State<CreateInterestDialog> {
                   TextInput(
                       focusNode: titleNode,
                       decoration: InputDecoration(
-                          labelText: 'Title*',
-                          border: OutlineInputBorder()),
+                          labelText: 'Title*', border: OutlineInputBorder()),
                       initialValue: widget.title,
                       validator: (value) {
                         if (value.isEmpty) {
@@ -69,7 +68,7 @@ class CreateInterestDialogState extends State<CreateInterestDialog> {
                   RaisedButton(
                       child: Text('Add Interest'),
                       textColor: Colors.white,
-                      color: Palette.primaryGreen,
+                      color: Palette.primary,
                       onPressed: () {
                         if (_createInterestFormKey.currentState.validate()) {
                           _onAdd();

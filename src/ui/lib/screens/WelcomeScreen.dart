@@ -28,6 +28,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   FocusNode passwordNode = FocusNode();
   final User model = new User();
+  bool _isThinking = false;
 
   Future createAccount(context) async {
     Navigator.of(context).pushNamed('/createAccount');
@@ -38,11 +39,17 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   }
 
   void login(BuildContext context) {
+    setState(() {
+      _isThinking = true;
+    });
     final globalModel = context.read<GlobalModel>();
     final userModel = globalModel.userModel;
     final cardInfoModel = globalModel.cardInfoModel;
     userModel.updateUser(model);
     userModel.login().then((success) {
+      setState(() {
+        _isThinking = false;
+      });
       if (success) {
         final user = userModel.currentUser;
         cardInfoModel.updateUser(user);
@@ -128,19 +135,36 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                 height: 40,
                                 child: Material(
                                   borderRadius: BorderRadius.circular(20),
-                                  shadowColor: Palette.primary,
-                                  color: Palette.primary,
+                                  shadowColor: _isThinking
+                                      ? Palette.secondary
+                                      : Palette.primary,
+                                  color: _isThinking
+                                      ? Palette.secondary
+                                      : Palette.primary,
                                   elevation: 7,
                                   child: GestureDetector(
-                                    onTap: () => login(context),
+                                    onTap: () {
+                                      if (!_isThinking) {
+                                        login(context);
+                                      }
+                                    },
                                     child: Center(
-                                      child: Text(
-                                        'LOGIN',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: 'Montserrat'),
-                                      ),
+                                      child: _isThinking
+                                          ? SizedBox(
+                                              width: 20,
+                                              height: 20,
+                                              child: Center(
+                                                child:
+                                                    CircularProgressIndicator(),
+                                              ),
+                                            )
+                                          : Text(
+                                              'LOGIN',
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily: 'Montserrat'),
+                                            ),
                                     ),
                                   ),
                                 )),

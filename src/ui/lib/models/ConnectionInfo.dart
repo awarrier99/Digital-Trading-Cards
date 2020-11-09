@@ -1,71 +1,55 @@
-import 'package:flutter/material.dart';
-import 'package:http/http.dart';
-
 import 'dart:convert';
-import 'package:ui/models/User.dart';
+
+import 'package:http/http.dart';
 import 'package:ui/models/CardInfo.dart';
+import 'package:ui/models/User.dart';
 
 class Connection {
-  User user1;
-  User user2;
-  String username;
+  int id;
+  User sender;
+  User recipient;
+  bool pending;
 
-  Connection({this.user1, this.user2, this.username});
-  // Map<String, dynamic> toJson() {
-  //   return {
-  //     'user1': user1.toJson(),
-  //     'user2': user2.toJson()
-  //   };
-  // }
   Map<String, dynamic> toJson() {
     return {
-      'username': username,
-      'user1': user1.toJson(),
-      'user2': user2.toJson()
+      'id': id,
+      'sender': sender.toJson(),
+      'recipient': recipient.toJson(),
+      'pending': pending
     };
   }
 
   void fromJson(Map<String, dynamic> json) {
-    username = json['username'];
-    user1 = User()..fromJson(json['user1']);
-    user2 = User()..fromJson(json['user2']);
+    id = json['id'];
+    sender = User()..fromJson(json['sender']);
+    recipient = User()..fromJson(json['recipient']);
+    pending = json['pending'];
   }
 }
 
 class ConnectionInfo {
   User user = User();
   List<Connection> connections = [];
-  List<CardInfo> connectedUsers = [];
-  List<String> interests = [];
-  List<String> skills = [];
+  List<CardInfo> connectionCards = [];
 
-  ConnectionInfo({this.user, this.connections, this.connectedUsers});
+  ConnectionInfo({this.user, this.connections, this.connectionCards});
 
   Map<String, dynamic> toJson() {
     return {
       'user': user.toJson(),
-      'connections': connections?.map((e) => e.toJson())?.toList(),
-      'connectedUsers': connectedUsers?.map((e) => e.toJson())?.toList(),
-      'interests': interests,
-      'skills': skills,
+      'connections': connections.map((e) => e.toJson())?.toList(),
+      'connectedUsers': connectionCards.map((e) => e.toJson())?.toList(),
     };
   }
 
   void fromJson(Map<String, dynamic> json) {
     user = User()..fromJson(json['user']);
-    // for(connection in json['connections']) {
-    //   connections.add(Connection..fromJson(connection));
-    // }
-    connections = new List<Connection>.from(json['connections']
-        .map((element) => Connection()..fromJson(element))
-        .toList());
-    connectedUsers = new List<CardInfo>.from(json['connectedUsers']
-        .map((element) => CardInfo()..fromJson(element))
-        .toList());
-    interests = new List<String>.from(
-        json['interests'].map((element) => element as String).toList());
-    skills = new List<String>.from(
-        json['skills'].map((element) => element as String).toList());
+    connections = (json['connections'] as List)
+        ?.map((element) => Connection()..fromJson(element))
+        ?.toList();
+    connectionCards = (json['connectionCards'] as List)
+        ?.map((element) => CardInfo()..fromJson(element))
+        ?.toList();
   }
 }
 
@@ -73,19 +57,18 @@ class ConnectionInfoModel {
   // TODO strip whitespace from inputs
   final ConnectionInfo _createConnectionInfo = ConnectionInfo();
   ConnectionInfo get createConnectionInfo => _createConnectionInfo;
-  String username;
 
-  Future<bool> createConnection(String token) async {
+  Future<bool> createConnection(User user, String token) async {
     try {
-      final res = await post('http://10.0.2.2:8888/api/cards/saved',
+      final res = await post('http://10.0.2.2:8888/api/connections',
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
             'Authorization': 'Bearer $token'
           },
-          body: json.encode({'username': username}));
+          body: json.encode(user.toJson()));
       final body = json.decode(res.body);
-      return body['success'] as bool;
+      return body['success'];
     } catch (err) {
       print('An error occurred while trying to create a connection:');
       print(err);
@@ -93,13 +76,50 @@ class ConnectionInfoModel {
     }
   }
 
+  Future<bool> acceptConnection(Connection connection, String token) async {
+    try {
+      final res =
+          await put('http://10.0.2.2:8888/api/connections/${connection.id}',
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer $token'
+              },
+              body: json.encode(connection.toJson()));
+      final body = json.decode(res.body);
+      return body['success'];
+    } catch (err) {
+      print('An error occurred while trying to accept a connection:');
+      print(err);
+      return false;
+    }
+  }
+
+  Future<bool> rejectConnection(int id, String token) async {
+    try {
+      final res =
+          await delete('http://10.0.2.2:8888/api/connections/$id', headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token'
+      });
+      final body = json.decode(res.body);
+      return body['success'];
+    } catch (err) {
+      print('An error occurred while trying to reject a connection:');
+      print(err);
+      return false;
+    }
+  }
+
   Future<ConnectionInfo> fetchConnectionInfo(int id, String token,
-      {isCurrentUser: false}) async {
-    final response =
-        await get("http://10.0.2.2:8888/api/cards/saved/$id", headers: {
-      'Accept': 'application/json',
-      'Authorization': 'Bearer $token',
-    });
+      {bool onlyPending = false, bool incoming = true}) async {
+    final response = await get(
+        'http://10.0.2.2:8888/api/connections/$id?onlyPending=$onlyPending&incoming=$incoming',
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token',
+        });
     final body = json.decode(response.body);
     if (response.statusCode == 200) {
       return ConnectionInfo()..fromJson(body);
@@ -110,6 +130,5 @@ class ConnectionInfoModel {
 
   void empty() {
     _createConnectionInfo.fromJson({});
-    username = null;
   }
 }

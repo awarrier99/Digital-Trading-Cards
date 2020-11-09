@@ -98,28 +98,6 @@ class CardInfo extends Serializable {
         interests: await UserInterest.getByUser(user));
   }
 
-  static Future<CardInfo> getByUsername(String username) async {
-    final User foundUser = await User.getByUsername(username);
-    return CardInfo.create(
-        user: foundUser,
-        education: await Education.getByUser(foundUser),
-        work: await Work.getByUser(foundUser),
-        volunteering: await Volunteering.getByUser(foundUser),
-        skills: await UserSkill.getByUser(foundUser),
-        interests: await UserInterest.getByUser(foundUser));
-  }
-
-  static Future<CardInfo> getById(int id) async {
-    final user = await User.get(id);
-    return CardInfo.create(
-        user: user,
-        education: await Education.getByUser(user),
-        work: await Work.getByUser(user),
-        volunteering: await Volunteering.getByUser(user),
-        skills: await UserSkill.getByUser(user),
-        interests: await UserInterest.getByUser(user));
-  }
-
   static Future<void> update(
       CardInfo cardInfo, Map<String, List<dynamic>> deleteLists) async {
     await _saveAll(cardInfo, true);

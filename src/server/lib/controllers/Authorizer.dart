@@ -5,7 +5,7 @@ import 'VerbController.dart';
 enum AuthMode { none, bearer, isRequestingUser }
 
 class Authorizer {
-  static final Map<Verb, AuthMode> verbMapTemplate = {
+  static final Map<Verb, AuthMode> _verbMapTemplate = {
     Verb.post: null,
     Verb.get: null,
     Verb.put: null,
@@ -14,13 +14,13 @@ class Authorizer {
   };
 
   static _AuthController bearer() {
-    final verbMap = Map.of(verbMapTemplate)
+    final verbMap = Map.of(_verbMapTemplate)
       ..updateAll((key, value) => AuthMode.bearer);
     return _AuthController(verbMap);
   }
 
   static _AuthController isRequestingUser() {
-    final verbMap = Map.of(verbMapTemplate)
+    final verbMap = Map.of(_verbMapTemplate)
       ..updateAll((key, value) => AuthMode.isRequestingUser);
     return _AuthController(verbMap);
   }
@@ -32,7 +32,7 @@ class Authorizer {
       AuthMode patch,
       AuthMode delete,
       AuthMode defaultMode = AuthMode.none}) {
-    final verbMap = Map.of(verbMapTemplate)
+    final verbMap = Map.of(_verbMapTemplate)
       ..updateAll((key, value) => defaultMode);
     if (post != null) {
       verbMap.update(Verb.post, (value) => post);
@@ -75,7 +75,7 @@ class _AuthController extends Controller {
     final jwtId = jwt?.payload == null ? null : jwt.payload['id'] as int;
     final idString = request.path.variables['id'];
     final id =
-        idString == null || idString.isEmpty ? null : int.parse(idString);
+        idString == null || idString.isEmpty ? null : int.tryParse(idString);
 
     if (mode == AuthMode.bearer) {
       if (jwt == null || jwtId == null) {

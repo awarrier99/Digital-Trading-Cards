@@ -51,13 +51,19 @@ class VerbController extends Controller {
   }
 
   Future<RequestOrResponse> _commonPutOrPatchOrDelete(
-      Request request, int id, Function checker) async {
+      Request request, int id, Function checker,
+      {String key}) async {
     if (id == null) {
       return notAllowed();
     }
 
-    if (await checker(id) == null) {
+    final obj = await checker(id);
+    if (obj == null) {
       return Response.notFound(body: {'success': false});
+    }
+
+    if (key != null) {
+      request.attachments.putIfAbsent(key, () => obj);
     }
 
     return request;
@@ -68,18 +74,28 @@ class VerbController extends Controller {
     final idString = request.path.variables['id'];
     final pattern = request.path.variables['pattern'];
     final id =
-        idString == null || idString.isEmpty ? null : int.parse(idString);
+        idString == null || idString.isEmpty ? null : int.tryParse(idString);
+    String username;
+    if (id == null) {
+      username = idString;
+    }
     final verb = stringToVerb(request.method);
 
     if (resource == Resource.card) {
       if (verb == Verb.post) {
         return _commonPost(request, id, User.get);
       } else if (verb == Verb.get) {
-        if (id == null) {
+        if (id == null && username == null) {
           return notAllowed();
         }
 
-        final user = await User.get(id);
+        User user;
+        if (id != null) {
+          user = await User.get(id);
+        } else {
+          user = await User.getByUsername(username);
+        }
+
         if (user == null) {
           return Response.notFound(body: {'success': false});
         }
@@ -124,6 +140,9 @@ class VerbController extends Controller {
         request.attachments.putIfAbsent('connectionUser', () => user);
         return request;
       }
+
+      return _commonPutOrPatchOrDelete(request, id, Connection.get,
+          key: 'connection');
     } else if (resource == Resource.event) {
       if (verb == Verb.post) {
         return _commonPost(request, id, Event.get);

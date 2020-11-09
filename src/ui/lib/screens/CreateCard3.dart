@@ -85,7 +85,7 @@ class CreateCard3State extends State<CreateCard3> {
                     child: RaisedButton(
                       child: Text('Submit'),
                       textColor: Colors.white,
-                      color: Palette.primaryGreen,
+                      color: Palette.primary,
                       onPressed: () {
                         if (_createCard3FormKey.currentState.validate()) {
                           final globalModel = context.read<GlobalModel>();

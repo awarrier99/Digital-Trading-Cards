@@ -8,6 +8,8 @@ class Event extends Serializable {
   Event.create({
     @required this.owner,
     @required this.eventName,
+    @required this.eventDescription,
+    @required this.company,
     @required this.startDate,
     @required this.endDate,
   });
@@ -15,6 +17,8 @@ class Event extends Serializable {
   int id;
   User owner;
   String eventName;
+  String eventDescription;
+  String company;
   DateTime startDate;
   DateTime endDate;
 
@@ -24,6 +28,8 @@ class Event extends Serializable {
       'id': id,
       'owner': owner.asMap(),
       'eventName': eventName,
+      'eventDescription': eventDescription,
+      'company': company,
       'startDate': startDate.toIso8601String(),
       'endDate': endDate?.toIso8601String()
     };
@@ -41,6 +47,8 @@ class Event extends Serializable {
       }
     }
     eventName = object['eventName'] as String;
+    eventDescription = object['eventDescription'] as String;
+    company = object['company'] as String;
     final startDateStr = object['startDate'] as String;
     startDate = startDateStr == null || startDateStr.isEmpty
         ? null
@@ -54,12 +62,35 @@ class Event extends Serializable {
   Future<void> save() async {
     const sql = '''
       INSERT INTO event
-      (owner, event_name, start_date, end_date)
-      VALUES (?, ?, ?, ?)
+      (owner, event_name, company_organization, event_description, start_date, end_date)
+      VALUES (?, ?, ?, ?, ?, ?)
     ''';
-    final results = await ServerChannel.db
-        .query(sql, [owner.id, eventName, startDate.toUtc(), endDate.toUtc()]);
+    final results = await ServerChannel.db.query(sql, [
+      owner.id,
+      eventName,
+      company,
+      eventDescription,
+      startDate.toUtc(),
+      endDate.toUtc()
+    ]);
     id = results.insertId;
+  }
+
+  Future<void> updateEvent() async {
+    const sql = '''
+      UPDATE event
+      SET event_name=?,company=?, eventDescription=?, start_date=?, end_date=?
+      WHERE id=? AND owner=?
+    ''';
+    await ServerChannel.db.query(sql, [
+      eventName,
+      company,
+      eventDescription,
+      startDate.toUtc(),
+      endDate.toUtc(),
+      id,
+      owner.id
+    ]);
   }
 
   Future<void> addAttendee() async {
@@ -86,7 +117,7 @@ class Event extends Serializable {
           return Student.create(
               firstName: e['first_name'] as String,
               lastName: e['last_name'] as String,
-              username: e['user_name'] as String,
+              username: e['username'] as String,
               country: e['country'] as String,
               state: e['state'] as String,
               city: e['city'] as String,
@@ -95,9 +126,9 @@ class Event extends Serializable {
         }
 
         return Recruiter.create(
-            firstName: e['firstName'] as String,
-            lastName: e['lastName'] as String,
-            username: e['lastName'] as String,
+            firstName: e['first_name'] as String,
+            lastName: e['last_name'] as String,
+            username: e['username'] as String,
             country: e['county'] as String,
             state: e['state'] as String,
             city: e['city'] as String,
@@ -146,16 +177,16 @@ class Event extends Serializable {
         user = Student.create(
             firstName: result['first_name'] as String,
             lastName: result['last_name'] as String,
-            username: result['user_name'] as String,
+            username: result['username'] as String,
             country: result['country'] as String,
             state: result['state'] as String,
             city: result['city'] as String,
             password: result['password'] as String);
       } else {
         user = Recruiter.create(
-            firstName: result['firstName'] as String,
-            lastName: result['lastName'] as String,
-            username: result['lastName'] as String,
+            firstName: result['first_name'] as String,
+            lastName: result['last_name'] as String,
+            username: result['username'] as String,
             country: result['county'] as String,
             state: result['state'] as String,
             city: result['city'] as String,
@@ -165,6 +196,8 @@ class Event extends Serializable {
       return Event.create(
           owner: user,
           eventName: result['event_name'] as String,
+          eventDescription: result['event_description'] as String,
+          company: result['company_organization'] as String,
           startDate: result['start_date'] as DateTime,
           endDate: result['end_date'] as DateTime)
         ..id = id;

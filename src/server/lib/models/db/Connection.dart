@@ -34,108 +34,87 @@ class Connection extends Serializable {
     pending = object['pending'] as bool;
   }
 
-  Future<void> save() async {
-    try {
-      String sql;
-      final values = [sender.id, recipient.id, pending];
-      if (id == null) {
-        sql = '''
-          INSERT INTO connections
-          (sender, recipient, pending)
-          VALUES (?, ?, ?)
-        ''';
-      } else {
-        sql = '''
-          UPDATE connections
-          SET pending = ?
-          WHERE id = ?
-        ''';
-        values.clear();
-        values.add(pending);
-        values.add(id);
+  Future<bool> save() async {
+    String sql;
+    final values = [sender.id, recipient.id, pending];
+    if (id == null) {
+      const checkSql = '''
+        SELECT * FROM connections
+        WHERE sender = ? AND recipient = ?
+          OR recipient = ? AND sender = ?
+      ''';
+      final checkResults = await ServerChannel.db
+          .query(checkSql, [sender.id, recipient.id, sender.id, recipient.id]);
+      if (checkResults.isNotEmpty) {
+        return false;
       }
-      final results = await ServerChannel.db.query(sql, values);
-      id ??= results.insertId;
+
+      sql = '''
+        INSERT INTO connections
+        (sender, recipient, pending)
+        VALUES (?, ?, ?)
+      ''';
+    } else {
+      sql = '''
+        UPDATE connections
+        SET pending = ?
+        WHERE id = ?
+      ''';
+      values.clear();
+      values.add(pending);
+      values.add(id);
+    }
+    final results = await ServerChannel.db.query(sql, values);
+    id ??= results.insertId;
+    return true;
+  }
+
+  Future<void> delete() async {
+    try {
+      if (id == null) {
+        print('Unsaved connection cannot be deleted');
+        return;
+      }
+
+      const sql = '''
+        DELETE FROM connections
+        WHERE id = ?
+      ''';
+
+      await ServerChannel.db.query(sql, [id]);
     } catch (err, stackTrace) {
       logError(err,
           stackTrace: stackTrace,
-          message: 'An error occurred while trying to save a connection:');
+          message: 'An error occurred while trying to delete a connection:');
     }
   }
 
-// This method gets the user in the unique interests of the users connections
-  // with the user parameter
-  static Future<List<String>> getOtherInterests(User user) async {
-    try {
-      const sql = '''
-        SELECT DISTINCT interest
-        FROM user_interests
-        WHERE user in (
-          SELECT recipient as user
-          FROM connections
-          WHERE sender = ?
-        ) OR user in (
-          SELECT sender as user
-          FROM connections
-          WHERE recipient = ?
-        )
-      ''';
+  static Future<Connection> get(int id) async {
+    const sql = '''
+      SELECT * FROM connections
+      WHERE id = ?
+    ''';
 
-      final results1 = await ServerChannel.db.query(sql, [user.id, user.id]);
-
-      print("$results1");
-      final resultsList1 =
-          results1.map((e) async => e['interest'] as String).toList();
-
-      return Future.wait(List.from(resultsList1));
-    } catch (err, stackTrace) {
-      logError(err,
-          stackTrace: stackTrace,
-          message:
-              'An error occurred while trying to get the unique interests:');
-      return [];
+    final results = await ServerChannel.db.query(sql, [id]);
+    if (results.isEmpty) {
+      return null;
     }
-  }
 
-// This method gets the user in the unique skills of the users connections
-  // with the user parameter
-  static Future<List<String>> getOtherSkills(User user) async {
-    try {
-      const sql = '''
-        SELECT DISTINCT skill
-        FROM user_skills
-        WHERE user in (
-          SELECT recipient as user
-          FROM connections
-          WHERE sender = ?
-        ) OR user in (
-          SELECT sender as user
-          FROM connections
-          WHERE recipient = ?
-        )
-      ''';
-
-      final results1 = await ServerChannel.db.query(sql, [user.id, user.id]);
-
-      print("$results1");
-      final resultsList1 =
-          results1.map((e) async => e['skill'] as String).toList();
-
-      return Future.wait(List.from(resultsList1));
-    } catch (err, stackTrace) {
-      logError(err,
-          stackTrace: stackTrace,
-          message: 'An error occurred while trying to get the unique skills:');
-      return [];
-    }
+    final connectionRow = results.first;
+    return Connection.create(
+        sender: await User.get(connectionRow['sender'] as int),
+        recipient: await User.get(connectionRow['recipient'] as int),
+        pending: (connectionRow['pending'] as int) == 1)
+      ..id = id;
   }
 
   static Future<List<Connection>> getByUser(User user) async {
     try {
       const sql = '''
         SELECT * FROM connections
-        WHERE sender = ?
-          OR recipient = ?
+        WHERE (sender = ?
+          OR recipient = ?)
+          AND pending = 0
       ''';
       final results = await ServerChannel.db.query(sql, [user.id, user.id]);
 
@@ -152,5 +131,50 @@ class Connection extends Serializable {
               'An error occurred while trying to get user connection info:');
       return [];
     }
+  }
+
+  static Future<List<CardInfo>> getConnectionCards(
+      User user, List<Connection> connections) async {
+    final futures = connections.map((e) {
+      User u = e.recipient;
+      if (u.id == user.id) {
+        u = e.sender;
+      }
+      return CardInfo.get(u);
+    });
+    return Future.wait(futures);
+  }
+
+  static Future<List<Connection>> getPending(User user, {bool incoming}) async {
+    String key = 'recipient';
+    if (!incoming) {
+      key = 'sender';
+    }
+    final sql = '''
+      SELECT * FROM connections
+      WHERE $key = ?
+        AND pending = 1
+    ''';
+    final results = await ServerChannel.db.query(sql, [user.id]);
+
+    List<Future<Connection>> resultFutures;
+    if (incoming) {
+      resultFutures = results
+          .map((e) async => Connection.create(
+              sender: await User.get(e['sender'] as int),
+              recipient: user,
+              pending: (e['pending'] as int) == 1)
+            ..id = e['id'] as int)
+          .toList();
+    } else {
+      resultFutures = results
+          .map((e) async => Connection.create(
+              sender: user,
+              recipient: await User.get(e['recipient'] as int),
+              pending: (e['pending'] as int) == 1)
+            ..id = e['id'] as int)
+          .toList();
+    }
+    return Future.wait(resultFutures);
   }
 }

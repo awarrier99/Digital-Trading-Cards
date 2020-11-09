@@ -34,7 +34,6 @@ class _TradingCardState extends State<TradingCard> {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.all(20),
-      padding: EdgeInsets.only(left: 5, right: 5, bottom: 5, top: 5),
       decoration: BoxDecoration(
           gradient: LinearGradient(
               colors: [Color(0xfff4f4f4), Color(0xfff8f8f8)],
@@ -44,7 +43,7 @@ class _TradingCardState extends State<TradingCard> {
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 5,
+              spreadRadius: 3,
               blurRadius: 7,
               offset: Offset(0, 10),
             ),
@@ -53,61 +52,112 @@ class _TradingCardState extends State<TradingCard> {
           child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          widget.currentUser
-              ? Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                  FlatButton(
-                    textColor: Colors.grey,
-                    onPressed: () {
-                      final globalModel = context.read<GlobalModel>();
-                      globalModel.cardInfoModel.isEditing = true;
-                      Navigator.of(context).pushNamed('/createCard1');
-                    },
-                    child: Column(
-                      children: [
-                        Icon(
-                          Icons.edit,
-                        ),
-                        Text(
-                          "Edit Card",
-                          style: TextStyle(fontSize: 12),
-                        ),
-                      ],
+          Container(
+              height: 80,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      colors: [Palette.analogousPurple, Palette.primary]),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20.0),
+                    topRight: Radius.circular(20.0),
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 2,
+                      blurRadius: 7,
+                      offset: Offset(0, 3),
                     ),
-                  )
-                ])
-              : Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                  FlatButton(
-                    textColor: Colors.grey,
-                    shape: CircleBorder(),
-                    onPressed: () {
-                      // Enable/disable favorite status so that it saves card
-                      // as a favorite when card is saved
-                      setState(() {
-                        isFavorite = !isFavorite; // toggle
-                      });
-                      Flushbar(
-                        flushbarPosition: FlushbarPosition.TOP,
-                        message: isFavorite
-                            ? "Card marked as a favorite"
-                            : "Card is no longer a favorite",
-                        duration: Duration(seconds: 3),
-                        margin: EdgeInsets.all(8),
-                        borderRadius: 8,
-                        backgroundColor:
-                            isFavorite ? Colors.amber : Colors.grey,
-                      )..show(context);
-                    },
-                    child: Column(
-                      children: [
-                        Icon(
-                          isFavorite ? Icons.star : Icons.star_border,
-                          color: isFavorite ? Colors.amber : Colors.black,
-                          // replace 'false' with isFavorite property
-                        ),
-                      ],
-                    ),
-                  )
-                ]),
+                  ]),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  widget.currentUser
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                              FlatButton(
+                                textColor: Palette.lightGray,
+                                onPressed: () {
+                                  Navigator.of(context).pushNamed('/profile');
+                                },
+                                child: Column(
+                                  children: [
+                                    Icon(
+                                      Icons.account_circle,
+                                    ),
+                                    Text(
+                                      "Account",
+                                      style: TextStyle(fontSize: 12),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              FlatButton(
+                                textColor: Palette.lightGray,
+                                onPressed: () {
+                                  final globalModel =
+                                      context.read<GlobalModel>();
+                                  globalModel.cardInfoModel.isEditing = true;
+                                  Navigator.of(context)
+                                      .pushNamed('/createCard1');
+                                },
+                                child: Column(
+                                  children: [
+                                    Icon(
+                                      Icons.edit,
+                                    ),
+                                    Text(
+                                      "Edit Card",
+                                      style: TextStyle(fontSize: 12),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ])
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                              FlatButton(
+                                textColor: Colors.grey,
+                                shape: CircleBorder(),
+                                onPressed: () {
+                                  // Enable/disable favorite status so that it saves card
+                                  // as a favorite when card is saved
+                                  setState(() {
+                                    isFavorite = !isFavorite; // toggle
+                                  });
+                                  Flushbar(
+                                    flushbarPosition: FlushbarPosition.TOP,
+                                    message: isFavorite
+                                        ? "Card marked as a favorite"
+                                        : "Card is no longer a favorite",
+                                    duration: Duration(seconds: 3),
+                                    margin: EdgeInsets.all(8),
+                                    borderRadius: 8,
+                                    backgroundColor:
+                                        isFavorite ? Colors.amber : Colors.grey,
+                                  )..show(context);
+                                },
+                                child: Column(
+                                  children: [
+                                    Icon(
+                                      isFavorite
+                                          ? Icons.star
+                                          : Icons.star_border,
+                                      color: isFavorite
+                                          ? Colors.amber
+                                          : Colors.black,
+                                      // replace 'false' with isFavorite property
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ]),
+                ],
+              )),
+          SizedBox(height: 30),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

@@ -42,7 +42,7 @@ class CreateAccount extends StatelessWidget {
                   child: RaisedButton(
                       child: Text('Sign Up'),
                       textColor: Colors.white,
-                      color: Palette.primaryGreen,
+                      color: Palette.primary,
                       onPressed: () {
                         if (_personalInfoInputsKey.currentState.validate()) {
                           final globalModel = context.read<GlobalModel>();
