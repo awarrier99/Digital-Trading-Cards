@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../palette.dart';
 
+import '../components/RoundedButton.dart';
+
 class AddCard extends StatelessWidget {
   const AddCard();
 
@@ -53,50 +55,18 @@ class AddCard extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 50),
-                Container(
-                  margin: EdgeInsets.fromLTRB(60, 0, 60, 0),
-                  height: 40,
-                  child: Material(
-                    borderRadius: BorderRadius.circular(20),
-                    shadowColor: Palette.primary,
-                    color: Palette.primary,
-                    elevation: 7,
-                    child: GestureDetector(
-                      onTap: () => addByEmail(context),
-                      child: Center(
-                        child: Text(
-                          'Add by email',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'Montserrat'),
-                        ),
-                      ),
-                    ),
-                  ),
+                RoundedButton(
+                  'Add by email',
+                  Palette.primary,
+                  () => addByEmail(context),
+                  false,
                 ),
                 SizedBox(height: 20),
-                Container(
-                  margin: EdgeInsets.fromLTRB(60, 0, 60, 0),
-                  height: 40,
-                  child: Material(
-                    borderRadius: BorderRadius.circular(20),
-                    shadowColor: Palette.secondary,
-                    color: Palette.secondary,
-                    elevation: 7,
-                    child: GestureDetector(
-                      onTap: () => addByNFC(context),
-                      child: Center(
-                        child: Text(
-                          'Add by NFC tap',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'Montserrat'),
-                        ),
-                      ),
-                    ),
-                  ),
+                RoundedButton(
+                  'Add by NFC tap',
+                  Palette.secondary,
+                  () => addByNFC(context),
+                  false,
                 ),
               ],
             ),

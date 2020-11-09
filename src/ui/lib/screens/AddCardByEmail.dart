@@ -1,6 +1,7 @@
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:ui/components/RoundedButton.dart';
 import 'package:ui/palette.dart';
 
 import '../models/CardInfo.dart';
@@ -158,41 +159,11 @@ class _AddCardByEmailState extends State<AddCardByEmail> {
                 ),
               ),
               SizedBox(height: 30),
-              Container(
-                margin: EdgeInsets.fromLTRB(60, 0, 60, 0),
-                height: 40,
-                child: Material(
-                  borderRadius: BorderRadius.circular(20),
-                  shadowColor:
-                      _isThinking ? Palette.secondary : Palette.primary,
-                  color: _isThinking ? Palette.secondary : Palette.primary,
-                  elevation: 7,
-                  child: GestureDetector(
-                    onTap: () {
-                      if (!_isThinking) {
-                        // if the input matches someone in the DB
-                        searchWithEmail();
-                      }
-                    },
-                    child: Center(
-                      child: _isThinking
-                          ? SizedBox(
-                              width: 20,
-                              height: 20,
-                              child: Center(
-                                child: CircularProgressIndicator(),
-                              ),
-                            )
-                          : Text(
-                              'Search',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'Montserrat'),
-                            ),
-                    ),
-                  ),
-                ),
+              RoundedButton(
+                'Search',
+                Palette.primary,
+                () => searchWithEmail(),
+                _isThinking,
               ),
             ],
           ),

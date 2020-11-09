@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:ui/palette.dart';
+import '../components/RoundedButton.dart';
 
 class AddCardByNFC extends StatefulWidget {
   @override
@@ -38,30 +39,14 @@ class _AddCardByNFCState extends State<AddCardByNFC> {
               SizedBox(height: 30),
               CircularProgressIndicator(),
               SizedBox(height: 30),
-              Container(
-                margin: EdgeInsets.fromLTRB(60, 0, 60, 0),
-                height: 40,
-                child: Material(
-                  borderRadius: BorderRadius.circular(20),
-                  shadowColor: Palette.secondary,
-                  color: Palette.secondary,
-                  elevation: 7,
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    child: Center(
-                      child: Text(
-                        'Cancel',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'Montserrat'),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+              RoundedButton(
+                'Cancel',
+                Palette.secondary,
+                () {
+                  Navigator.pop(context);
+                },
+                false,
+              )
             ],
           ),
         ),

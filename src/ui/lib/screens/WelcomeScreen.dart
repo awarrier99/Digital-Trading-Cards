@@ -7,6 +7,7 @@ import 'package:ui/components/TextInput.dart';
 import 'package:ui/models/CardInfo.dart';
 import 'package:ui/models/Global.dart';
 import 'package:ui/screens/Home.dart';
+import '../components/RoundedButton.dart';
 
 import '../models/User.dart';
 import '../palette.dart';
@@ -131,65 +132,18 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                       color: Colors.grey)),
                             ),
                             SizedBox(height: 40),
-                            Container(
-                                height: 40,
-                                child: Material(
-                                  borderRadius: BorderRadius.circular(20),
-                                  shadowColor: _isThinking
-                                      ? Palette.secondary
-                                      : Palette.primary,
-                                  color: _isThinking
-                                      ? Palette.secondary
-                                      : Palette.primary,
-                                  elevation: 7,
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      if (!_isThinking) {
-                                        login(context);
-                                      }
-                                    },
-                                    child: Center(
-                                      child: _isThinking
-                                          ? SizedBox(
-                                              width: 20,
-                                              height: 20,
-                                              child: Center(
-                                                child:
-                                                    CircularProgressIndicator(),
-                                              ),
-                                            )
-                                          : Text(
-                                              'LOGIN',
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontFamily: 'Montserrat'),
-                                            ),
-                                    ),
-                                  ),
-                                )),
+                            RoundedButton('LOGIN', Palette.primary, () {
+                              if (!_isThinking) {
+                                login(context);
+                              }
+                            }, _isThinking),
                             SizedBox(height: 20),
-                            Container(
-                                height: 40,
-                                child: Material(
-                                  borderRadius: BorderRadius.circular(20),
-                                  color: Palette.secondary,
-                                  elevation: 7,
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      createAccount(context);
-                                    },
-                                    child: Center(
-                                      child: Text(
-                                        'CREATE ACCOUNT',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: 'Montserrat'),
-                                      ),
-                                    ),
-                                  ),
-                                ))
+                            RoundedButton(
+                              'CREATE ACCOUNT',
+                              Palette.secondary,
+                              () => createAccount(context),
+                              false,
+                            ),
                           ],
                         ))
                   ],

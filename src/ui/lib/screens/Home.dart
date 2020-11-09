@@ -5,6 +5,7 @@ import 'package:ui/models/CardInfo.dart';
 import 'package:provider/provider.dart';
 import 'package:ui/models/Global.dart';
 import '../palette.dart';
+import '../components/RoundedButton.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -78,33 +79,15 @@ class _HomeState extends State<Home> {
                             ),
                           ),
                           SizedBox(height: 50),
-                          Container(
-                            margin: EdgeInsets.fromLTRB(60, 0, 60, 0),
-                            height: 40,
-                            child: Material(
-                              borderRadius: BorderRadius.circular(20),
-                              shadowColor: Palette.primary,
-                              color: Palette.primary,
-                              elevation: 7,
-                              child: GestureDetector(
-                                onTap: () {
-                                  final globalModel =
-                                      context.read<GlobalModel>();
-                                  globalModel.cardInfoModel.isEditing = false;
-                                  Navigator.of(context)
-                                      .pushNamed('/createCard1');
-                                },
-                                child: Center(
-                                  child: Text(
-                                    'Get started',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: 'Montserrat'),
-                                  ),
-                                ),
-                              ),
-                            ),
+                          RoundedButton(
+                            'Get started',
+                            Palette.primary,
+                            () {
+                              final globalModel = context.read<GlobalModel>();
+                              globalModel.cardInfoModel.isEditing = false;
+                              Navigator.of(context).pushNamed('/createCard1');
+                            },
+                            false,
                           ),
                         ],
                       ),
