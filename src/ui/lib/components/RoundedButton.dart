@@ -12,24 +12,16 @@ class RoundedButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
+      color: isThinking ? Palette.secondary : color,
+      shadowColor: isThinking ? Palette.secondary : color,
+      elevation: 7,
+      borderRadius: BorderRadius.circular(20),
       child: InkWell(
         onTap: isThinking ? null : onTapFunction,
         borderRadius: BorderRadius.circular(20),
         child: Container(
           height: 40,
           width: 260,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.8),
-                spreadRadius: 2,
-                blurRadius: 7,
-                offset: Offset(0, 3),
-              ),
-            ],
-            color: isThinking ? Palette.secondary : color,
-          ),
           child: Center(
             child: isThinking
                 ? SizedBox(
