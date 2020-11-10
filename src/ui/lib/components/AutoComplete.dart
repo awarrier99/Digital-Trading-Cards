@@ -18,6 +18,7 @@ class AutoComplete extends StatelessWidget {
   final Function onEditingComplete;
 
   final String itemName;
+  final String pluralItemName;
   final Icon suggestionIcon;
   final Function getSuggestions;
   final Function itemBuilder;
@@ -41,7 +42,8 @@ class AutoComplete extends StatelessWidget {
       this.validator,
       this.onChanged,
       this.onEditingComplete,
-      this.itemName,
+      @required this.itemName,
+      this.pluralItemName,
       this.suggestionIcon,
       @required this.getSuggestions,
       @required this.itemBuilder,
@@ -76,17 +78,17 @@ class AutoComplete extends StatelessWidget {
   }
 
   Widget _noItemsFoundBuilder(BuildContext context) {
-    final lowerItemName = itemName.toLowerCase();
+    final plural = pluralItemName ?? '${itemName}s';
     if (onNoItemsFound == null) {
       return ListTile(
         leading: Icon(Icons.report),
-        title: Text('No matching ${lowerItemName}s found'),
+        title: Text('No matching ${plural.toLowerCase()} found'),
       );
     }
     return ListTile(
         leading: Icon(Icons.add_circle),
         title: Text('Add $itemName'),
-        subtitle: Text('Add new $lowerItemName to the known list'),
+        subtitle: Text('Add new ${itemName.toLowerCase()} to the known list'),
         onTap: () {
           onNoItemsFound(_controller.text);
         });

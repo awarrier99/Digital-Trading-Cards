@@ -6,8 +6,8 @@ import 'package:ui/components/CreateCompanyDialog.dart';
 import 'package:ui/components/TextInput.dart';
 import 'package:ui/models/Global.dart';
 
-import '../MonthYearPicker.dart';
 import '../../models/CardInfo.dart';
+import '../MonthYearPicker.dart';
 
 class WorkInputs extends StatefulWidget {
   final Work model;
@@ -102,6 +102,8 @@ class WorkInputsState extends State<WorkInputs> {
             focusNode: companyNode,
             cursorColor: Color(0xFF92DAAF),
             keyboardType: TextInputType.text,
+            itemName: 'Company',
+            pluralItemName: 'Companies',
             decoration: InputDecoration(
                 labelText: 'Company*', border: OutlineInputBorder()),
             textCapitalization: TextCapitalization.words,
