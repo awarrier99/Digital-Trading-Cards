@@ -147,8 +147,8 @@ class Event extends Serializable {
     try {
       print(userId);
       const sql = '''
-          SELECT event.id as eventId FROM events 
-          JOIN users ON event.owner=users.id 
+          SELECT events.id as eventId FROM events 
+          JOIN users ON events.owner=users.id 
         ''';
       final results = await ServerChannel.db.query(sql);
       print(results);
@@ -168,8 +168,8 @@ class Event extends Serializable {
     try {
       const sql = '''
         SELECT * FROM events 
-        JOIN users ON event.owner=users.id
-        WHERE event.id=? 
+        JOIN users ON events.owner=users.id
+        WHERE events.id=? 
       ''';
       final result = (await ServerChannel.db.query(sql, [id])).first;
       User user;
