@@ -293,14 +293,19 @@ class Recruiter extends User {
   @override
   Map<String, dynamic> asMap() {
     final userMap = super.asMap();
-    return {...userMap, 'company': company, 'website': website};
+    return {...userMap, 'company': company?.asMap(), 'website': website};
   }
 
   @override
   void readFromMap(Map<String, dynamic> object) {
     super.readFromMap(object);
     type = UserType.recruiter;
-    company = Company()..readFromMap(object['company'] as Map<String, dynamic>);
+    final companyMap = object['company'] as Map<String, dynamic>;
+    if (companyMap == null) {
+      company = null;
+    } else {
+      company = Company()..readFromMap(companyMap);
+    }
     website = object['website'] as String;
   }
 
@@ -313,7 +318,7 @@ class Recruiter extends User {
         (id, company, website)
         VALUES (?, ?, ?)
       ''';
-      await ServerChannel.db.query(sql, [id, company.name, website]);
+      await ServerChannel.db.query(sql, [id, company?.name, website]);
     } catch (err, stackTrace) {
       logError(err,
           stackTrace: stackTrace,
