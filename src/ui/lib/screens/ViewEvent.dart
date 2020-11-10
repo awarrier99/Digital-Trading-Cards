@@ -21,6 +21,7 @@ class _ViewEventState extends State<ViewEvent> {
   Future<List<User>> attendees;
   bool isOwner;
   int currentUserID;
+  int currentEventID;
 
   void deactivate() {
     super.deactivate();
@@ -39,6 +40,7 @@ class _ViewEventState extends State<ViewEvent> {
     attendees = eventModel.fetchAttendees(widget.eventId, userModel.token);
 
     currentUserID = userModel.currentUser.id;
+    currentEventID = widget.eventId;
     isOwner = false;
   }
 
@@ -71,9 +73,15 @@ class _ViewEventState extends State<ViewEvent> {
                           Navigator.of(context).pushNamed('/viewEvents');
 
                           // int currUserId = globalModel.userModel.currentUser;
-                          // final globalModel = context.read<GlobalModel>();
-                          // final userModel = globalModel.userModel;
-                          // final eventModel = globalModel.eventInfoModel.eventInfo;
+                          final globalModel = context.read<GlobalModel>();
+                          final userModel = globalModel.userModel;
+                          final eventModel = globalModel.eventInfoModel;
+                          eventModel.registerForEvent(
+                              currentEventID, userModel.token).then((success) => {
+                                if(success){
+                                  print('RSVP successful')
+                                }
+                              });
                           // print(eventModel.eventId);
                           // widget
                           //     .registerForEvent(userModel.token)

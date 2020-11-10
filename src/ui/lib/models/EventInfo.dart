@@ -151,14 +151,15 @@ class EventInfoModel {
     }
   }
 
-  Future<bool> registerForEvent(String token) async {
+  Future<bool> registerForEvent(int eventId, String token) async {
     try {
       final res = await post('http://10.0.2.2:8888/api/events/attendees',
           headers: {
             'Accept': 'application/json',
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token',
           },
-          body: json.encode(_eventInfo.toJson()));
+          body: json.encode({'id': eventId}));
 
       final body = json.decode(res.body);
       final success = body['success'];
