@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:meta/meta.dart';
 import 'package:http/http.dart';
 import 'package:ui/models/User.dart';
 
@@ -70,7 +69,7 @@ class EventInfoModel {
     try {
       print('hello3');
       print(_eventInfo.toJson());
-      final res = await post('http://10.0.2.2:8888/api/events',
+      final res = await post('http://34.75.44.166:8888/api/events',
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -89,7 +88,7 @@ class EventInfoModel {
 
   Future<bool> update(int id, String token) async {
     try {
-      final res = await put('http://10.0.2.2:8888/api/events/$id',
+      final res = await put('http://34.75.44.166:8888/api/events/$id',
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -107,7 +106,8 @@ class EventInfoModel {
   }
 
   Future<EventInfo> fetchEventInfo(int id, String token) async {
-    final response = await get('http://10.0.2.2:8888/api/events/$id', headers: {
+    final response =
+        await get('http://34.75.44.166:8888/api/events/$id', headers: {
       'Accept': 'application/json',
       'Authorization': 'Bearer $token',
     });
@@ -122,7 +122,7 @@ class EventInfoModel {
 
   Future<List<EventInfo>> fetchUpcomingEvents(int userId, String token) async {
     final response =
-        await get('http://10.0.2.2:8888/api/allEvents/$userId', headers: {
+        await get('http://34.75.44.166:8888/api/allEvents/$userId', headers: {
       'Accept': 'application/json',
       'Authorization': 'Bearer $token',
     });
@@ -137,7 +137,7 @@ class EventInfoModel {
 
   Future<List<User>> fetchAttendees(int eventId, String token) async {
     final response = await get(
-        'http://10.0.2.2:8888/api/events/attendees/$eventId',
+        'http://34.75.44.166:8888/api/events/attendees/$eventId',
         headers: {
           'Accept': 'application/json',
           'Authorization': 'Bearer $token',
@@ -153,7 +153,7 @@ class EventInfoModel {
 
   Future<bool> registerForEvent(String token) async {
     try {
-      final res = await post('http://10.0.2.2:8888/api/events/attendees',
+      final res = await post('http://34.75.44.166:8888/api/events/attendees',
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
