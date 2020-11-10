@@ -38,7 +38,7 @@ class ConnectionInfo {
     return {
       'user': user.toJson(),
       'connections': connections.map((e) => e.toJson())?.toList(),
-      'connectedUsers': connectionCards.map((e) => e.toJson())?.toList(),
+      'connectionCards': connectionCards.map((e) => e.toJson())?.toList(),
     };
   }
 
