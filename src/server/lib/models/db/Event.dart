@@ -61,7 +61,7 @@ class Event extends Serializable {
 
   Future<void> save() async {
     const sql = '''
-      INSERT INTO event
+      INSERT INTO events
       (owner, event_name, company_organization, event_description, start_date, end_date)
       VALUES (?, ?, ?, ?, ?, ?)
     ''';
@@ -78,7 +78,7 @@ class Event extends Serializable {
 
   Future<void> updateEvent() async {
     const sql = '''
-      UPDATE event
+      UPDATE events
       SET event_name=?,company=?, eventDescription=?, start_date=?, end_date=?
       WHERE id=? AND owner=?
     ''';
@@ -147,7 +147,7 @@ class Event extends Serializable {
     try {
       print(userId);
       const sql = '''
-          SELECT event.id as eventId FROM event 
+          SELECT event.id as eventId FROM events 
           JOIN users ON event.owner=users.id 
         ''';
       final results = await ServerChannel.db.query(sql);
@@ -167,7 +167,7 @@ class Event extends Serializable {
   static Future<Event> get(int id) async {
     try {
       const sql = '''
-        SELECT * FROM event 
+        SELECT * FROM events 
         JOIN users ON event.owner=users.id
         WHERE event.id=? 
       ''';
