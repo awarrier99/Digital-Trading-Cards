@@ -5,9 +5,9 @@ import 'package:ui/components/AutoComplete.dart';
 import 'package:ui/components/TextInput.dart';
 import 'package:ui/models/Global.dart';
 
+import '../../models/CardInfo.dart';
 import '../CreateCompanyDialog.dart';
 import '../MonthYearPicker.dart';
-import '../../models/CardInfo.dart';
 
 class VolunteeringInputs extends StatefulWidget {
   final Volunteering model;
@@ -80,6 +80,8 @@ class VolunteeringInputsState extends State<VolunteeringInputs> {
             focusNode: companyNode,
             cursorColor: Color(0xFF92DAAF),
             label: 'Company*',
+            itemName: 'Company',
+            pluralItemName: 'Companies',
             textCapitalization: TextCapitalization.words,
             initialValue: widget.model.company?.name,
             validator: (value) {
