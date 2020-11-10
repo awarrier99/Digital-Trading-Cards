@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:ui/models/Global.dart';
-import 'package:ui/models/User.dart';
-import 'package:ui/palette.dart';
+import 'package:ui/SizeConfig.dart';
 import 'package:ui/components/forms/InterestsInputs.dart';
+import 'package:ui/models/Global.dart';
+import 'package:ui/palette.dart';
+
 import '../components/forms/DynamicForm.dart';
 import '../components/forms/SkillsInputs.dart';
-import 'package:ui/SizeConfig.dart';
+import '../models/CardInfo.dart';
 import '../palette.dart';
 import 'Home.dart';
-import '../models/CardInfo.dart';
 
 class CreateCard3 extends StatefulWidget {
   final BuildContext context;
@@ -31,8 +31,8 @@ class CreateCard3State extends State<CreateCard3> {
     super.initState();
     final globalModel = widget.context.read<GlobalModel>();
     final currentCard = globalModel.cardInfoModel.currentUserCardInfo;
-    skillsInputsModel = currentCard.skills;
-    interestsInputsModel = currentCard.interests;
+    skillsInputsModel = currentCard.skills ?? [];
+    interestsInputsModel = currentCard.interests ?? [];
     isEditing = globalModel.cardInfoModel.isEditing;
   }
 

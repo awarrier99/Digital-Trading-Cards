@@ -1,13 +1,10 @@
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:ui/components/BadgeGroup.dart';
 import 'package:ui/models/CardInfo.dart';
 import 'package:ui/models/Global.dart';
 import 'package:ui/palette.dart';
-import 'package:flutter/material.dart';
-import 'package:ui/models/CardInfo.dart';
-import 'package:provider/provider.dart';
-import 'package:ui/models/User.dart';
-import 'package:flushbar/flushbar.dart';
 
 // Widget to display a user's Trading Card that will be shown to other users
 // User has the ability to edit the information in this card
@@ -191,7 +188,7 @@ class _TradingCardState extends State<TradingCard> {
                                       style: TextStyle(
                                           fontWeight: FontWeight.w600,
                                           fontSize: 16)),
-                                  Text('${e.degree} ${e.field.name}')
+                                  Text('${e.degree} of ${e.field.name}')
                                 ],
                               );
                             }).toList()),
