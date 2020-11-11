@@ -3,6 +3,12 @@ import 'package:ui/components/forms/ColorBadge.dart';
 import 'package:ui/components/inheritedWidgets/SubFormInheritedWidget.dart';
 import 'package:ui/palette.dart';
 
+// The subform is reusable and able to hold form widgets such as
+// EducationInputs, PersonalInfoInputs, etc.
+
+// Then the dynamic form can house multiple subform widgets to create a custom
+// form
+
 class SubForm extends StatefulWidget {
   final String subTitle;
   final int index;

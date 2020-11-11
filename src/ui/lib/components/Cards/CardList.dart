@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:ui/models/User.dart';
 
+// This widget displays a list of names for the attendee's list in
+// the ViewAttendees screen
+
 class CardList extends StatefulWidget {
   final List<User> list;
 

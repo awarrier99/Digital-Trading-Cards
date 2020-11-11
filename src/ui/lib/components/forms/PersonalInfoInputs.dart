@@ -8,6 +8,9 @@ import 'package:ui/SizeConfig.dart';
 import '../../models/CardInfo.dart';
 import '../../models/User.dart';
 
+// This form widget contains input widgetst that allows for user's to
+// enter in their basic personal information to create an account.
+
 // Create a Form widget.
 class PersonalInfoInputs extends StatefulWidget {
   final GlobalKey key;

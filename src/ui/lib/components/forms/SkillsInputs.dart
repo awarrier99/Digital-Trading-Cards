@@ -7,6 +7,9 @@ import 'package:ui/models/Global.dart';
 import 'DropdownFormField.dart';
 import '../../models/CardInfo.dart';
 
+// this form widget takes in input from the users using an input widget to
+// get the skills the user has.
+
 class SkillsInputs extends StatefulWidget {
   final UserSkill model;
 

@@ -9,6 +9,9 @@ import 'package:ui/models/EventInfo.dart';
 import 'package:ui/palette.dart';
 import 'package:intl/intl.dart';
 
+// This Widget form contains the Input Widgets that are needed to take in
+// input from the user when creating and updating an Event.
+
 class EventInputs extends StatefulWidget {
   // final GlobalKey key;
   final EventInfo model;
@@ -37,7 +40,6 @@ class EventInputsState extends State<EventInputs> {
   void initState() {
     super.initState();
 
-    // isEditing seems to always be true;
     if (widget.isEditing) {
       startDate = widget.model.startDate;
       endDate = widget.model.endDate;
@@ -174,9 +176,6 @@ class EventInputsState extends State<EventInputs> {
 
   // Textfield input for Event Description
   Widget _buildEventDescription() {
-    // need to edit this too be able to add multlines
-    // I think Ashvin included a maxline property that can deal with this
-
     return TextInput(
       initialValue: widget.isEditing ? widget.model.eventDescription : "",
       decoration: InputDecoration(
@@ -315,9 +314,6 @@ class EventInputsState extends State<EventInputs> {
       ),
     );
   }
-
-  // selectedStartTime = TimeOfDay.now();
-  // selectedEndTime = TimeOfDay.now();
 
   String startTime;
   String endTime;

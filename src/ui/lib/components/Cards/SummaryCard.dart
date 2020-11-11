@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:ui/components/BadgeGroup.dart';
 import 'package:ui/models/CardInfo.dart';
 
+// Tile summary format of a user's card in the view saved cards screen
+
 class SummaryCard extends StatefulWidget {
   CardInfo data;
   bool currentUser;
