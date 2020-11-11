@@ -102,7 +102,7 @@ class _PreviewCardState extends State<PreviewCard> {
             style: TextStyle(fontFamily: 'Montserrat'),
           ),
         ),
-        body: Center(
+        body: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
