@@ -8,6 +8,10 @@ import 'package:ui/models/User.dart';
 import 'package:ui/palette.dart';
 import 'package:ui/screens/AddEvents.dart';
 
+// The UI screen to view a specific event details
+// Event information is populated with the eventId
+// If the user is the owner of the event, there is an edit functionality
+
 class ViewEvent extends StatefulWidget {
   final int eventId;
 
@@ -76,12 +80,11 @@ class _ViewEventState extends State<ViewEvent> {
                           final globalModel = context.read<GlobalModel>();
                           final userModel = globalModel.userModel;
                           final eventModel = globalModel.eventInfoModel;
-                          eventModel.registerForEvent(
-                              currentEventID, userModel.token).then((success) => {
-                                if(success){
-                                  print('RSVP successful')
-                                }
-                              });
+                          eventModel
+                              .registerForEvent(currentEventID, userModel.token)
+                              .then((success) => {
+                                    if (success) {print('RSVP successful')}
+                                  });
                           // print(eventModel.eventId);
                           // widget
                           //     .registerForEvent(userModel.token)

@@ -8,6 +8,9 @@ import 'package:ui/models/Global.dart';
 
 import '../palette.dart';
 
+// The UI Screen that allows users to see another card before acting on it
+// User has the ability to save the card or reject it
+
 class PreviewCard extends StatefulWidget {
   final CardInfo cardInfo;
   final bool pending;

@@ -6,8 +6,9 @@ import 'package:ui/components/forms/EventInputs.dart';
 import 'package:ui/models/EventInfo.dart';
 import 'package:ui/models/Global.dart';
 
-// made some changes that might need to be changed in routegenerator.dart
-// for this path
+// UI screen for creating a new event
+// uses a form called EventInputs
+
 class AddEvents extends StatefulWidget {
   final int eventId;
   final EventInfo event;

@@ -11,6 +11,10 @@ import '../models/CardInfo.dart';
 import '../palette.dart';
 import 'Home.dart';
 
+// UI screen for adding skills and interests to a new user's card
+// uses the forms for InterestsInputs and SkillsInputs
+// Includes DynamicForm which allows users to add multiple form entries
+
 class CreateCard3 extends StatefulWidget {
   final BuildContext context;
 

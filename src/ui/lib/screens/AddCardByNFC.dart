@@ -3,6 +3,8 @@ import 'package:flushbar/flushbar.dart';
 import 'package:ui/palette.dart';
 import '../components/RoundedButton.dart';
 
+// UI screen for adding a card of another user by NFC
+
 class AddCardByNFC extends StatefulWidget {
   @override
   _AddCardByNFCState createState() => _AddCardByNFCState();

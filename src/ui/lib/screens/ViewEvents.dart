@@ -11,6 +11,9 @@ import 'package:ui/models/CardInfo.dart';
 import 'package:ui/models/User.dart';
 import 'package:provider/provider.dart';
 
+// The UI screen to view the events on the app
+// The user can filter the events by past, upcoming, or all events
+
 class ViewEvents extends StatefulWidget {
   @override
   _ViewEventsState createState() => _ViewEventsState();
