@@ -8,6 +8,9 @@ import 'package:ui/models/User.dart';
 
 import '../components/Cards/SummaryCard.dart';
 
+// The UI screen to view the user's saved cards
+// Filter functionality allows users to see a subset of their saved cards
+
 class ViewSavedCards extends StatefulWidget {
   @override
   _ViewSavedCardsState createState() => _ViewSavedCardsState();

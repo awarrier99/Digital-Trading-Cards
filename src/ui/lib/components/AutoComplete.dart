@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 
+// This widget is used for the smart autocomplete form fields like for skills
 class AutoComplete extends StatelessWidget {
   final String label;
   final String initialValue;

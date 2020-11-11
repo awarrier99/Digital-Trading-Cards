@@ -9,6 +9,7 @@ void main() {
   runApp(MyApp());
 }
 
+// This main class is the entry point of the application
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

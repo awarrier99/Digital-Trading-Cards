@@ -3,6 +3,8 @@ import 'package:ui/components/Cards/CardList.dart';
 import 'package:ui/models/EventInfo.dart';
 import 'package:ui/models/User.dart';
 
+// The UI screen to view an event's attendees
+
 class ViewAttendees extends StatefulWidget {
   final List<User> list;
   final EventInfo info;

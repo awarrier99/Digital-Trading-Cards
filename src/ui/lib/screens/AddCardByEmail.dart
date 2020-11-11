@@ -7,6 +7,9 @@ import 'package:ui/palette.dart';
 import '../models/CardInfo.dart';
 import '../models/Global.dart';
 
+// UI screen for adding a card of another user by email
+// includes a search text input
+
 class AddCardByEmail extends StatefulWidget {
   @override
   _AddCardByEmailState createState() => _AddCardByEmailState();

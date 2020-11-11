@@ -7,6 +7,8 @@ import 'package:ui/models/Global.dart';
 import '../palette.dart';
 import '../components/RoundedButton.dart';
 
+// Home screen which hosts the user's card
+
 class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();

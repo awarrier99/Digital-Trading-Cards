@@ -8,6 +8,9 @@ import '../SizeConfig.dart';
 import '../palette.dart';
 import '../components/RoundedButton.dart';
 
+// UI screen for creating a new account
+// Includes a form called PersonalInfoInputs
+
 class CreateAccount extends StatelessWidget {
   final _personalInfoInputsKey = GlobalKey<FormState>();
   final _personalInfoInputsModel = User();

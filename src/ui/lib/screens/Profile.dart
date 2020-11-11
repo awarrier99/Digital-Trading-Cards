@@ -5,6 +5,8 @@ import 'package:ui/models/Global.dart';
 import '../SizeConfig.dart';
 import '../palette.dart';
 
+// The UI Screen to display a user's account info and to logout of the app
+
 class Profile extends StatelessWidget {
   Future logout(BuildContext context) async {
     Navigator.of(context, rootNavigator: true).pushNamed('/');

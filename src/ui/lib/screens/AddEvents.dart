@@ -6,6 +6,9 @@ import 'package:ui/components/forms/EventInputs.dart';
 import 'package:ui/models/EventInfo.dart';
 import 'package:ui/models/Global.dart';
 
+// UI screen for creating a new event
+// uses a form called EventInputs
+
 class AddEvents extends StatefulWidget {
   final int eventId;
   final EventInfo event;
