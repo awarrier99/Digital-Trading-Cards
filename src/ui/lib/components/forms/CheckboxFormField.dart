@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+// This widget is a checkbox element that we use in our other forms.
+// changes it's state between unchecked and checked on tapping the box.
+
 class CheckboxFormField extends FormField<bool> {
   CheckboxFormField(
       {Widget title,

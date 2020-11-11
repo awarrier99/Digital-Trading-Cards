@@ -9,6 +9,9 @@ import 'package:ui/models/Global.dart';
 import '../../models/CardInfo.dart';
 import '../MonthYearPicker.dart';
 
+// This form widget has input widgets that allows the users to enter in their
+// work experience.
+
 class WorkInputs extends StatefulWidget {
   final Work model;
 

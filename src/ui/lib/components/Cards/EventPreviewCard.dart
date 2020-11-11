@@ -7,7 +7,9 @@ import 'package:ui/models/EventInfo.dart';
 import 'package:ui/models/User.dart';
 import 'package:ui/palette.dart';
 import 'package:intl/intl.dart';
-// an event has a name, a host, a start time and an end time
+
+// Summary of an event contains a name, a host, a start time and an end time,
+// and a date. Displays in a tile format on the View Event Screen.
 
 class EventPreviewCard extends StatefulWidget {
   // This will need to be replaced with a model probably
