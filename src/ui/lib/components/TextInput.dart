@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+// Basic reusable text input widget that trims trailing whitespace
 class TextInput extends StatelessWidget {
   final String label;
   final String initialValue;

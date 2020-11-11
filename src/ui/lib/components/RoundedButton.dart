@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:ui/palette.dart';
 
+// This is a custom rounded button widget that has a loading spinner when
+// the system is thinking
 class RoundedButton extends StatelessWidget {
   final String text;
   final VoidCallback onTapFunction;

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:ui/components/forms/ColorBadgeSmall.dart';
 
+// This is similar to BadgeGroup, but is shown in a condensed single scrollable
+// row.
 class BadgeGroupSmall extends StatelessWidget {
   final List<String> items;
   final String badgeType;

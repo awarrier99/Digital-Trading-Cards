@@ -15,6 +15,7 @@ import 'package:ui/screens/AddCardByEmail.dart';
 import 'package:ui/screens/AddCardByNFC.dart';
 import 'package:ui/screens/PendingConnections.dart';
 
+// This class is used to simplify moving between pages via routes
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     // Getting arguments passed in while calling Navigator.pushNamed

@@ -7,6 +7,8 @@ import 'package:ui/models/Global.dart';
 import '../SizeConfig.dart';
 import '../palette.dart';
 
+// This is a widget that allows the user to input a new institution into the
+// autocomplete dropdown
 class CreateInstitutionDialog extends StatefulWidget {
   final String name;
 
