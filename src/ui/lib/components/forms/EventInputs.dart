@@ -12,9 +12,9 @@ import 'package:intl/intl.dart';
 class EventInputs extends StatefulWidget {
   // final GlobalKey key;
   final EventInfo model;
-  final bool Editing;
+  final bool isEditing;
 
-  EventInputs({/*@required this.key,*/ @required this.model, this.Editing});
+  EventInputs({/*@required this.key,*/ @required this.model, this.isEditing});
 
   @override
   State<StatefulWidget> createState() {
@@ -38,7 +38,7 @@ class EventInputsState extends State<EventInputs> {
     super.initState();
 
     // isEditing seems to always be true;
-    if (widget.Editing) {
+    if (widget.isEditing) {
       startDate = widget.model.startDate;
       endDate = widget.model.endDate;
       selectedStartTime =
@@ -128,7 +128,7 @@ class EventInputsState extends State<EventInputs> {
   // Textfield input for Event Name
   Widget _buildEventName() {
     return TextInput(
-      initialValue: widget.Editing ? widget.model.eventName : "",
+      initialValue: widget.isEditing ? widget.model.eventName : "",
       decoration: InputDecoration(
           labelText: 'Name of Event*', border: OutlineInputBorder()),
       textCapitalization: TextCapitalization.words,
@@ -151,7 +151,7 @@ class EventInputsState extends State<EventInputs> {
   // Textfield input for Organization Name
   Widget _buildEventOrganization() {
     return TextInput(
-      initialValue: widget.Editing ? widget.model.company : "",
+      initialValue: widget.isEditing ? widget.model.company : "",
       decoration: InputDecoration(
           labelText: 'Company/Organization Name*',
           border: OutlineInputBorder()),
@@ -178,7 +178,7 @@ class EventInputsState extends State<EventInputs> {
     // I think Ashvin included a maxline property that can deal with this
 
     return TextInput(
-      initialValue: widget.Editing ? widget.model.eventDescription : "",
+      initialValue: widget.isEditing ? widget.model.eventDescription : "",
       decoration: InputDecoration(
         labelText: 'Event Description*',
         border: OutlineInputBorder(),
@@ -206,7 +206,7 @@ class EventInputsState extends State<EventInputs> {
   // Textfield input for Contact Email
   Widget _buildEventContactEmail() {
     return TextInput(
-      initialValue: widget.Editing ? widget.model.owner.username : "",
+      initialValue: widget.isEditing ? widget.model.owner.username : "",
       decoration: InputDecoration(
           labelText: 'Email Address', border: OutlineInputBorder()),
       textCapitalization: TextCapitalization.none,
@@ -229,7 +229,7 @@ class EventInputsState extends State<EventInputs> {
   // Textfield input for Contact Phone #
   Widget _buildEventContactPhoneNumber() {
     return TextInput(
-      initialValue: widget.Editing ? "" : "",
+      initialValue: widget.isEditing ? "" : "",
       decoration: InputDecoration(
           labelText: 'Phone Number', border: OutlineInputBorder()),
       textCapitalization: TextCapitalization.words,
