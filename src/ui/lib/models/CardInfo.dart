@@ -1,5 +1,5 @@
+// This file holds relevant classes for connecting to the back end for the users trading card
 import 'dart:convert';
-
 import 'package:http/http.dart';
 import 'package:ui/models/User.dart';
 
@@ -118,8 +118,6 @@ class Work {
     startDate =
         json['startDate'] == null ? null : DateTime.parse(json['startDate']);
     endDate = json['endDate'] == null ? null : DateTime.parse(json['endDate']);
-    // startDate = DateTime.parse(json['startDate'].toString());
-    // endDate = DateTime.parse(json['endDate'].toString());
   }
 }
 
@@ -151,8 +149,6 @@ class Volunteering {
     startDate =
         json['startDate'] == null ? null : DateTime.parse(json['startDate']);
     endDate = json['endDate'] == null ? null : DateTime.parse(json['endDate']);
-    // startDate = DateTime.parse(json['startDate'].toString());
-    // endDate = DateTime.parse(json['endDate'].toString());
   }
 }
 
@@ -211,6 +207,7 @@ class UserInterest {
   }
 }
 
+// CardInfo is a model that will hold all information relevent to a users trading card
 class CardInfo {
   User user = User();
   List<Education> education = [];
@@ -263,6 +260,7 @@ class CardInfo {
         ?.toList();
   }
 
+  // checks if the users card has any of the interests that are in the interestsFilter parameter
   bool satisfiesFilters(List<String> interestsFilter) {
     for (String interest in interestsFilter) {
       if (interests.contains(interest)) {
@@ -273,6 +271,7 @@ class CardInfo {
   }
 }
 
+// the card Info Model is used for making api calls regarding cards
 class CardInfoModel {
   // TODO strip whitespace from inputs
   final CardInfo _currentUserCardInfo = CardInfo();
@@ -288,6 +287,8 @@ class CardInfoModel {
     'interests': <UserInterest>[]
   };
 
+  // sends a post call to the API to create a card
+  // token is a string that is used to validate that the api call is coming from our application
   Future<bool> createCard(String token) async {
     try {
       final res = await post('http://34.75.44.166:8888/api/cards',
@@ -307,6 +308,9 @@ class CardInfoModel {
     }
   }
 
+  // Sends a put call to the API to update a card
+  // id: the id of the user that will be updated
+  // token: string that is used to validate that the api call is coming from our application
   Future<bool> updateCard(int id, String token) async {
     try {
       final res = await put('http://34.75.44.166:8888/api/cards/$id',
@@ -329,6 +333,9 @@ class CardInfoModel {
     }
   }
 
+  // makes a call to the API to get the card info of a specific user
+  // id: the id of the user that you want to get the information of
+  // token: string that is used to validate that the api call is coming from our application
   Future<CardInfo> fetchCardInfo(int id, String token,
       {isCurrentUser: false}) async {
     final response =
@@ -349,6 +356,9 @@ class CardInfoModel {
     }
   }
 
+  // makes a call to the API to get the card info of a speciific user
+  // id: the username of the user that you want to get the information of
+  // token: string that is used to validate that the api call is coming from our application
   Future<CardInfo> fetchCardInfoByUsername(String username, String token,
       {isCurrentUser: false}) async {
     final response = await get(

@@ -8,6 +8,9 @@ import './CreateCard2.dart';
 import '../palette.dart';
 import '../models/CardInfo.dart';
 
+// UI screen for adding Education info for a new user's card
+// Includes DynamicForm which allows users to add multiple form entries
+
 class CreateCard1 extends StatefulWidget {
   final BuildContext context;
 

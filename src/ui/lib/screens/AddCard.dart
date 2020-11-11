@@ -3,6 +3,9 @@ import '../palette.dart';
 
 import '../components/RoundedButton.dart';
 
+// UI screen for adding a card of another user
+// Choose either email or NFC
+
 class AddCard extends StatelessWidget {
   const AddCard();
 

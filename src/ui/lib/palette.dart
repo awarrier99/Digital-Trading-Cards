@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// This class holds our global colors used throughout the app
 class Palette {
   // main
   static Color primaryGreen = Color(0xFF92DAAF);

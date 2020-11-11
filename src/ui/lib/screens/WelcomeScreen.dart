@@ -13,6 +13,9 @@ import '../models/User.dart';
 import '../palette.dart';
 import 'package:flushbar/flushbar.dart';
 
+// The UI screen when a user first opens the app
+// Prompts the user to choose to login or create an account
+
 class WelcomeScreen extends StatefulWidget {
   final String title;
 

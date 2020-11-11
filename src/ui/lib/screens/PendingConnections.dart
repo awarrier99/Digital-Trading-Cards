@@ -6,6 +6,8 @@ import 'package:ui/models/Global.dart';
 
 import '../components/Cards/SummaryCard.dart';
 
+// The UI screen to view the users's pending connection requests
+
 class PendingConnections extends StatefulWidget {
   @override
   _PendingConnectionsState createState() => _PendingConnectionsState();

@@ -9,6 +9,9 @@ import '../../models/CardInfo.dart';
 import '../CreateCompanyDialog.dart';
 import '../MonthYearPicker.dart';
 
+// This form widget has input widgets that allows the users to enter in their
+// volunteer experience.
+
 class VolunteeringInputs extends StatefulWidget {
   final Volunteering model;
 

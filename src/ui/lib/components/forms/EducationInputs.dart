@@ -13,6 +13,10 @@ import 'DropdownFormField.dart';
 import '../../models/CardInfo.dart';
 import '../MonthYearPicker.dart';
 
+// The EducationInputs form contains input widgets that allow
+// for user's to input the required information for fields such as
+// Insitution name, Date attended, Expected gradiation data, Degree type
+
 class EducationInputs extends StatefulWidget {
   final Education model;
 

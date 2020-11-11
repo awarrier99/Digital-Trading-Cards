@@ -1,8 +1,8 @@
 import 'dart:convert';
-
 import 'package:http/http.dart';
 import 'package:ui/models/CardInfo.dart';
 
+// User is a model that will hold all information relevent to a users account information
 class User {
   int id;
   String firstName;
@@ -54,6 +54,7 @@ class User {
   }
 }
 
+// the user Model is used for making api calls regarding users account information
 class UserModel {
   User _currentUser;
   String _token;
@@ -61,6 +62,8 @@ class UserModel {
   User get currentUser => _currentUser;
   String get token => _token;
 
+  // sends a post call to the API to create a user
+  // token is a string that is used to validate that the api call is coming from our application
   Future<bool> createUser() async {
     try {
       final res = await post('http://34.75.44.166:8888/api/users',
@@ -81,6 +84,7 @@ class UserModel {
     }
   }
 
+  // logs in a user
   Future<bool> login() async {
     // TODO: add try/catch, strip whitespace
     final res = await post('http://34.75.44.166:8888/api/users/login',

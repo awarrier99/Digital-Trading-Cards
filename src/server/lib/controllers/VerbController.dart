@@ -1,7 +1,7 @@
 import 'package:server/models/db/Event.dart';
 
 import '../server.dart';
-
+//this is a helper file that helps with making API calls
 enum Resource {
   card,
   user,
@@ -36,7 +36,7 @@ class VerbController extends Controller {
   VerbController(this.resource);
 
   final Resource resource;
-
+  //handling post api calls
   Future<RequestOrResponse> _commonPost(
       Request request, int id, Function checker) async {
     if (id == null) {
@@ -49,7 +49,7 @@ class VerbController extends Controller {
 
     return Response.conflict(body: {'success': false});
   }
-
+  //handling update api calls
   Future<RequestOrResponse> _commonPutOrPatchOrDelete(
       Request request, int id, Function checker,
       {String key}) async {
@@ -68,7 +68,7 @@ class VerbController extends Controller {
 
     return request;
   }
-
+  //handling the api calls based on what's being called
   @override
   Future<RequestOrResponse> handle(Request request) async {
     final idString = request.path.variables['id'];

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ui/components/forms/ColorBadge.dart';
 
+// This widget displays a group of ColorBadge widgets
 class BadgeGroup extends StatelessWidget {
   final List<String> items;
   final String badgeType;

@@ -2,7 +2,9 @@ import 'package:server/models/db/Event.dart';
 
 import '../server.dart';
 
+//this is the controller to handle events
 class EventController extends ResourceController {
+  //api call to create an event
   @Operation.post()
   Future<Response> createEvent(@Bind.body() Event event) async {
     try {
@@ -20,6 +22,7 @@ class EventController extends ResourceController {
     }
   }
 
+  //api call to get an event by searching using an event's id
   @Operation.get('id')
   Future<Response> getEvent(@Bind.path('id') int eventId) async {
     try {
@@ -31,7 +34,7 @@ class EventController extends ResourceController {
       return Response.serverError(body: {'success': false});
     }
   }
-
+  //api call to update the details of an event
   @Operation.put('id')
   Future<Response> updateEvent(
       @Bind.body() Event event, @Bind.path('id') int eventId) async {
@@ -48,7 +51,7 @@ class EventController extends ResourceController {
           message: 'An error occurred while trying to update an event:');
     }
   }
-
+  //api call to get the upcoming events that a user has registered for
   @Operation.get('userId')
   Future<Response> getUpcomingEvents(@Bind.path('userId') int userId) async {
     try {

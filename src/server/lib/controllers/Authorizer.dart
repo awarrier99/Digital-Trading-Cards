@@ -3,7 +3,7 @@ import '../util/auth.dart';
 import 'VerbController.dart';
 
 enum AuthMode { none, bearer, isRequestingUser }
-
+//This is the controler to handle authorization and generating tokens once a user is logged in
 class Authorizer {
   static final Map<Verb, AuthMode> _verbMapTemplate = {
     Verb.post: null,

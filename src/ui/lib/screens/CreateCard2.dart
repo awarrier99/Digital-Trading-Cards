@@ -10,6 +10,9 @@ import '../components/forms/DynamicForm.dart';
 import '../models/CardInfo.dart';
 import '../palette.dart';
 
+// UI screen for adding professional experience info for a new user's card
+// such as volunteer experience (VolunteeringInputs) and work experience (WorkInputs)
+// Includes DynamicForm which allows users to add multiple form entries
 class CreateCard2 extends StatefulWidget {
   final BuildContext context;
 

@@ -1,6 +1,7 @@
 import '../server.dart';
 import '../util/auth.dart';
 
+//this is the server controller to register a new user and get the current user logged in 
 class UserController extends ResourceController {
   @Operation.post()
   Future<Response> createUser(@Bind.body() User user) async {

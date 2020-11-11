@@ -7,6 +7,8 @@ import 'package:ui/models/Global.dart';
 import '../SizeConfig.dart';
 import '../palette.dart';
 
+// This is a widget that allows the user to input a new company into the
+// autocomplete dropdown
 class CreateCompanyDialog extends StatefulWidget {
   final String name;
 

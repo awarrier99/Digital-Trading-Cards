@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
 import 'package:ui/models/CardInfo.dart';
@@ -7,6 +6,7 @@ import 'package:ui/models/ConnectionInfo.dart';
 import 'package:ui/models/EventInfo.dart';
 import 'package:ui/models/User.dart';
 
+// a model to hold all the other models for the session
 class GlobalModel {
   final UserModel userModel = UserModel();
   final CardInfoModel cardInfoModel = CardInfoModel();

@@ -1,7 +1,7 @@
 import 'package:server/models/db/Event.dart';
 
 import '../server.dart';
-
+//this is the server controller to get the upcoming events for a user based on a user's id
 class UpcomingEventsController extends ResourceController {
   @Operation.get('userId')
   Future<Response> getUpcomingEvents(@Bind.path('userId') int userId) async {

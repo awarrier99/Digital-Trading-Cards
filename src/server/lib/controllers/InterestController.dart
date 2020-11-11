@@ -1,6 +1,8 @@
 import 'package:server/server.dart';
 
+//this is the server controller to get/create new interest. This is a look up table in the database
 class InterestController extends ResourceController {
+    //api call to get interest if it is already in the database
   @Operation.get('pattern')
   Future<Response> getMatchingInterests(
       @Bind.path('pattern') String pattern) async {
@@ -17,7 +19,7 @@ class InterestController extends ResourceController {
       return Response.serverError(body: {'success': false});
     }
   }
-
+  //api call to create a new interest if it is not in the table already
   @Operation.post()
   Future<Response> createInterest(@Bind.body() Interest interest) async {
     try {

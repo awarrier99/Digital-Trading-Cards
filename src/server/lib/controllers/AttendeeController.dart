@@ -1,8 +1,9 @@
 import 'package:server/models/db/Event.dart';
 
 import '../server.dart';
-
+//This is the server controller to handle API routes for registering a user as an attendee to its associated event.
 class AttendeeController extends  ResourceController {
+  //Registering a user to its associated event
   @Operation.post()
   Future<Response> addAttendee(
       @Bind.body() Event event) async {
@@ -18,7 +19,7 @@ class AttendeeController extends  ResourceController {
       return Response.serverError(body: {'success': false});
     }
   }
-
+  //getting the attendees of an associated event
   @Operation.get('id')
   Future<Response> getAttendees(@Bind.path('id') int eventId) async {
     try {

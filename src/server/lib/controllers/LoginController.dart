@@ -1,6 +1,7 @@
 import '../server.dart';
 import '../util/auth.dart';
 
+//this is the server controller to login a user with its associated credentials
 class LoginController extends ResourceController {
   @Operation.post()
   Future<Response> loginUser(@Bind.body() User user) async {

@@ -1,6 +1,8 @@
 import '../server.dart';
 
+//this is the server controller to get/create new insituttiions. This is a look up table in the database
 class InstitutionController extends ResourceController {
+  //api call to get institution if it is already in the database
   @Operation.get('pattern')
   Future<Response> getMatchingInstitutions(
       @Bind.path('pattern') String pattern) async {
@@ -18,7 +20,7 @@ class InstitutionController extends ResourceController {
       return Response.serverError(body: {'success': false});
     }
   }
-
+  //api call to create a new institution if it is not in the table already
   @Operation.post()
   Future<Response> createInstitution(
       @Bind.body() Institution institution) async {

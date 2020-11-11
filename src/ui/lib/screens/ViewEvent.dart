@@ -8,6 +8,10 @@ import 'package:ui/models/User.dart';
 import 'package:ui/palette.dart';
 import 'package:ui/screens/AddEvents.dart';
 
+// The UI screen to view a specific event details
+// Event information is populated with the eventId
+// If the user is the owner of the event, there is an edit functionality
+
 class ViewEvent extends StatefulWidget {
   final int eventId;
 
@@ -43,15 +47,15 @@ class _ViewEventState extends State<ViewEvent> {
 
     currentUserID = userModel.currentUser.id;
     currentEventID = widget.eventId;
-
     isOwner = false;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(),
-        body: Center(
+      appBar: AppBar(),
+      body: Center(
+        child: SingleChildScrollView(
           child: FutureBuilder<List<dynamic>>(
             future: Future.wait([eventInfo, attendees]),
             builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
@@ -75,14 +79,15 @@ class _ViewEventState extends State<ViewEvent> {
                         onTap: () {
                           Navigator.of(context).pushNamed('/viewEvents');
                           // int currUserId = globalModel.userModel.currentUser;
-                          print("pressed");
-                          print(currentEventID);
-                          print(currentUserID);
                           final globalModel = context.read<GlobalModel>();
-                          final eventModel = globalModel.eventInfoModel;
                           final userModel = globalModel.userModel;
-                          eventModel.registerForEvent(currentEventID, userModel.token).then((success) => null);
-
+                          final eventModel = globalModel.eventInfoModel;
+                          eventModel
+                              .registerForEvent(currentEventID, userModel.token)
+                              .then((success) => {
+                                    if (success) {print('RSVP successful')}
+                                  });
+                          // print(eventModel.eventId);
                           // widget
                           //     .registerForEvent(userModel.token)
                           //     .then((success) {
@@ -171,6 +176,8 @@ class _ViewEventState extends State<ViewEvent> {
               ));
             },
           ),
-        ));
+        ),
+      ),
+    );
   }
 }

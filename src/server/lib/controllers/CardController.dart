@@ -1,6 +1,8 @@
 import '../server.dart';
 
+//this is the controller to handle a user's digital trading card. 
 class CardController extends ResourceController {
+  //creating a digital trading caard
   @Operation.post()
   Future<Response> createCard(@Bind.body() CardInfo cardInfo) async {
     try {
@@ -16,6 +18,7 @@ class CardController extends ResourceController {
     }
   }
 
+  //getting the logged in user's card
   @Operation.get('id')
   Future<Response> getCard() async {
     try {

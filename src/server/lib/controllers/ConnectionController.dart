@@ -1,6 +1,8 @@
 import '../server.dart';
 
+//this is the controller to create connections between users. 
 class ConnectionController extends ResourceController {
+  //the api call for a user to make a connection with another user
   @Operation.post()
   Future<Response> requestConnection(@Bind.body() User user) async {
     try {
@@ -21,7 +23,7 @@ class ConnectionController extends ResourceController {
       return Response.serverError(body: {'success': false});
     }
   }
-
+  //api call to update a connection.
   @Operation.put('id')
   Future<Response> acceptConnection(@Bind.body() Connection connection) async {
     try {
@@ -35,7 +37,7 @@ class ConnectionController extends ResourceController {
       return Response.serverError(body: {'success': false});
     }
   }
-
+  //api call to delete a connection
   @Operation.delete('id')
   Future<Response> rejectConnection(@Bind.path('id') int id) async {
     try {
@@ -50,6 +52,7 @@ class ConnectionController extends ResourceController {
     }
   }
 
+  //api call to get the connections of the user logged in
   @Operation.get('id')
   Future<Response> getConnectionInfo(
       {@Bind.query('onlyPending') String onlyPending = 'false',

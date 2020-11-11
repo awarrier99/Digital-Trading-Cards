@@ -1,6 +1,8 @@
 import 'package:server/server.dart';
 
+//this is the server controller to handle fields that are a lookup table in the database
 class FieldController extends ResourceController {
+  //api call to get fields based on user input if it matches a patter
   @Operation.get('pattern')
   Future<Response> getMatchingFields(
       @Bind.path('pattern') String pattern) async {
@@ -15,7 +17,7 @@ class FieldController extends ResourceController {
       return Response.serverError(body: {'success': false});
     }
   }
-
+  //api call to create a new field
   @Operation.post()
   Future<Response> createField(@Bind.body() Field field) async {
     try {

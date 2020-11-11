@@ -7,6 +7,9 @@ import 'package:ui/models/Global.dart';
 
 import '../../models/CardInfo.dart';
 
+// The InterestsInputs form widget contains various input widgets that allow
+// for user's to enter in their interests and hobbies
+
 class InterestsInputs extends StatefulWidget {
   final UserInterest model;
 

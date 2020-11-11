@@ -5,6 +5,7 @@ String pad(int num) {
   return num < 10 ? '0$num' : num.toString();
 }
 
+// This is a custom date picker widget
 class MonthYearPicker extends StatefulWidget {
   final FocusNode focusNode;
   final DateTime firstDate;
