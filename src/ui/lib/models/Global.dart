@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
 import 'package:ui/models/CardInfo.dart';
@@ -7,6 +6,7 @@ import 'package:ui/models/ConnectionInfo.dart';
 import 'package:ui/models/EventInfo.dart';
 import 'package:ui/models/User.dart';
 
+// a model to hold all the other models for the session
 class GlobalModel {
   final UserModel userModel = UserModel();
   final CardInfoModel cardInfoModel = CardInfoModel();
@@ -16,8 +16,7 @@ class GlobalModel {
   Future<List<dynamic>> getSuggestions(String endpoint, String pattern,
       String key, Function classBuilder) async {
     pattern = pattern.replaceAll(' ', '%20');
-    final res =
-        await get('http://34.75.44.166:8888$endpoint/$pattern', headers: {
+    final res = await get('http://10.0.2.2:8888$endpoint/$pattern', headers: {
       'Accept': 'application/json',
       'Authorization': 'Bearer ${userModel.token}',
     });
@@ -31,7 +30,7 @@ class GlobalModel {
 
   Future<void> onAdd(
       String endpoint, dynamic model, BuildContext context) async {
-    await post('http://34.75.44.166:8888$endpoint',
+    await post('http://10.0.2.2:8888$endpoint',
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',

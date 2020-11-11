@@ -45,8 +45,9 @@ class _ViewEventState extends State<ViewEvent> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(),
-        body: Center(
+      appBar: AppBar(),
+      body: Center(
+        child: SingleChildScrollView(
           child: FutureBuilder<List<dynamic>>(
             future: Future.wait([eventInfo, attendees]),
             builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
@@ -163,6 +164,8 @@ class _ViewEventState extends State<ViewEvent> {
               ));
             },
           ),
-        ));
+        ),
+      ),
+    );
   }
 }
