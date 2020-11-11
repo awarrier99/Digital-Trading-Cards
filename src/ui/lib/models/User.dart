@@ -66,7 +66,7 @@ class UserModel {
   // token is a string that is used to validate that the api call is coming from our application
   Future<bool> createUser() async {
     try {
-      final res = await post('http://10.0.2.2:8888/api/users',
+      final res = await post('http://34.75.44.166:8888/api/users',
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
@@ -87,7 +87,7 @@ class UserModel {
   // logs in a user
   Future<bool> login() async {
     // TODO: add try/catch, strip whitespace
-    final res = await post('http://10.0.2.2:8888/api/users/login',
+    final res = await post('http://34.75.44.166:8888/api/users/login',
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json'

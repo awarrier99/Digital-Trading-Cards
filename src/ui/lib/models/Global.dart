@@ -16,7 +16,8 @@ class GlobalModel {
   Future<List<dynamic>> getSuggestions(String endpoint, String pattern,
       String key, Function classBuilder) async {
     pattern = pattern.replaceAll(' ', '%20');
-    final res = await get('http://10.0.2.2:8888$endpoint/$pattern', headers: {
+    final res =
+        await get('http://34.75.44.166:8888$endpoint/$pattern', headers: {
       'Accept': 'application/json',
       'Authorization': 'Bearer ${userModel.token}',
     });
@@ -30,7 +31,7 @@ class GlobalModel {
 
   Future<void> onAdd(
       String endpoint, dynamic model, BuildContext context) async {
-    await post('http://10.0.2.2:8888$endpoint',
+    await post('http://34.75.44.166:8888$endpoint',
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',

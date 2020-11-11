@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:ui/RouteGenerator.dart';
-import 'package:ui/components/SearchBar.dart';
 
 // This widget supports the bottom navigation bar seen on most pages
 class NavigationBar extends StatefulWidget {
