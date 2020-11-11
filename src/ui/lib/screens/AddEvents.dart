@@ -6,8 +6,6 @@ import 'package:ui/components/forms/EventInputs.dart';
 import 'package:ui/models/EventInfo.dart';
 import 'package:ui/models/Global.dart';
 
-// made some changes that might need to be changed in routegenerator.dart
-// for this path
 class AddEvents extends StatefulWidget {
   final int eventId;
   final EventInfo event;
@@ -21,19 +19,11 @@ class AddEvents extends StatefulWidget {
 class _AddEvents extends State<AddEvents> {
   final _eventInputsKey = GlobalKey<FormState>();
   EventInfo _eventsInfoModel = EventInfo();
-  // final bool isEditing;
-
-  // void deactivate() {
-  //   super.deactivate();
-  //   final globalModel = context.read<GlobalModel>();
-  //   globalModel.eventInfoModel.isEditing = false;
-  // }
 
   void initState() {
     super.initState();
     final globalModel = context.read<GlobalModel>();
     final eventModel = globalModel.eventInfoModel;
-    // print(eventModel.isEditing);
 
     if (eventModel.isEditing) {
       _eventsInfoModel = widget.event;
@@ -41,7 +31,6 @@ class _AddEvents extends State<AddEvents> {
   }
 
   Future sendToViewEventScreen(context) async {
-    // once we are done we are sent back to view events
     Navigator.of(context).pushNamed('/viewEvents');
   }
 

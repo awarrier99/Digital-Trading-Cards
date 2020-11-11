@@ -7,6 +7,8 @@ import 'package:ui/palette.dart';
 import 'package:ui/screens/ViewAttendees.dart';
 import 'package:ui/models/Global.dart';
 
+// This widget displays an event card that displays all the information about
+// the event taken from the model
 
 class EventCard extends StatefulWidget {
   final EventInfo data;
@@ -197,7 +199,7 @@ class _EventCardState extends State<EventCard> {
                   //           final globalModel = context.read<GlobalModel>();
                   //           final eventModel = globalModel.eventInfoModel;
                   //           final userModel = globalModel.userModel;
-                           
+
                   //         },
                   //         child: Center(
                   //           child: Text(

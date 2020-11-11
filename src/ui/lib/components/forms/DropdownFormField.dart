@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+// This widget is used as resuable dropdown element in our other forms
+
 class DropdownFormField extends StatefulWidget {
   final List<String> data;
   final String initialValue;

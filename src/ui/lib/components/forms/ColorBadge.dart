@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+// This widget is used to display skills, and areas of interest on our
+// SummaryCard.dart and TradingCard.dart in the form of a rectangle with
+// round edges and a color gradient on it.
+
 class BadgeColors {
   final Color startColor;
   final Color endColor;

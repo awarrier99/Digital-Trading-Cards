@@ -8,6 +8,12 @@ import 'package:ui/palette.dart';
 import 'SubForm.dart';
 import '../inheritedWidgets/SubFormInheritedWidget.dart';
 
+// this widget a dynamic form that is reusable and takes in different
+// subforms that house custom input forms that we have created.
+// For example, EducationInputs.dart, PersonalInfoInputs.dart, etc.
+// would be placed in a subform and then the subform would act like
+// different sections in a form.
+
 class DynamicForm extends StatefulWidget {
   final String title;
   final Function inputBuilder;
