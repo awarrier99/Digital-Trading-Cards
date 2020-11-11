@@ -74,11 +74,11 @@ class _AddEvents extends State<AddEvents> {
             child: Column(
               children: [
                 isEditing
-                    ? EventInputs(model: _eventsInfoModel, Editing: true)
+                    ? EventInputs(model: _eventsInfoModel, isEditing: true)
                     // this block down here updates the event
                     : EventInputs(
                         model: _eventsInfoModel,
-                        Editing: false,
+                        isEditing: false,
                       ),
                 SizedBox(height: SizeConfig.safeBlockVertical * 10),
                 isEditing
