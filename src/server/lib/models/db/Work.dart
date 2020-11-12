@@ -4,6 +4,7 @@ import '../../server.dart';
 import 'Company.dart';
 import 'User.dart';
 
+// represents a user's work info
 class Work extends Serializable {
   Work();
 
@@ -25,6 +26,7 @@ class Work extends Serializable {
   DateTime startDate;
   DateTime endDate;
 
+  // serializes a class instance into a JSON response payload
   @override
   Map<String, dynamic> asMap() {
     return {
@@ -39,6 +41,7 @@ class Work extends Serializable {
     };
   }
 
+  // serializes the JSON request payload into a class instance
   @override
   void readFromMap(Map<String, dynamic> object) {
     id = object['id'] as int;
@@ -60,6 +63,7 @@ class Work extends Serializable {
         : DateTime.parse(endDateStr);
   }
 
+  // save or update a class instance in the database
   Future<void> save({bool allowUpdate = true}) async {
     try {
       String sql;
@@ -104,6 +108,7 @@ class Work extends Serializable {
     }
   }
 
+  // delete a class instance in the database
   Future<void> delete() async {
     try {
       if (id == null) {
@@ -124,6 +129,7 @@ class Work extends Serializable {
     }
   }
 
+  // get a list of a user's work info
   static Future<List<Work>> getByUser(User user) async {
     try {
       const sql = '''

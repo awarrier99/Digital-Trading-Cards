@@ -4,6 +4,7 @@ import '../../server.dart';
 import 'Skill.dart';
 import 'User.dart';
 
+// represents a many-to-many relationship between users and skills
 class UserSkill extends Serializable {
   UserSkill();
 
@@ -13,11 +14,13 @@ class UserSkill extends Serializable {
   User user;
   Skill skill;
 
+  // serializes a class instance into a JSON response payload
   @override
   Map<String, dynamic> asMap() {
     return {'id': id, 'user': user.asMap(), 'skill': skill.asMap()};
   }
 
+  // serializes the JSON request payload into a class instance
   @override
   void readFromMap(Map<String, dynamic> object) {
     id = object['id'] as int;
@@ -28,6 +31,7 @@ class UserSkill extends Serializable {
     skill = Skill()..readFromMap(object['skill'] as Map<String, dynamic>);
   }
 
+  // save or update a class instance in the database
   Future<void> save({bool allowUpdate = true}) async {
     try {
       String sql;
@@ -59,6 +63,7 @@ class UserSkill extends Serializable {
     }
   }
 
+  // delete a class instance in the database
   Future<void> delete() async {
     try {
       if (id == null) {
@@ -79,6 +84,7 @@ class UserSkill extends Serializable {
     }
   }
 
+  // get a list of a user's skills
   static Future<List<UserSkill>> getByUser(User user) async {
     try {
       const sql = '''

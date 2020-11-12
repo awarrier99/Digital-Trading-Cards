@@ -4,6 +4,7 @@ import '../../server.dart';
 import 'Company.dart';
 import 'User.dart';
 
+// represents a user's volunteering info
 class Volunteering extends Serializable {
   Volunteering();
 
@@ -23,6 +24,7 @@ class Volunteering extends Serializable {
   DateTime startDate;
   DateTime endDate;
 
+  // serializes a class instance into a JSON response payload
   @override
   Map<String, dynamic> asMap() {
     return {
@@ -36,6 +38,7 @@ class Volunteering extends Serializable {
     };
   }
 
+  // serializes the JSON request payload into a class instance
   @override
   void readFromMap(Map<String, dynamic> object) {
     id = object['id'] as int;
@@ -56,6 +59,7 @@ class Volunteering extends Serializable {
         : DateTime.parse(endDateStr);
   }
 
+  // save or update a class instance in the database
   Future<void> save({bool allowUpdate = true}) async {
     try {
       String sql;
@@ -99,6 +103,7 @@ class Volunteering extends Serializable {
     }
   }
 
+  // delete a class instance in the database
   Future<void> delete() async {
     try {
       if (id == null) {
@@ -120,6 +125,7 @@ class Volunteering extends Serializable {
     }
   }
 
+  // get a list of a user's volunteering info
   static Future<List<Volunteering>> getByUser(User user) async {
     try {
       const sql = '''

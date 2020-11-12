@@ -1,8 +1,8 @@
 import 'package:meta/meta.dart';
-import 'package:dbcrypt/dbcrypt.dart';
 
 import '../../server.dart';
 
+// represents an event
 class Event extends Serializable {
   Event();
   Event.create({
@@ -22,6 +22,7 @@ class Event extends Serializable {
   DateTime startDate;
   DateTime endDate;
 
+  // serializes a class instance into a JSON response payload
   @override
   Map<String, dynamic> asMap() {
     return {
@@ -35,6 +36,7 @@ class Event extends Serializable {
     };
   }
 
+  // serializes the JSON request payload into a class instance
   @override
   void readFromMap(Map<String, dynamic> object) {
     id = object['id'] as int;
@@ -59,6 +61,7 @@ class Event extends Serializable {
         : DateTime.parse(endDateStr);
   }
 
+  // save a class instance in the database
   Future<void> save() async {
     const sql = '''
       INSERT INTO events
@@ -76,6 +79,7 @@ class Event extends Serializable {
     id = results.insertId;
   }
 
+  // update a class instance in the database
   Future<void> updateEvent() async {
     const sql = '''
       UPDATE events
@@ -93,6 +97,7 @@ class Event extends Serializable {
     ]);
   }
 
+  // add an attendee for an event
   Future<void> addAttendee() async {
     const sql = ''' 
       INSERT INTO attendees 
@@ -103,6 +108,7 @@ class Event extends Serializable {
     id = results.insertId;
   }
 
+  // get all attendees for an event
   static Future<List<User>> getAttendees(int eventId) async {
     try {
       const sql = '''
@@ -143,6 +149,7 @@ class Event extends Serializable {
     }
   }
 
+  // get all upcoming events for a user
   static Future<List<Event>> getUpcoming(int userId) async {
     try {
       print(userId);
@@ -164,6 +171,7 @@ class Event extends Serializable {
     }
   }
 
+  // get an event by id
   static Future<Event> get(int id) async {
     try {
       const sql = '''

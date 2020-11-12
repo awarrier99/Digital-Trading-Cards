@@ -2,6 +2,7 @@ import 'package:meta/meta.dart';
 
 import '../../server.dart';
 
+// represents a field of study
 class Field extends Serializable {
   Field();
 
@@ -10,17 +11,20 @@ class Field extends Serializable {
   String abbreviation;
   String name;
 
+  // serializes a class instance into a JSON response payload
   @override
   Map<String, dynamic> asMap() {
     return {'abbreviation': abbreviation, 'name': name};
   }
 
+  // serializes the JSON request payload into a class instance
   @override
   void readFromMap(Map<String, dynamic> object) {
     abbreviation = object['abbreviation'] as String;
     name = object['name'] as String;
   }
 
+  // saves a class instance in the database
   Future<void> save() async {
     try {
       const sql = '''
@@ -36,6 +40,7 @@ class Field extends Serializable {
     }
   }
 
+  // get all fields in the database
   static Future<List<Field>> getAll() async {
     try {
       const sql = '''
@@ -55,6 +60,7 @@ class Field extends Serializable {
     }
   }
 
+  // find all fields that match the provided pattern
   static Future<List<Field>> find(String pattern) async {
     try {
       if (pattern.isEmpty) {

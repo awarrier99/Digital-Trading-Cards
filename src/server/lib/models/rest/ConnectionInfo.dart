@@ -2,6 +2,7 @@ import 'package:meta/meta.dart';
 
 import '../../server.dart';
 
+// represents a user's connection info
 class ConnectionInfo extends Serializable {
   ConnectionInfo();
 
@@ -14,6 +15,7 @@ class ConnectionInfo extends Serializable {
   List<Connection> connections;
   List<CardInfo> connectionCards;
 
+  // serializes a class instance into a JSON response payload
   @override
   Map<String, dynamic> asMap() {
     return {
@@ -23,6 +25,7 @@ class ConnectionInfo extends Serializable {
     };
   }
 
+  // serializes the JSON request payload into a class instance
   @override
   void readFromMap(Map<String, dynamic> object) {
     user = User.fromMap(object['user'] as Map<String, dynamic>);
@@ -36,6 +39,7 @@ class ConnectionInfo extends Serializable {
         .toList();
   }
 
+  // get a list of a user's connections and their cards
   static Future<ConnectionInfo> getByUser(User user, {bool onlyPending, bool incoming}) async {
     List<Connection> connections;
     if (onlyPending) {

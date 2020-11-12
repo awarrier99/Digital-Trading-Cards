@@ -1,5 +1,6 @@
 import '../server.dart';
 
+// connect to the mysql database
 class Database {
   factory Database(ServerConfig config) {
     _database.config = config;
@@ -22,6 +23,7 @@ class Database {
     return MySqlConnection.connect(settings);
   }
 
+  // helper for querying the database
   Future<Results> query(String sql, [List<dynamic> values]) async {
     conn ??= await _connect();
     return conn.query(sql, values);

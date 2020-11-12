@@ -15,6 +15,7 @@ import 'controllers/UserController.dart';
 import 'controllers/VerbController.dart';
 import 'server.dart';
 
+// define all API endpoints
 Controller createRoutes() {
   final router = Router(basePath: '/api');
 

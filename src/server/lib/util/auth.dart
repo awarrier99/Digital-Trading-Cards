@@ -1,5 +1,6 @@
 import '../server.dart';
 
+// generate a JWT for a user
 String generateToken(User user) {
   final key = ServerChannel.config.jwt.key;
   final aud = ServerChannel.config.jwt.aud;
@@ -14,6 +15,7 @@ String generateToken(User user) {
   return token;
 }
 
+// validate a user's JWT
 JWT validateToken(String token) {
   final key = ServerChannel.config.jwt.key;
   final aud = ServerChannel.config.jwt.aud;

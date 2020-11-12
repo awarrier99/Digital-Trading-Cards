@@ -2,6 +2,7 @@ import 'package:meta/meta.dart';
 
 import '../../server.dart';
 
+// represents a skill
 class Skill extends Serializable {
   Skill();
 
@@ -9,16 +10,19 @@ class Skill extends Serializable {
 
   String title;
 
+  // serializes a class instance into a JSON response payload
   @override
   Map<String, dynamic> asMap() {
     return {'title': title};
   }
 
+  // serializes the JSON request payload into a class instance
   @override
   void readFromMap(Map<String, dynamic> object) {
     title = object['title'] as String;
   }
 
+  // saves a class instance in the database
   Future<void> save() async {
     try {
       const sql = '''
@@ -35,6 +39,7 @@ class Skill extends Serializable {
     }
   }
 
+  // get a list of all skills
   static Future<List<Skill>> getAll() async {
     try {
       const sql = '''
@@ -52,6 +57,7 @@ class Skill extends Serializable {
     }
   }
 
+  // find all skills which match the provided pattern
   static Future<List<Skill>> find(String pattern) async {
     try {
       if (pattern.isEmpty) {
