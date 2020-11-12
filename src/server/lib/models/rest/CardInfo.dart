@@ -2,6 +2,7 @@ import 'package:meta/meta.dart';
 
 import '../../server.dart';
 
+// represents a user's card, which is a collection of other info
 class CardInfo extends Serializable {
   CardInfo();
 
@@ -20,6 +21,7 @@ class CardInfo extends Serializable {
   List<UserSkill> skills;
   List<UserInterest> interests;
 
+  // serializes a class instance into a JSON response payload
   @override
   Map<String, dynamic> asMap() {
     return {
@@ -33,6 +35,7 @@ class CardInfo extends Serializable {
     };
   }
 
+  // serializes the JSON request payload into a class instance
   @override
   void readFromMap(Map<String, dynamic> object) {
     final userMap = object['user'] as Map<String, dynamic>;
@@ -69,6 +72,7 @@ class CardInfo extends Serializable {
         .toList();
   }
 
+  // save or update a user's card info in the database
   static Future<void> _saveAll(CardInfo cardInfo, bool allowUpdate) async {
     final List<Future> futures = [];
     futures.add(Future.forEach(
@@ -84,10 +88,12 @@ class CardInfo extends Serializable {
     await Future.wait(futures);
   }
 
+  // save the card
   static Future<void> save(CardInfo cardInfo) {
     return _saveAll(cardInfo, false);
   }
 
+  // get a card by user
   static Future<CardInfo> get(User user) async {
     return CardInfo.create(
         user: user,
@@ -98,10 +104,11 @@ class CardInfo extends Serializable {
         interests: await UserInterest.getByUser(user));
   }
 
+  // update the card
   static Future<void> update(
       CardInfo cardInfo, Map<String, List<dynamic>> deleteLists) async {
     await _saveAll(cardInfo, true);
-    for (List<dynamic> list in deleteLists.values) {
+    for (List<dynamic> list in deleteLists.values) { // represents any info that was deleted in the update
       for (dynamic e in list) {
         e.delete();
       }
@@ -109,15 +116,18 @@ class CardInfo extends Serializable {
   }
 }
 
+// represents an update made to a user's card
 class CardInfoUpdate extends Serializable {
   CardInfo cardInfo;
   Map<String, List<dynamic>> deleteLists;
 
+  // serializes a class instance into a JSON response payload
   @override
   Map<String, dynamic> asMap() {
     return {};
   }
 
+  // serializes the JSON request payload into a class instance
   @override
   void readFromMap(Map<String, dynamic> object) {
     cardInfo = CardInfo()

@@ -2,6 +2,7 @@ import 'package:meta/meta.dart';
 
 import '../../server.dart';
 
+// represents an institution or school
 class Institution extends Serializable {
   Institution();
 
@@ -10,17 +11,20 @@ class Institution extends Serializable {
   String name;
   String longName;
 
+  // serializes a class instance into a JSON response payload
   @override
   Map<String, dynamic> asMap() {
     return {'name': name, 'longName': longName};
   }
 
+  // serializes the JSON request payload into a class instance
   @override
   void readFromMap(Map<String, dynamic> object) {
     name = object['name'] as String;
     longName = object['longName'] as String;
   }
 
+  // saves a class instance in the database
   Future<void> save() async {
     try {
       const sql = '''
@@ -36,6 +40,7 @@ class Institution extends Serializable {
     }
   }
 
+  // get an institution by name
   static Future<Institution> get(String name) async {
     try {
       const sql = '''
@@ -53,6 +58,7 @@ class Institution extends Serializable {
     }
   }
 
+  // get a list of all institutions
   static Future<List<Institution>> getAll() async {
     try {
       const sql = '''
@@ -71,6 +77,7 @@ class Institution extends Serializable {
     }
   }
 
+  // find all institutions which match the provided pattern
   static Future<List<Institution>> find(String pattern) async {
     try {
       if (pattern.isEmpty) {

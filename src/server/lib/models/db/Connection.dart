@@ -3,6 +3,7 @@ import 'package:meta/meta.dart';
 import '../../server.dart';
 import 'User.dart';
 
+// represents a connection between two users
 class Connection extends Serializable {
   Connection();
 
@@ -14,6 +15,7 @@ class Connection extends Serializable {
   User recipient;
   bool pending;
 
+  // serializes a class instance into a JSON response payload
   @override
   Map<String, dynamic> asMap() {
     return {
@@ -24,6 +26,7 @@ class Connection extends Serializable {
     };
   }
 
+  // serializes the JSON request payload into a class instance
   @override
   void readFromMap(Map<String, dynamic> object) {
     id = object['id'] as int;
@@ -34,10 +37,11 @@ class Connection extends Serializable {
     pending = object['pending'] as bool;
   }
 
+  // save or update a class instance in the database
   Future<bool> save() async {
     String sql;
     final values = [sender.id, recipient.id, pending];
-    if (id == null) {
+    if (id == null) { // if the id isn't set, create a new row
       const checkSql = '''
         SELECT * FROM connections
         WHERE sender = ? AND recipient = ?
@@ -45,7 +49,7 @@ class Connection extends Serializable {
       ''';
       final checkResults = await ServerChannel.db
           .query(checkSql, [sender.id, recipient.id, sender.id, recipient.id]);
-      if (checkResults.isNotEmpty) {
+      if (checkResults.isNotEmpty) { // check whether the connection tuple already exists
         return false;
       }
 
@@ -54,7 +58,7 @@ class Connection extends Serializable {
         (sender, recipient, pending)
         VALUES (?, ?, ?)
       ''';
-    } else {
+    } else { // if the id is set, update the properties
       sql = '''
         UPDATE connections
         SET pending = ?
@@ -69,6 +73,7 @@ class Connection extends Serializable {
     return true;
   }
 
+  // delete a class instance from the database
   Future<void> delete() async {
     try {
       if (id == null) {
@@ -89,6 +94,7 @@ class Connection extends Serializable {
     }
   }
 
+  // get a connection by id
   static Future<Connection> get(int id) async {
     const sql = '''
       SELECT * FROM connections
@@ -108,6 +114,7 @@ class Connection extends Serializable {
       ..id = id;
   }
 
+  // get a connection by a user
   static Future<List<Connection>> getByUser(User user) async {
     try {
       const sql = '''
@@ -133,6 +140,7 @@ class Connection extends Serializable {
     }
   }
 
+  // get the cards of the users the current user is connected with
   static Future<List<CardInfo>> getConnectionCards(
       User user, List<Connection> connections) async {
     final futures = connections.map((e) {
@@ -145,9 +153,10 @@ class Connection extends Serializable {
     return Future.wait(futures);
   }
 
+  // get all pending connection requests
   static Future<List<Connection>> getPending(User user, {bool incoming}) async {
     String key = 'recipient';
-    if (!incoming) {
+    if (!incoming) { // specify whether the current user is the sender or recipient
       key = 'sender';
     }
     final sql = '''

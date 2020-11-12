@@ -4,6 +4,7 @@ import '../../server.dart';
 import 'Interest.dart';
 import 'User.dart';
 
+// represents a many-to-many relationship between users and interests
 class UserInterest extends Serializable {
   UserInterest();
 
@@ -13,11 +14,13 @@ class UserInterest extends Serializable {
   User user;
   Interest interest;
 
+  // serializes a class instance into a JSON response payload
   @override
   Map<String, dynamic> asMap() {
     return {'id': id, 'user': user.asMap(), 'interest': interest.asMap()};
   }
 
+  // serializes the JSON request payload into a class instance
   @override
   void readFromMap(Map<String, dynamic> object) {
     id = object['id'] as int;
@@ -29,6 +32,7 @@ class UserInterest extends Serializable {
       ..readFromMap(object['interest'] as Map<String, dynamic>);
   }
 
+  // save or update a class instance in the database
   Future<void> save({bool allowUpdate = true}) async {
     try {
       String sql;
@@ -60,6 +64,7 @@ class UserInterest extends Serializable {
     }
   }
 
+  // delete a class instance in the database
   Future<void> delete() async {
     try {
       if (id == null) {
@@ -80,6 +85,7 @@ class UserInterest extends Serializable {
     }
   }
 
+  // get a list of a user's interests
   static Future<List<UserInterest>> getByUser(User user) async {
     try {
       const sql = '''
