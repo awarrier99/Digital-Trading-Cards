@@ -83,7 +83,7 @@ class Event extends Serializable {
   Future<void> updateEvent() async {
     const sql = '''
       UPDATE events
-      SET event_name=?,company=?, eventDescription=?, start_date=?, end_date=?
+      SET event_name=?, company_organization=?, event_description=?, start_date=?, end_date=?
       WHERE id=? AND owner=?
     ''';
     await ServerChannel.db.query(sql, [
