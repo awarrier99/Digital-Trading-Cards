@@ -1,17 +1,15 @@
 # Digital Trading Cards
 Georgia Tech Capstone
 
-Client: Christen Steele
-
 An app to streamline the networking process by connecting students, professionals, and recruiters through matched skills and shared interests.
 
-## Demo Video
-https://youtu.be/IDTbivJaiyQ 
+Client: Christen Steele
 
-# Version
-Version Number: 1.0.0
+**Demo Video:** https://youtu.be/IDTbivJaiyQ 
 
 # Release Notes:
+**Version Number: 1.0.0**
+
 **New Features:**
 * Create your own personal card to summarize your experiences and skills.
 * Add other people’s cards and make connections through one of two ways
