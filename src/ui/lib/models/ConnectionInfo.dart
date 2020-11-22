@@ -64,7 +64,7 @@ class ConnectionInfoModel {
   // token is a string that is used to validate that the api call is coming from our application
   Future<bool> createConnection(User user, String token) async {
     try {
-      final res = await post('http://34.75.44.166:8888/api/connections',
+      final res = await post('http://10.0.2.2:8888/api/connections',
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -86,7 +86,7 @@ class ConnectionInfoModel {
   Future<bool> acceptConnection(Connection connection, String token) async {
     try {
       final res =
-          await put('http://34.75.44.166:8888/api/connections/${connection.id}',
+          await put('http://10.0.2.2:8888/api/connections/${connection.id}',
               headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
@@ -107,12 +107,12 @@ class ConnectionInfoModel {
   // token: string that is used to validate that the api call is coming from our applicatio
   Future<bool> rejectConnection(int id, String token) async {
     try {
-      final res = await delete('http://34.75.44.166:8888/api/connections/$id',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer $token'
-          });
+      final res =
+          await delete('http://10.0.2.2:8888/api/connections/$id', headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token'
+      });
       final body = json.decode(res.body);
       return body['success'];
     } catch (err) {
@@ -128,7 +128,7 @@ class ConnectionInfoModel {
   Future<ConnectionInfo> fetchConnectionInfo(int id, String token,
       {bool onlyPending = false, bool incoming = true}) async {
     final response = await get(
-        'http://34.75.44.166:8888/api/connections/$id?onlyPending=$onlyPending&incoming=$incoming',
+        'http://10.0.2.2:8888/api/connections/$id?onlyPending=$onlyPending&incoming=$incoming',
         headers: {
           'Accept': 'application/json',
           'Authorization': 'Bearer $token',

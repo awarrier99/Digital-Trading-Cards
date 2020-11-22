@@ -3,6 +3,7 @@ import 'package:server/controllers/CompanyController.dart';
 import 'package:server/controllers/FieldController.dart';
 import 'package:server/controllers/InstitutionController.dart';
 import 'package:server/controllers/InterestController.dart';
+import 'package:server/controllers/MessageController.dart';
 import 'package:server/controllers/SkillController.dart';
 import 'package:server/controllers/UpcomingEventsController.dart';
 
@@ -18,6 +19,7 @@ import 'server.dart';
 // define all API endpoints
 Controller createRoutes() {
   final router = Router(basePath: '/api');
+  final connections = {};
 
   router
       .route('/cards[/:id]')
@@ -96,5 +98,10 @@ Controller createRoutes() {
       .link(() => VerbController(Resource.company))
       .link(() => CompanyController());
 
+  router
+      .route('/messaging[/:senderId[/:receiverId]]')
+      .link(Authorizer.bearer)
+      .link(() => VerbController(Resource.messages))
+      .link(() => MessageController());
   return router;
 }

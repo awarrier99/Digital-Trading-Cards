@@ -291,7 +291,7 @@ class CardInfoModel {
   // token is a string that is used to validate that the api call is coming from our application
   Future<bool> createCard(String token) async {
     try {
-      final res = await post('http://34.75.44.166:8888/api/cards',
+      final res = await post('http://10.0.2.2:8888/api/cards',
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -313,7 +313,7 @@ class CardInfoModel {
   // token: string that is used to validate that the api call is coming from our application
   Future<bool> updateCard(int id, String token) async {
     try {
-      final res = await put('http://34.75.44.166:8888/api/cards/$id',
+      final res = await put('http://10.0.2.2:8888/api/cards/$id',
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -338,8 +338,7 @@ class CardInfoModel {
   // token: string that is used to validate that the api call is coming from our application
   Future<CardInfo> fetchCardInfo(int id, String token,
       {isCurrentUser: false}) async {
-    final response =
-        await get('http://34.75.44.166:8888/api/cards/$id', headers: {
+    final response = await get('http://10.0.2.2:8888/api/cards/$id', headers: {
       'Accept': 'application/json',
       'Authorization': 'Bearer $token',
     });
@@ -362,7 +361,7 @@ class CardInfoModel {
   Future<CardInfo> fetchCardInfoByUsername(String username, String token,
       {isCurrentUser: false}) async {
     final response = await get(
-      'http://34.75.44.166:8888/api/cards/$username',
+      'http://10.0.2.2:8888/api/cards/$username',
       headers: {
         'Accept': 'application/json',
         'Authorization': 'Bearer $token',

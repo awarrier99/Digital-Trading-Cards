@@ -73,7 +73,7 @@ class EventInfoModel {
     try {
       print('hello3');
       print(_eventInfo.toJson());
-      final res = await post('http://34.75.44.166:8888/api/events',
+      final res = await post('http://10.0.2.2:8888/api/events',
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -95,7 +95,7 @@ class EventInfoModel {
   // token: string that is used to validate that the api call is coming from our application
   Future<bool> update(int id, String token) async {
     try {
-      final res = await put('http://34.75.44.166:8888/api/events/$id',
+      final res = await put('http://10.0.2.2:8888/api/events/$id',
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -116,8 +116,7 @@ class EventInfoModel {
   // id: the id of the event that you want to get the information of
   // token: string that is used to validate that the api call is coming from our application
   Future<EventInfo> fetchEventInfo(int id, String token) async {
-    final response =
-        await get('http://34.75.44.166:8888/api/events/$id', headers: {
+    final response = await get('http://10.0.2.2:8888/api/events/$id', headers: {
       'Accept': 'application/json',
       'Authorization': 'Bearer $token',
     });
@@ -135,7 +134,7 @@ class EventInfoModel {
   // token: string that is used to validate that the api call is coming from our application
   Future<List<EventInfo>> fetchUpcomingEvents(int userId, String token) async {
     final response =
-        await get('http://34.75.44.166:8888/api/allEvents/$userId', headers: {
+        await get('http://10.0.2.2:8888/api/allEvents/$userId', headers: {
       'Accept': 'application/json',
       'Authorization': 'Bearer $token',
     });
@@ -153,7 +152,7 @@ class EventInfoModel {
   // token: string that is used to validate that the api call is coming from our application
   Future<List<User>> fetchAttendees(int eventId, String token) async {
     final response = await get(
-        'http://34.75.44.166:8888/api/events/attendees/$eventId',
+        'http://10.0.2.2:8888/api/events/attendees/$eventId',
         headers: {
           'Accept': 'application/json',
           'Authorization': 'Bearer $token',
@@ -169,7 +168,7 @@ class EventInfoModel {
 
   Future<bool> registerForEvent(int eventId, String token) async {
     try {
-      final res = await post('http://34.75.44.166:8888/api/events/attendees',
+      final res = await post('http://10.0.2.2:8888/api/events/attendees',
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',

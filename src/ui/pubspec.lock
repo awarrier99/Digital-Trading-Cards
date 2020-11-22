@@ -90,6 +90,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.2.2"
+  flutter_linkedin:
+    dependency: "direct main"
+    description:
+      name: flutter_linkedin
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.2"
   flutter_staggered_grid_view:
     dependency: transitive
     description:
@@ -109,6 +116,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.8.8"
+  flutter_webview_plugin:
+    dependency: transitive
+    description:
+      name: flutter_webview_plugin
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.11"
   http:
     dependency: "direct main"
     description:
