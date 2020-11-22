@@ -34,44 +34,62 @@ Client: Christen Steele
 * Messaging bug: Messages don’t update in real-time. New messages do appear on page refresh/reload.
 
 # Install Guide: 
+
 **Pre-requisites:** 
+
 Since we have not uploaded our application to the Google Play store or App Store, the customer can download the project folder from the repository. The customer will need a laptop that can run mobile application development. The customer will also need an iOS or android emulator to run the application on if they do not have an external mobile device they can connect the application to. 
 
 **Dependent libraries that must be installed:**
+
 Third party software that must be installed for our software to function is the Flutter SDK, Dart, and Aqueduct. 
+
 Flutter SDK - https://flutter.dev/docs/get-started/install
+
 Dart - https://dart.dev/get-dart
+
 Aqueduct - https://aqueduct.io/docs/getting_started/
 
 **Download instructions**
+
 Until we upload our application to the Google Play store and App store, customers interested in our project can contact us to be given access to the repository of the code. Once given access, customer’s can then clone the folder and run the application either through a connected mobile device or an emulator. 
 
 **Build instructions**
+
 To build the application the users will simply need to download or clone the repo folder on to their local machine and follow the run instructions to run the application. 
 
 ### Installation of actual application
+
 From the source code of our repository, the user will need to have all the directories located in the src folder of our repository. 
 
 **Run instructions**
+
 To execute the software, the customer should first either start up an emulator or connect a mobile device to their computer. Once a device is connected, then the customer should open two command prompts (or terminals). In one prompt, the customer should navigate to the src/ui directory and then run ‘flutter run’ if a device is running and connected. If the customer needs to connect an emulator the customer can run the command ‘flutter emulators --create [emulator-name]’, ‘‘flutter emulators --launch [emulator-name]’, and finally ‘flutter run’. After running ‘flutter run’, the application should run on the connected device and the user should see the Wisteria home page. 
 If the customer wishes to run the server, they can navigate to the src/server directory in the other prompt and run the command 'aqueduct serve’. 
 
 **Troubleshooting:**
+
 Make sure environment paths are set correctly for Flutter SDK and the dart bin, as well as packages installed for both. 
 https://dartcode.org/docs/configuring-path-and-environment-variables/#:~:text=Windows,edit%20or%20add%20new%20ones.
 
 *Adjusting Path*
+
 Windows OS:
 https://flutter.dev/docs/get-started/install/windows
+
 Mac OS:
 https://flutter.dev/docs/get-started/install/macos
 
 ## Credits
 Noah Le - noah3@gatech.edu
+
 Mariana Matias - mariana@gatech.edu
+
 Pratik Nallamotu - pratiknallamotu@gatech.edu
+
 Matt Oliver - moliver39@gatech.edu
+
 Patrick Ufer - pufer3@gatech.edu
+
 Ashvin Warrier - awarrier@gatech.edu
 
 ## Good code practices
