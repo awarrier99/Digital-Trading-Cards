@@ -56,37 +56,19 @@ class _ViewSavedCardState extends State<ViewSavedCard> {
                           cardData.volunteering.isNotEmpty);
                   children = [
                     TradingCard(snapshot.data, currentUser: false),
-                    SizedBox(),
-                    Container(
-                      margin: EdgeInsets.fromLTRB(60, 0, 60, 0),
-                      height: 40,
-                      child: Material(
-                        borderRadius: BorderRadius.circular(20),
-                        shadowColor: Palette.secondary,
-                        color: Palette.primary,
-                        elevation: 7,
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        Messaging(widget.userId)));
-                          },
-                          child: Center(
-                            child: Text(
-                              'Message',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'Montserrat'),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(),
-                    SizedBox()
+                    SizedBox(height: 10),
+                    RoundedButton(
+                        "Message",
+                        Palette.primary,
+                        () => {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          Messaging(widget.userId)))
+                            },
+                        false),
+                    SizedBox(height: 30),
                   ];
                 } else if (snapshot.hasError) {
                   children = [

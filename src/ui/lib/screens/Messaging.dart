@@ -26,15 +26,16 @@ class _MessagingState extends State<Messaging> {
   int receiverId;
   String messageText;
   List<Message> messages = [];
+  bool isThinking = true;
   var _controller = TextEditingController();
 
   getMessages(MessageModel messageModel, int senderId, int receiverId,
       String token) async {
     // var allEvents = await eventInfoModel.fetchUpcomingEvents(
     //     userModel.currentUser.id, userModel.token);
-    var allEvents =
+    var allMessages =
         await messageModel.fetchMessages(senderId, receiverId, token);
-    return allEvents;
+    return allMessages;
   }
 
   @override
@@ -47,6 +48,7 @@ class _MessagingState extends State<Messaging> {
     getMessages(messageModel, userModel.currentUser.id, widget.receiverId,
             userModel.token)
         .then((data) {
+      isThinking = false;
       setState(() {
         messages.addAll(data);
       });
@@ -91,13 +93,19 @@ class _MessagingState extends State<Messaging> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      body: Container(
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(
+          "Direct Message",
+          style: TextStyle(fontFamily: 'Montserrat'),
+        ),
+      ),
+      body: isThinking
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : Column(
+              mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
                 messages.length > 0
                     ? Expanded(
@@ -113,19 +121,24 @@ class _MessagingState extends State<Messaging> {
                               return GestureDetector(
                                 onTap: () {},
                                 child: Container(
-                                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                                  child: Text(messages[index].text),
-                                ),
+                                    padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          messages[index].senderId == receiverId
+                                              ? MainAxisAlignment.end
+                                              : MainAxisAlignment.start,
+                                      children: [
+                                        Text(messages[index].text),
+                                      ],
+                                    )),
                               );
                             }),
                       )
-                    : Center(
-                        child: CircularProgressIndicator(),
-                      ),
+                    : SizedBox(),
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 8.0),
                   height: 50.0,
-                  color: Colors.white,
+                  color: Palette.lightGray,
                   child: Row(
                     children: <Widget>[
                       Expanded(
@@ -144,41 +157,16 @@ class _MessagingState extends State<Messaging> {
                                 FocusScope.of(context).unfocus();
                                 _controller.clear();
                               },
-                              // onPressed: () => _controller.clear(),
                               icon: Icon(Icons.send),
                             ),
                           ),
                         ),
-                        // TextField(
-                        //   textCapitalization: TextCapitalization.sentences,
-                        //   onChanged: (value) {
-                        //     _changeText(value);
-                        //   },
-                        //   decoration: InputDecoration.collapsed(
-                        //     hintText: 'Send a message...',
-                        //   ),
-                        // ),
                       ),
-                      // IconButton(
-                      //   icon: Icon(Icons.send),
-                      //   iconSize: 25.0,
-                      //   color: Theme.of(context).primaryColor,
-                      //   onPressed: () {
-                      //     setState(() {
-                      //       _sendMessage();
-                      //     });
-                      //     FocusScope.of(context).unfocus();
-                      //     _changeText(" ");
-                      //   },
-                      // ),
                     ],
                   ),
                 ),
               ],
             ),
-          ),
-        ),
-      ),
     );
   }
 }
