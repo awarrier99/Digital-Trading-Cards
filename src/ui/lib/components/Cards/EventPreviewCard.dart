@@ -74,9 +74,9 @@ class _EventPreviewState extends State<EventPreviewCard> {
                   children: [
                     FittedBox(
                       fit: BoxFit.fitWidth,
-                      child:
-                          ListView(scrollDirection: Axis.horizontal, children: [
-                        AutoSizeText(
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: AutoSizeText(
                           widget.data.eventName,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
@@ -85,7 +85,7 @@ class _EventPreviewState extends State<EventPreviewCard> {
                           ),
                           maxLines: 2,
                         ),
-                      ]),
+                      ),
                     ),
                   ],
                 ),
