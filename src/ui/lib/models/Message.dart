@@ -44,7 +44,7 @@ class MessageModel {
   Future<List<Message>> fetchMessages(
       int senderId, int receiverId, String token) async {
     final response = await get(
-        'http://10.0.2.2:8888/api/messaging/$senderId/$receiverId',
+        'http://34.75.44.166:8888/api/messaging/$senderId/$receiverId',
         headers: {
           'Accept': 'application/json',
           'Authorization': 'Bearer $token',
@@ -62,7 +62,7 @@ class MessageModel {
       String text, String token) async {
     try {
       print(text);
-      final res = await post('http://10.0.2.2:8888/api/messaging',
+      final res = await post('http://34.75.44.166:8888/api/messaging',
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
