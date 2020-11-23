@@ -5,6 +5,7 @@ import 'package:ui/models/CardInfo.dart';
 import 'package:ui/models/ConnectionInfo.dart';
 import 'package:ui/models/Global.dart';
 import 'package:ui/models/User.dart';
+import 'package:ui/screens/ViewSavedCard.dart';
 
 import '../components/Cards/SummaryCard.dart';
 
@@ -284,8 +285,13 @@ class _ViewSavedCardsState extends State<ViewSavedCards> {
                                 itemBuilder: (BuildContext context, int index) {
                                   return GestureDetector(
                                     onTap: () {
-                                      // Navigator.of(context).pushNamed(Country.routeName,
-                                      //     arguments: filteredUsers[index]);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => ViewSavedCard(
+                                              filteredUsers[index].user.id),
+                                        ),
+                                      );
                                     },
                                     child: Container(
                                       padding:

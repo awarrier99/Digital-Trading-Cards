@@ -33,8 +33,8 @@ class _ViewEventsState extends State<ViewEvents> {
       bool isCurrentUser) async {
     // var allEvents = await eventInfoModel.fetchUpcomingEvents(
     //     userModel.currentUser.id, userModel.token);
-    var allEvents =
-        await eventInfoModel.fetchUpcomingEvents(1, userModel.token);
+    var allEvents = await eventInfoModel.fetchUpcomingEvents(
+        userModel.currentUser.id, userModel.token);
     return allEvents;
   }
 
@@ -121,7 +121,6 @@ class _ViewEventsState extends State<ViewEvents> {
                 )
               : TextField(
                   onChanged: (value) {
-                    print("searchSelected");
                     _filterEvents(value);
                   },
                   style: TextStyle(color: Colors.white),

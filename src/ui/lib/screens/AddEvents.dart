@@ -115,7 +115,6 @@ class _AddEvents extends State<AddEvents> {
                                 final eventModel = globalModel.eventInfoModel;
                                 final userModel = globalModel.userModel;
                                 _eventsInfoModel.owner = userModel.currentUser;
-                                print(_eventsInfoModel.toJson());
                                 eventModel.eventInfo
                                     .fromEvent(_eventsInfoModel);
                                 eventModel
