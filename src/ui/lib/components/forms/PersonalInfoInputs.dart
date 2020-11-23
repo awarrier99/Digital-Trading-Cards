@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:ui/components/TextInput.dart';
 import 'package:ui/components/forms/DropdownFormField.dart';
 import 'package:ui/palette.dart';
 import 'package:ui/SizeConfig.dart';
 
 import '../../models/CardInfo.dart';
 import '../../models/User.dart';
+
+// This form widget contains input widgetst that allows for user's to
+// enter in their basic personal information to create an account.
 
 // Create a Form widget.
 class PersonalInfoInputs extends StatefulWidget {
@@ -47,13 +50,14 @@ class PersonalInfoInputsState extends State<PersonalInfoInputs> {
               Visibility(
                 visible: true,
                 child: Text('Personal Information',
-                    style: TextStyle(fontSize: 20, color: Palette.darkGreen)),
+                    style: TextStyle(fontSize: 20, color: Palette.primary)),
               ),
               SizedBox(height: SizeConfig.safeBlockVertical * 2),
-              TextFormField(
-                  textInputAction: TextInputAction.next,
+              TextInput(
                   decoration: InputDecoration(
-                      labelText: 'First Name*', border: OutlineInputBorder()),
+                    labelText: 'First Name*',
+                    border: OutlineInputBorder(),
+                  ),
                   textCapitalization: TextCapitalization.words,
                   validator: (value) {
                     if (value.isEmpty) {
@@ -64,13 +68,12 @@ class PersonalInfoInputsState extends State<PersonalInfoInputs> {
                   onChanged: (value) {
                     widget.model.firstName = value;
                   },
-                  onFieldSubmitted: (term) {
+                  onEditingComplete: () {
                     FocusScope.of(context).requestFocus(lastNameNode);
                   }),
               SizedBox(height: SizeConfig.safeBlockVertical * 2),
-              TextFormField(
+              TextInput(
                   focusNode: lastNameNode,
-                  textInputAction: TextInputAction.next,
                   decoration: InputDecoration(
                       labelText: 'Last Name*', border: OutlineInputBorder()),
                   textCapitalization: TextCapitalization.words,
@@ -83,13 +86,12 @@ class PersonalInfoInputsState extends State<PersonalInfoInputs> {
                   onChanged: (value) {
                     widget.model.lastName = value;
                   },
-                  onFieldSubmitted: (term) {
+                  onEditingComplete: () {
                     FocusScope.of(context).requestFocus(emailNode);
                   }),
               SizedBox(height: SizeConfig.safeBlockVertical * 2),
-              TextFormField(
+              TextInput(
                   focusNode: emailNode,
-                  textInputAction: TextInputAction.next,
                   decoration: InputDecoration(
                       labelText: 'Email*', border: OutlineInputBorder()),
                   keyboardType: TextInputType.emailAddress,
@@ -102,13 +104,12 @@ class PersonalInfoInputsState extends State<PersonalInfoInputs> {
                   onChanged: (value) {
                     widget.model.username = value;
                   },
-                  onFieldSubmitted: (term) {
+                  onEditingComplete: () {
                     FocusScope.of(context).requestFocus(countryNode);
                   }),
               SizedBox(height: SizeConfig.safeBlockVertical * 2),
-              TextFormField(
+              TextInput(
                   focusNode: countryNode,
-                  textInputAction: TextInputAction.next,
                   decoration: InputDecoration(
                       labelText: 'Country*', border: OutlineInputBorder()),
                   textCapitalization: TextCapitalization.words,
@@ -121,13 +122,12 @@ class PersonalInfoInputsState extends State<PersonalInfoInputs> {
                   onChanged: (value) {
                     widget.model.country = value;
                   },
-                  onFieldSubmitted: (term) {
+                  onEditingComplete: () {
                     FocusScope.of(context).requestFocus(stateNode);
                   }),
               SizedBox(height: SizeConfig.safeBlockVertical * 2),
-              TextFormField(
+              TextInput(
                   focusNode: stateNode,
-                  textInputAction: TextInputAction.next,
                   decoration: InputDecoration(
                       labelText: 'State*', border: OutlineInputBorder()),
                   textCapitalization: TextCapitalization.words,
@@ -140,13 +140,12 @@ class PersonalInfoInputsState extends State<PersonalInfoInputs> {
                   onChanged: (value) {
                     widget.model.state = value;
                   },
-                  onFieldSubmitted: (term) {
+                  onEditingComplete: () {
                     FocusScope.of(context).requestFocus(cityNode);
                   }),
               SizedBox(height: SizeConfig.safeBlockVertical * 2),
-              TextFormField(
+              TextInput(
                   focusNode: cityNode,
-                  textInputAction: TextInputAction.next,
                   decoration: InputDecoration(
                       labelText: 'City*', border: OutlineInputBorder()),
                   textCapitalization: TextCapitalization.words,
@@ -158,12 +157,14 @@ class PersonalInfoInputsState extends State<PersonalInfoInputs> {
                   },
                   onChanged: (value) {
                     widget.model.city = value;
+                  },
+                  onEditingComplete: () {
+                    FocusScope.of(context).requestFocus(passwordNode);
                   }),
               SizedBox(height: SizeConfig.safeBlockVertical * 2),
-              TextFormField(
+              TextInput(
                   obscureText: true,
                   focusNode: passwordNode,
-                  textInputAction: TextInputAction.next,
                   decoration: InputDecoration(
                       labelText: 'Password*', border: OutlineInputBorder()),
                   textCapitalization: TextCapitalization.words,

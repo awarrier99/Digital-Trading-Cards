@@ -2,18 +2,41 @@ import 'package:flutter/material.dart';
 import 'package:ui/components/forms/EducationInputs.dart';
 import 'package:ui/SizeConfig.dart';
 import 'package:provider/provider.dart';
+import 'package:ui/models/Global.dart';
 import '../components/forms/DynamicForm.dart';
 import './CreateCard2.dart';
 import '../palette.dart';
 import '../models/CardInfo.dart';
 
-class CreateCard1 extends StatelessWidget {
+// UI screen for adding Education info for a new user's card
+// Includes DynamicForm which allows users to add multiple form entries
+
+class CreateCard1 extends StatefulWidget {
+  final BuildContext context;
+
+  CreateCard1({this.context});
+
+  @override
+  CreateCard1State createState() => CreateCard1State();
+}
+
+class CreateCard1State extends State<CreateCard1> {
   final _createCard1FormKey = GlobalKey<FormState>();
-  final educationInputsModel = <Education>[];
+  List<Education> educationInputsModel;
+  bool isEditing;
+
+  @override
+  void initState() {
+    super.initState();
+    final globalModel = widget.context.read<GlobalModel>();
+    final currentCard = globalModel.cardInfoModel.currentUserCardInfo;
+    educationInputsModel = currentCard.education ?? [];
+    isEditing = globalModel.cardInfoModel.isEditing;
+  }
 
   Future nextStep(context) async {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => CreateCard2()));
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => CreateCard2(context: context)));
   }
 
   @override
@@ -36,21 +59,29 @@ class CreateCard1 extends StatelessWidget {
                           inputBuilder: (model) =>
                               EducationInputs(model: model),
                           dynamicModelList: educationInputsModel,
-                          dynamicModelBuilder: () => Education()),
+                          dynamicModelBuilder: () => Education(),
+                          onDelete: (idx) {
+                            final globalModel = context.read<GlobalModel>();
+                            final id = educationInputsModel[idx]?.id;
+                            if (isEditing && id != null)
+                              globalModel.cardInfoModel.deleteLists['education']
+                                  .add(educationInputsModel[idx]);
+                          }),
                       SizedBox(
                           width: SizeConfig.screenWidth,
                           child: RaisedButton(
                               child: Text('Next'),
                               textColor: Colors.white,
-                              color: Palette.primaryGreen,
+                              color: Palette.primary,
                               onPressed: () {
                                 if (_createCard1FormKey.currentState
                                     .validate()) {
+                                  final globalModel =
+                                      context.read<GlobalModel>();
                                   final cardInfoModel =
-                                      context.read<CardInfoModel>();
+                                      globalModel.cardInfoModel;
                                   cardInfoModel
                                       .updateEducation(educationInputsModel);
-                                  print(cardInfoModel.createUser.toJson());
                                   nextStep(context);
                                 }
                               }))

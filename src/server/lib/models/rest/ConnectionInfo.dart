@@ -2,56 +2,55 @@ import 'package:meta/meta.dart';
 
 import '../../server.dart';
 
+// represents a user's connection info
 class ConnectionInfo extends Serializable {
-  ConnectionInfo(
+  ConnectionInfo();
+
+  ConnectionInfo.create(
       {@required this.user,
       @required this.connections,
-      @required this.connectedUsers}
-      );
+      @required this.connectionCards});
 
   User user;
   List<Connection> connections;
-  List<User> connectedUsers;
+  List<CardInfo> connectionCards;
 
+  // serializes a class instance into a JSON response payload
   @override
   Map<String, dynamic> asMap() {
     return {
-      "user": user.asMap(),
-      "connections": connections.map((e) => e.asMap()).toList(),
-      "connectedUsers": connectedUsers.map((e) => e.asMap()).toList(),
+      'user': user.asMap(),
+      'connections': connections.map((e) => e.asMap()).toList(),
+      'connectionCards': connectionCards.map((e) => e.asMap()).toList()
     };
   }
 
+  // serializes the JSON request payload into a class instance
   @override
   void readFromMap(Map<String, dynamic> object) {
-    final userMap = object['user'] as Map<String, dynamic>;
-    final connectionList = object['connections'] as List;
-    final connectedUsersList = object['connectedUsers'] as List;
-
-    connections = connectionList
-        .map((e) => Connection()
-        ..readFromMap(e as Map<String, dynamic>)).toList();
-
-    connectedUsers = connectedUsersList
-        .map((e) => User()
-        ..readFromMap(e as Map<String, dynamic>)).toList();
+    user = User.fromMap(object['user'] as Map<String, dynamic>);
+    final connectionsList = object['connections'] as List;
+    connections = connectionsList
+        .map((e) => Connection()..readFromMap(e as Map<String, dynamic>))
+        .toList();
+    final connectionCardsList = object['connectionCards'] as List;
+    connectionCards = connectionCardsList
+        .map((e) => CardInfo()..readFromMap(e as Map<String, dynamic>))
+        .toList();
   }
 
-  static Future<void> create(ConnectionInfo connectionInfo) async {
-    final List<Future> futures = [];
-    await connectionInfo.user.save();
-    futures.add(Future.forEach(connectionInfo.connections,
-            (Connection e) => Connection.create(user1: e.user1, user2: e.user2)..save()));
-    futures.add(Future.forEach(connectionInfo.connectedUsers,
-            (User e) => User.get(e.id)));
-    await Future.wait(futures);
-  }
-
-  static Future<ConnectionInfo> get(User user) async {
-    return ConnectionInfo(
+  // get a list of a user's connections and their cards
+  static Future<ConnectionInfo> getByUser(User user, {bool onlyPending, bool incoming}) async {
+    List<Connection> connections;
+    if (onlyPending) {
+      connections = await Connection.getPending(user, incoming: incoming);
+    } else {
+      connections = await Connection.getByUser(user);
+    }
+    final connectionCards = await Connection.getConnectionCards(user, connections);
+    return ConnectionInfo.create(
         user: user,
-        connections: await Connection.getByUser(user),
-        connectedUsers: await Connection.getOtherUsers(user)
-    );
+        connections: connections,
+        connectionCards: connectionCards);
   }
 }

@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 
+// This widget is used as resuable dropdown element in our other forms
+
 class DropdownFormField extends StatefulWidget {
   final List<String> data;
+  final String initialValue;
   final Function onChanged;
 
-  DropdownFormField(this.data, {this.onChanged});
+  DropdownFormField(this.data, {this.onChanged, this.initialValue});
   // DropdownFormField({Key key}) : super(key: key);
 
   @override
@@ -17,7 +20,7 @@ class _DropdownFormFieldState extends State<DropdownFormField> {
   @override
   void initState() {
     super.initState();
-    dropdownValue = widget.data[0];
+    dropdownValue = widget.initialValue ?? widget.data[0];
   }
 
   @override

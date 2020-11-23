@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ui/RouteGenerator.dart';
-import 'package:ui/models/CardInfo.dart';
-import 'package:ui/models/User.dart';
-import 'package:ui/models/ConnectionInfo.dart';
+import 'package:ui/models/Global.dart';
 
 import 'palette.dart';
 
@@ -11,28 +9,20 @@ void main() {
   runApp(MyApp());
 }
 
+// This main class is the entry point of the application
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        Provider<CardInfoModel>(
-          create: (context) => CardInfoModel(),
-        ),
-        Provider<UserModel>(create: (context) => UserModel()),
-        Provider<ConnectionInfoModel>(
-            create: (context) => ConnectionInfoModel())
-      ],
-      child: MaterialApp(
-        title: 'Wisteria',
-        theme: ThemeData(
-          primarySwatch: Colors.green,
-          primaryColor: Palette.primaryGreen,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-        ),
-        initialRoute: '/',
-        onGenerateRoute: RouteGenerator.generateRoute,
-      ),
-    );
+    return Provider<GlobalModel>(
+        create: (context) => GlobalModel(),
+        child: MaterialApp(
+            title: 'Wisteria',
+            theme: ThemeData(
+              primarySwatch: Colors.deepPurple,
+              primaryColor: Palette.primary,
+              visualDensity: VisualDensity.adaptivePlatformDensity,
+            ),
+            initialRoute: '/',
+            onGenerateRoute: RouteGenerator.generateRoute));
   }
 }

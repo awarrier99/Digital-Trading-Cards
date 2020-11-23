@@ -8,31 +8,46 @@ import 'package:ui/palette.dart';
 import 'SubForm.dart';
 import '../inheritedWidgets/SubFormInheritedWidget.dart';
 
+// this widget a dynamic form that is reusable and takes in different
+// subforms that house custom input forms that we have created.
+// For example, EducationInputs.dart, PersonalInfoInputs.dart, etc.
+// would be placed in a subform and then the subform would act like
+// different sections in a form.
+
 class DynamicForm extends StatefulWidget {
   final String title;
   final Function inputBuilder;
   final List dynamicModelList;
   final Function dynamicModelBuilder;
+  final Function onDelete;
 
-  DynamicForm({
-    @required this.title,
-    @required this.inputBuilder,
-    this.dynamicModelList,
-    this.dynamicModelBuilder
-  });
+  DynamicForm(
+      {@required this.title,
+      @required this.inputBuilder,
+      this.dynamicModelList,
+      this.dynamicModelBuilder,
+      this.onDelete});
 
   @override
   _DynamicFormState createState() => _DynamicFormState();
 }
 
 class _DynamicFormState extends State<DynamicForm> {
-  int index = 0;
+  int index;
   final _formKey = GlobalKey<FormState>();
 
-  callback() {
+  @override
+  void initState() {
+    super.initState();
+    index = widget.dynamicModelList?.length ?? 0;
+  }
+
+  callback(int idx) {
     setState(() {
+      if (widget.onDelete != null) widget.onDelete(idx);
+      if (widget.dynamicModelList != null)
+        widget.dynamicModelList.removeAt(idx);
       index--;
-      if (widget.dynamicModelList != null) widget.dynamicModelList.removeLast();
     });
   }
 
@@ -49,7 +64,7 @@ class _DynamicFormState extends State<DynamicForm> {
                       widget.title,
                       style: TextStyle(
                           fontSize: SizeConfig.safeBlockHorizontal * 4.2,
-                          color: Palette.darkGreen),
+                          color: Palette.primary),
                     ),
                   ]),
                   for (int i = 0; i < index; i++)
@@ -57,7 +72,9 @@ class _DynamicFormState extends State<DynamicForm> {
                       subTitle: widget.title,
                       index: (i + 1),
                       callback: callback,
-                      subModel: widget.dynamicModelList == null ? null : widget.dynamicModelList[i],
+                      subModel: widget.dynamicModelList == null
+                          ? null
+                          : widget.dynamicModelList[i],
                     ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -71,7 +88,8 @@ class _DynamicFormState extends State<DynamicForm> {
                             }
                           });
                           if (widget.dynamicModelList != null)
-                            widget.dynamicModelList.add(widget.dynamicModelBuilder());
+                            widget.dynamicModelList
+                                .add(widget.dynamicModelBuilder());
                         },
                         child: Row(
                           children: [

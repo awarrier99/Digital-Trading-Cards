@@ -1,9 +1,8 @@
+import 'dart:convert';
+import 'package:http/http.dart';
 import 'package:ui/models/CardInfo.dart';
 
-import 'package:http/http.dart';
-
-import 'dart:convert';
-
+// User is a model that will hold all information relevent to a users account information
 class User {
   int id;
   String firstName;
@@ -42,18 +41,20 @@ class User {
     return map;
   }
 
-  void fromJson(Map<String, dynamic> map) {
-    id = map['id'];
-    firstName = map['firstName'];
-    lastName = map['lastName'];
-    username = map['username'];
-    country = map['country'];
-    state = map['state'];
-    city = map['city'];
-    type = map['type'];
+  void fromJson(Map<String, dynamic> json) {
+    json = json ?? {};
+    id = json['id'];
+    firstName = json['firstName'];
+    lastName = json['lastName'];
+    username = json['username'];
+    country = json['country'];
+    state = json['state'];
+    city = json['city'];
+    type = json['type'];
   }
 }
 
+// the user Model is used for making api calls regarding users account information
 class UserModel {
   User _currentUser;
   String _token;
@@ -61,9 +62,11 @@ class UserModel {
   User get currentUser => _currentUser;
   String get token => _token;
 
+  // sends a post call to the API to create a user
+  // token is a string that is used to validate that the api call is coming from our application
   Future<bool> createUser() async {
     try {
-      final res = await post('http://10.0.2.2:8888/api/users',
+      final res = await post('http://34.75.44.166:8888/api/users',
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
@@ -81,9 +84,10 @@ class UserModel {
     }
   }
 
-  Future<User> login() async {
+  // logs in a user
+  Future<bool> login() async {
     // TODO: add try/catch, strip whitespace
-    final res = await post('http://10.0.2.2:8888/api/users/login',
+    final res = await post('http://34.75.44.166:8888/api/users/login',
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
@@ -91,13 +95,18 @@ class UserModel {
         body: json.encode(_currentUser.toJson()));
     final body = json.decode(res.body);
     final success = body['success'];
-    if (!success) return null;
+    if (!success) return false;
 
     final token = body['token'] as String;
     _token = token;
     final user = body['user'];
     _currentUser = User()..fromJson(user);
-    return _currentUser;
+    return true;
+  }
+
+  void empty() {
+    _currentUser = null;
+    _token = null;
   }
 
   void updateUser(User user) {

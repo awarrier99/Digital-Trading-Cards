@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ui/RouteGenerator.dart';
-import 'package:ui/components/SearchBar.dart';
 
+// This widget supports the bottom navigation bar seen on most pages
 class NavigationBar extends StatefulWidget {
   @override
   _NavigationBarState createState() => _NavigationBarState();
@@ -9,24 +9,28 @@ class NavigationBar extends StatefulWidget {
 
 class _NavigationBarState extends State<NavigationBar> {
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
-  int _currentIndex = 1;
+  int _currentIndex = 0;
 
   Widget _bottomNavigationBar() {
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
       items: [
         BottomNavigationBarItem(
-          icon: Icon(Icons.bookmark),
-          title: Text("Saved Cards"),
-        ),
-        BottomNavigationBarItem(
           icon: Icon(Icons.home),
-          title: Text("Home"),
+          label: 'Home',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.add),
-          title: Text("Add Card"),
+          label: 'Add Card',
         ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.bookmark),
+          label: 'Saved',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.calendar_today),
+          label: 'Events',
+        )
       ],
       onTap: _onTap,
       currentIndex: _currentIndex,
@@ -36,13 +40,16 @@ class _NavigationBarState extends State<NavigationBar> {
   _onTap(int tabIndex) {
     switch (tabIndex) {
       case 0:
-        _navigatorKey.currentState.pushReplacementNamed("/savedCards");
-        break;
-      case 1:
         _navigatorKey.currentState.pushReplacementNamed("/home");
         break;
+      case 1:
+        _navigatorKey.currentState.pushReplacementNamed("/addCard");
+        break;
       case 2:
-        showSearch(context: context, delegate: StudentCardSearch(false));
+        _navigatorKey.currentState.pushReplacementNamed("/savedCards");
+        break;
+      case 3:
+        _navigatorKey.currentState.pushReplacementNamed("/viewEvents");
         break;
     }
     setState(() {
@@ -56,7 +63,7 @@ class _NavigationBarState extends State<NavigationBar> {
       body: Navigator(
           key: _navigatorKey,
           initialRoute: '/home',
-          onGenerateRoute: RouteGenerator.generateRoute),
+          onGenerateRoute: RouteGenerator.generateNavigationBarRoute),
       bottomNavigationBar: _bottomNavigationBar(),
     );
   }

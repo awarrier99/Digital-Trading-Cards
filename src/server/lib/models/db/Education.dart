@@ -4,6 +4,7 @@ import '../../server.dart';
 
 enum Degree { associate, bachelor, master, doctoral }
 
+// convert an enum to a string
 String degreeToString(Degree degree) {
   switch (degree) {
     case Degree.associate:
@@ -17,6 +18,7 @@ String degreeToString(Degree degree) {
   }
 }
 
+// convert a string to an enum
 Degree stringToDegree(String string) {
   switch (string) {
     case 'Associate':
@@ -30,6 +32,7 @@ Degree stringToDegree(String string) {
   }
 }
 
+// represents education experience for a user
 class Education extends Serializable {
   Education();
 
@@ -51,6 +54,7 @@ class Education extends Serializable {
   DateTime startDate;
   DateTime endDate;
 
+  // serializes a class instance into a JSON response payload
   @override
   Map<String, dynamic> asMap() {
     return {
@@ -65,15 +69,13 @@ class Education extends Serializable {
     };
   }
 
+  // serializes the JSON request payload into a class instance
   @override
   void readFromMap(Map<String, dynamic> object) {
+    id = object['id'] as int;
     if (user == null) {
       final userMap = object['user'] as Map<String, dynamic>;
-      if (stringToUserType(userMap['type'] as String) == UserType.student) {
-        user = Student()..readFromMap(userMap);
-      } else {
-        user = Recruiter()..readFromMap(userMap);
-      }
+      user = User.fromMap(userMap);
     }
     institution = Institution()
       ..readFromMap(object['institution'] as Map<String, dynamic>);
@@ -90,14 +92,11 @@ class Education extends Serializable {
         : DateTime.parse(endDateStr);
   }
 
-  Future<void> save() async {
+  // save or update a class instance in the database
+  Future<void> save({bool allowUpdate = true}) async {
     try {
-      const sql = '''
-        INSERT INTO education
-        (user, institution, degree, field, current, start_date, end_date)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
-      ''';
-      await ServerChannel.db.query(sql, [
+      String sql;
+      final values = [
         user.id,
         institution.name,
         degreeToString(degree),
@@ -105,7 +104,34 @@ class Education extends Serializable {
         current,
         startDate.toUtc(),
         endDate?.toUtc()
-      ]);
+      ];
+      if (id == null) {
+        // if the id isn't set, create a new row
+        sql = '''
+          INSERT INTO education
+          (user, institution, degree, field, current, start_date, end_date)
+          VALUES (?, ?, ?, ?, ?, ?, ?)
+        ''';
+      } else if (allowUpdate) {
+        // if the id is set, update the properties
+        sql = '''
+          UPDATE education
+          SET institution = ?,
+            degree = ?,
+            field = ?,
+            current = ?,
+            start_date = ?,
+            end_date = ?
+          WHERE id = ?
+        ''';
+        values.removeAt(0);
+        values.add(id);
+      } else {
+        return;
+      }
+
+      final results = await ServerChannel.db.query(sql, values);
+      id ??= results.insertId;
     } catch (err, stackTrace) {
       logError(err,
           stackTrace: stackTrace,
@@ -114,6 +140,29 @@ class Education extends Serializable {
     }
   }
 
+  // delete a class instance from the database
+  Future<void> delete() async {
+    try {
+      if (id == null) {
+        print('Unsaved user education info cannot be deleted');
+        return;
+      }
+
+      const sql = '''
+        DELETE FROM education
+        WHERE id = ?
+      ''';
+
+      await ServerChannel.db.query(sql, [id]);
+    } catch (err, stackTrace) {
+      logError(err,
+          stackTrace: stackTrace,
+          message:
+              'An error occurred while trying to delete user education info:');
+    }
+  }
+
+  // get all of a user's education info
   static Future<List<Education>> getByUser(User user) async {
     try {
       const sql = '''
@@ -126,7 +175,9 @@ class Education extends Serializable {
           user: user,
           institution: await Institution.get(e['institution'] as String),
           degree: stringToDegree(e['degree'] as String),
-          field: Field.create(name: e['field'] as String),
+          field: Field.create(
+              name: e['field'] as String,
+              abbreviation: e['abbreviation'] as String),
           current: (e['current'] as int) == 1,
           startDate: (e['start_date'] as DateTime).toLocal(),
           endDate: (e['end_date'] as DateTime)?.toLocal())

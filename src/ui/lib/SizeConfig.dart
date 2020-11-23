@@ -1,5 +1,7 @@
 import 'package:flutter/widgets.dart';
 
+// This class is used to scale certain widgets by the size of the device's
+// screen
 class SizeConfig {
   static MediaQueryData _mediaQueryData;
   static double screenWidth;

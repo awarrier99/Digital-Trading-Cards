@@ -3,18 +3,23 @@ import 'package:ui/components/forms/ColorBadge.dart';
 import 'package:ui/components/inheritedWidgets/SubFormInheritedWidget.dart';
 import 'package:ui/palette.dart';
 
+// The subform is reusable and able to hold form widgets such as
+// EducationInputs, PersonalInfoInputs, etc.
+
+// Then the dynamic form can house multiple subform widgets to create a custom
+// form
+
 class SubForm extends StatefulWidget {
   final String subTitle;
   final int index;
   final Function callback;
   final subModel;
 
-  SubForm({
-    @required this.subTitle,
-    @required this.index,
-    @required this.callback,
-    this.subModel
-  });
+  SubForm(
+      {@required this.subTitle,
+      @required this.index,
+      @required this.callback,
+      this.subModel});
 
   @override
   _SubFormState createState() => _SubFormState();
@@ -38,7 +43,7 @@ class _SubFormState extends State<SubForm> {
               IconButton(
                 icon: Icon(Icons.delete_outline),
                 onPressed: () {
-                  widget.callback();
+                  widget.callback(widget.index - 1);
                 },
               ),
             ]),

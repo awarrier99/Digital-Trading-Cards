@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:ui/models/Global.dart';
 import 'package:ui/models/User.dart';
 
-import '../models/CardInfo.dart';
 import '../components/forms/PersonalInfoInputs.dart';
 import '../SizeConfig.dart';
 import '../palette.dart';
-import 'Home.dart';
-import 'dart:convert';
-import 'package:http/http.dart';
+import '../components/RoundedButton.dart';
+
+// UI screen for creating a new account
+// Includes a form called PersonalInfoInputs
 
 class CreateAccount extends StatelessWidget {
   final _personalInfoInputsKey = GlobalKey<FormState>();
@@ -21,36 +22,41 @@ class CreateAccount extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(
-            'Create Account',
-            style: TextStyle(fontFamily: 'Montserrat'),
+      appBar: AppBar(
+        title: Text(
+          'Create Account',
+          style: TextStyle(fontFamily: 'Montserrat'),
+        ),
+      ),
+      body: Container(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.all(20),
+          child: Form(
+            child: Column(
+              children: <Widget>[
+                PersonalInfoInputs(
+                  key: _personalInfoInputsKey,
+                  model: _personalInfoInputsModel,
+                ),
+                SizedBox(height: SizeConfig.safeBlockVertical * 1),
+                RoundedButton('Sign Up', Palette.primary, () {
+                  if (_personalInfoInputsKey.currentState.validate()) {
+                    final globalModel = context.read<GlobalModel>();
+                    final userModel = globalModel.userModel;
+                    final cardInfoModel = globalModel.cardInfoModel;
+                    userModel.updateUser(_personalInfoInputsModel);
+                    userModel.createUser().then((success) {
+                      if (success)
+                        cardInfoModel.updateUser(userModel.currentUser);
+                    });
+                    nextStep(context);
+                  }
+                }, false),
+              ],
+            ),
           ),
         ),
-        body: Container(
-            margin: EdgeInsets.all(20),
-            child: SingleChildScrollView(
-                child: Form(
-                    child: Column(children: <Widget>[
-              PersonalInfoInputs(
-                key: _personalInfoInputsKey,
-                model: _personalInfoInputsModel,
-              ),
-              SizedBox(height: SizeConfig.safeBlockVertical * 10),
-              SizedBox(
-                  child: RaisedButton(
-                      child: Text('Sign Up'),
-                      textColor: Colors.white,
-                      color: Palette.primaryGreen,
-                      onPressed: () {
-                        if (_personalInfoInputsKey.currentState.validate()) {
-                          final userModel = context.read<UserModel>();
-                          userModel.updateUser(_personalInfoInputsModel);
-                          userModel.createUser();
-                          print(userModel.currentUser.toJson());
-                          nextStep(context);
-                        }
-                      }))
-            ])))));
+      ),
+    );
   }
 }

@@ -1,14 +1,20 @@
-import 'dart:convert';
-
+import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 import 'package:ui/SizeConfig.dart';
+import 'package:ui/components/TextInput.dart';
 import 'package:ui/models/CardInfo.dart';
+import 'package:ui/models/Global.dart';
 import 'package:ui/screens/Home.dart';
+import '../components/RoundedButton.dart';
 
 import '../models/User.dart';
 import '../palette.dart';
+import 'package:flushbar/flushbar.dart';
+
+// The UI screen when a user first opens the app
+// Prompts the user to choose to login or create an account
 
 class WelcomeScreen extends StatefulWidget {
   final String title;
@@ -23,9 +29,10 @@ class WelcomeScreen extends StatefulWidget {
 }
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   FocusNode passwordNode = FocusNode();
-  FocusNode usernameNode = FocusNode();
   final User model = new User();
+  bool _isThinking = false;
 
   Future createAccount(context) async {
     Navigator.of(context).pushNamed('/createAccount');
@@ -35,11 +42,44 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     Navigator.of(context).pushNamed('/main');
   }
 
+  void login(BuildContext context) {
+    setState(() {
+      _isThinking = true;
+    });
+    final globalModel = context.read<GlobalModel>();
+    final userModel = globalModel.userModel;
+    final cardInfoModel = globalModel.cardInfoModel;
+    userModel.updateUser(model);
+    userModel.login().then((success) {
+      setState(() {
+        _isThinking = false;
+      });
+      if (success) {
+        final user = userModel.currentUser;
+        cardInfoModel.updateUser(user);
+        loginContext(context);
+      } else {
+        throw (Error());
+      }
+    }).catchError((error) {
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        title: "Incorrect email or password",
+        message: "Please double-check and try again!",
+        duration: Duration(seconds: 5),
+        margin: EdgeInsets.all(8),
+        borderRadius: 8,
+        backgroundColor: Color(0xffDF360E),
+      )..show(context);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
 
     return Scaffold(
+        key: _scaffoldKey,
         body: SingleChildScrollView(
             child: Container(
                 padding: EdgeInsets.fromLTRB(25, 0, 25, 0),
@@ -52,21 +92,23 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       child: Text(
                         widget.title,
                         style: TextStyle(
-                            fontSize: 60, fontWeight: FontWeight.bold),
+                            fontSize: 60,
+                            fontWeight: FontWeight.bold,
+                            color: Palette.secondary),
                       ),
                     )),
                     Container(
                         padding: EdgeInsets.only(top: 30, left: 20, right: 20),
                         child: Column(
                           children: <Widget>[
-                            TextFormField(
+                            TextInput(
                               keyboardType: TextInputType.emailAddress,
                               onChanged: (value) {
                                 model.username = value;
                               },
-                              onFieldSubmitted: (term) {
+                              onEditingComplete: () {
                                 FocusScope.of(context)
-                                    .requestFocus(usernameNode);
+                                    .requestFocus(passwordNode);
                               },
                               decoration: InputDecoration(
                                   labelText: 'EMAIL',
@@ -76,14 +118,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                       color: Colors.grey)),
                             ),
                             SizedBox(height: 20),
-                            TextFormField(
+                            TextInput(
+                              focusNode: passwordNode,
                               obscureText: true,
                               onChanged: (value) {
                                 model.password = value;
                               },
-                              onFieldSubmitted: (term) {
-                                FocusScope.of(context)
-                                    .requestFocus(passwordNode);
+                              onEditingComplete: () {
+                                login(context);
                               },
                               decoration: InputDecoration(
                                   labelText: 'PASSWORD',
@@ -93,62 +135,18 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                       color: Colors.grey)),
                             ),
                             SizedBox(height: 40),
-                            Container(
-                                height: 40,
-                                child: Material(
-                                  borderRadius: BorderRadius.circular(20),
-                                  shadowColor: Palette.primaryGreen,
-                                  color: Palette.primaryGreen,
-                                  elevation: 7,
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      final userModel =
-                                          context.read<UserModel>();
-                                      final cardInfoModel =
-                                          context.read<CardInfoModel>();
-                                      userModel.updateUser(model);
-                                      userModel.login().then((user) {
-                                        if (user != null) {
-                                          cardInfoModel.updateUser(user);
-                                          loginContext(context);
-                                        }
-                                      }).catchError((error) {
-                                        print('Caught $error');
-                                      });
-                                    },
-                                    child: Center(
-                                      child: Text(
-                                        'LOGIN',
-                                        style: TextStyle(
-                                            color: Colors.black87,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: 'Montserrat'),
-                                      ),
-                                    ),
-                                  ),
-                                )),
+                            RoundedButton('LOGIN', Palette.primary, () {
+                              if (!_isThinking) {
+                                login(context);
+                              }
+                            }, _isThinking),
                             SizedBox(height: 20),
-                            Container(
-                                height: 40,
-                                child: Material(
-                                  borderRadius: BorderRadius.circular(20),
-                                  color: Colors.black87,
-                                  elevation: 7,
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      createAccount(context);
-                                    },
-                                    child: Center(
-                                      child: Text(
-                                        'CREATE ACCOUNT',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: 'Montserrat'),
-                                      ),
-                                    ),
-                                  ),
-                                ))
+                            RoundedButton(
+                              'CREATE ACCOUNT',
+                              Palette.secondary,
+                              () => createAccount(context),
+                              false,
+                            ),
                           ],
                         ))
                   ],
