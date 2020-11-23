@@ -75,10 +75,10 @@ class Message extends Serializable {
     try {
       const sql = '''
           SELECT * FROM messages
-          WHERE senderId = ? AND receiverId = ? 
+          WHERE (senderId = ? AND receiverId = ?) OR (senderId = ? AND receiverId = ?)
           ORDER BY timestamp ASC
         ''';
-      final results = await ServerChannel.db.query(sql, [senderId, receiverId]);
+      final results = await ServerChannel.db.query(sql, [senderId, receiverId, receiverId, senderId]);
       print(results);
 
       final resultsList =

@@ -50,6 +50,7 @@ class _MessagingState extends State<Messaging> {
         .then((data) {
       isThinking = false;
       setState(() {
+        messages.clear();
         messages.addAll(data);
       });
     });
@@ -61,7 +62,6 @@ class _MessagingState extends State<Messaging> {
   void _changeText(value) {
     setState(() {
       messageText = value;
-      print(messageText);
     });
   }
 
@@ -82,6 +82,7 @@ class _MessagingState extends State<Messaging> {
                   userModel.token)
               .then((data) {
             setState(() {
+              messages.clear();
               messages.addAll(data);
             });
           });
@@ -124,7 +125,7 @@ class _MessagingState extends State<Messaging> {
                                     padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
                                     child: Row(
                                       mainAxisAlignment:
-                                          messages[index].senderId == receiverId
+                                          messages[index].senderId == senderId
                                               ? MainAxisAlignment.end
                                               : MainAxisAlignment.start,
                                       children: [
